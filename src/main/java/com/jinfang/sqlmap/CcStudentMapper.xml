@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.CcStudentMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.CcStudent" >
+        <result column="id" property="id" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="student_no" property="studentNo" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="id_card" property="idCard" />
+        <result column="birthday" property="birthday" />
+        <result column="address" property="address" />
+        <result column="domitory" property="domitory" />
+        <result column="statue" property="statue" />
+        <result column="politics" property="politics" />
+        <result column="native_place" property="nativePlace" />
+        <result column="country" property="country" />
+        <result column="nation" property="nation" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="mobile_phone_sec" property="mobilePhoneSec" />
+        <result column="qq" property="qq" />
+        <result column="wechat" property="wechat" />
+        <result column="email" property="email" />
+        <result column="photo" property="photo" />
+        <result column="matriculate_date" property="matriculateDate" />
+        <result column="graduate_date" property="graduateDate" />
+        <result column="grade" property="grade" />
+        <result column="class_id" property="classId" />
+        <result column="personal" property="personal" />
+        <result column="highest_education" property="highestEducation" />
+        <result column="is_del" property="isDel" />
+        <result column="remark" property="remark" />
+        <result column="password" property="password" />
+    </resultMap>
+
+    <resultMap id="ExtResultMap" type="com.jinfang.entity.CcStudent" extends="BaseResultMap">
+        <result column="class_name" jdbcType="VARCHAR" property="className"/>
+        <result column="major_id" jdbcType="BIGINT" property="majorId"/>
+        <result column="major_name" jdbcType="VARCHAR" property="majorName"/>
+        <result column="institute_id" jdbcType="BIGINT" property="instituteId"/>
+        <result column="institute_name" jdbcType="VARCHAR" property="instituteName"/>
+        <result column="school_id" jdbcType="BIGINT" property="schoolId"/>
+        <result column="school_name" jdbcType="VARCHAR" property="schoolName"/>
+    </resultMap>
+
+    <select id="findByStudentLogin" resultMap="BaseResultMap">
+        select * from cc_student where student_no=#{studentNo} and password=#{password} and is_del=0
+    </select>
+
+    <select id="findByStudentById" resultMap="BaseResultMap">
+        select * from cc_student where id=#{id}  and is_del=0
+    </select>
+
+
+    <select id="findInfoById" resultMap="ExtResultMap">
+        SELECT cs.*,
+               clazz.name     class_name,
+               major.id       major_id,
+               major.name     major_name,
+               institute.id   institute_id,
+               institute.name institute_name,
+               school.id      school_id,
+               school.name    school_name
+        FROM cc_student cs
+                 LEFT JOIN cc_class cc ON cc.id = cs.class_id
+                 LEFT JOIN sys_office clazz ON clazz.id = cc.id
+                 LEFT JOIN sys_office major ON major.id = clazz.parentid
+                 LEFT JOIN sys_office institute ON institute.id = major.parentid
+                 LEFT JOIN sys_office school ON school.id = institute.parentid
+
+        where cs.id = #{id}
+          and cs.is_del = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpReplyTeacherMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpReplyTeacher" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="major_id" property="majorId" />
+        <result column="group_name" property="groupName" />
+        <result column="teacher_id" property="teacherId" />
+        <result column="role_id" property="roleId" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+    <select id="findByTeacher" resultMap="BaseResultMap">
+        select * from ep_reply_teacher
+        where grade=#{grade} and teacher_id=#{teacherId} and role_id=#{roleId} and is_del=0
+    </select>
+
+</mapper>

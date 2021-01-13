@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpOutAdviserMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpOutAdviser" >
+        <result column="id" property="id" />
+        <result column="company_id" property="companyId" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="password" property="password" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+    <resultMap id="ExtResultMap" type="com.jinfang.entity.EpOutAdviser" extends="BaseResultMap">
+        <result column="major_id" jdbcType="BIGINT" property="majorId"/>
+    </resultMap>
+
+    <select id="findOutAdviser" resultMap="BaseResultMap">
+        select * from ep_out_adviser
+        where phone=#{phone} and is_del=0
+        <if test="password!=null || password!='' ">
+            and password=#{password}
+        </if>
+
+    </select>
+
+    <select id="findAdviserInfoBySysId" resultMap="BaseResultMap">
+        select eoa.*,epc.major_id from ep_out_adviser eoa
+        left join sys_user su on eoa.phone=su.loginName
+        left join ep_practice_company epc on epc.id=eoa.company_id
+        where su.id=#{id} and su.is_del=0 and eoa.is_del=0
+    </select>
+
+</mapper>

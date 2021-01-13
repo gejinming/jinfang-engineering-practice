@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jinfang.mapper.CcTeacherMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.CcTeacher">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="native_place" jdbcType="VARCHAR" property="nativePlace"/>
+        <result column="nation" jdbcType="VARCHAR" property="nation"/>
+        <result column="politics" jdbcType="VARCHAR" property="politics"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+        <result column="highest_education" jdbcType="VARCHAR" property="highestEducation"/>
+        <result column="highest_degrees" jdbcType="INTEGER" property="highestDegrees"/>
+        <result column="bachelor_school" jdbcType="VARCHAR" property="bachelorSchool"/>
+        <result column="bachelor_major" jdbcType="VARCHAR" property="bachelorMajor"/>
+        <result column="master_school" jdbcType="VARCHAR" property="masterSchool"/>
+        <result column="master_major" jdbcType="VARCHAR" property="masterMajor"/>
+        <result column="doctorate_school" jdbcType="VARCHAR" property="doctorateSchool"/>
+        <result column="doctorate_major" jdbcType="VARCHAR" property="doctorateMajor"/>
+        <result column="come_school_time" jdbcType="DATE" property="comeSchoolTime"/>
+        <result column="start_education_year" jdbcType="DATE" property="startEducationYear"/>
+        <result column="job_title" jdbcType="INTEGER" property="jobTitle"/>
+        <result column="administrative" jdbcType="VARCHAR" property="administrative"/>
+        <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone"/>
+        <result column="mobile_phone_sec" jdbcType="VARCHAR" property="mobilePhoneSec"/>
+        <result column="office_phone" jdbcType="VARCHAR" property="officePhone"/>
+        <result column="office_phone_sec" jdbcType="VARCHAR" property="officePhoneSec"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="wechat" jdbcType="VARCHAR" property="wechat"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="office_address" jdbcType="VARCHAR" property="officeAddress"/>
+        <result column="photo" jdbcType="LONGVARCHAR" property="photo"/>
+        <result column="is_del" jdbcType="BIT" property="isDel"/>
+        <result column="is_leave" jdbcType="BIT" property="isLeave"/>
+        <result column="major_id" jdbcType="BIGINT" property="majorId"/>
+        <result column="institute_id" jdbcType="BIGINT" property="instituteId"/>
+        <result column="school_id" jdbcType="BIGINT" property="schoolId"/>
+    </resultMap>
+    <select id="findPage" resultMap="BaseResultMap">
+        select *
+        from cc_teacher where is_del=0
+    </select>
+    <!--根据教师角色名称 和id 查询-->
+    <select id="selectCountByRoleName" resultType="int">
+        select count(*)
+        from sys_role sr
+        where sr.name = #{roleName}
+          and FIND_IN_SET(sr.id,
+            (
+                select roles
+                from cc_teacher ct
+                         join sys_user_role ur on ct.id = ur.user_id
+                where ct.id = #{teacherId})
+            )
+
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from cc_teacher
+        where id = #{id}
+    </select>
+
+</mapper>
