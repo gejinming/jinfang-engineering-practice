@@ -1,10 +1,9 @@
 package com.jinfang.controller;
 
-import com.github.pagehelper.PageInfo;
-import com.jinfang.dto.page.PageRequest;
 
+import com.jinfang.httpdto.Result;
+import com.jinfang.httpdto.ResultEnum;
 import com.jinfang.service.SystemService;
-import com.jinfang.vo.LoginUserMeta;
 import com.jinfang.vo.LoginUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,18 @@ public class BaseController {
         return loginUserVo;
     }
 
-
+    protected Result getSaveResultState(int save){
+        if (save>0){
+            return Result.ok();
+        }
+        return  Result.error(ResultEnum.SAVE_ERROR.getCode(),ResultEnum.SAVE_ERROR.getMessage());
+    }
+    protected Result getUpdateResultState(int update){
+        if (update>0){
+            return Result.ok();
+        }
+        return  Result.error(ResultEnum.UPDATE_ERROR.getCode(),ResultEnum.UPDATE_ERROR.getMessage());
+    }
     /*protected void addSchoolId(PageRequest pageRequest, LoginUserMeta loginUserMeta) {
         if (loginUserMeta == null || loginUserMeta.getSchoolId() == null) {
             throw new IllegalArgumentException("SchoolId is empty");

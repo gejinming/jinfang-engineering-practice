@@ -41,6 +41,11 @@ public class SysUserServiceImp implements SysUserService {
         return sysUser;
     }
 
+    @Override
+    public int update(SysUser record) {
+        return 0;
+    }
+
 
     @Override
     public Result findPage(SysUser record) {

@@ -12,8 +12,9 @@ public enum ResultEnum {
     SYSTEM_ERROR(500, "服务器开小差了，请稍后再试"),
     PARAM_ERROR(201,"参数错误"),
     NULL_POINTER(202,"空指针异常"),
-    TOKEN_ERR(203,"--token错误---"),;
-
+    TOKEN_ERR(203,"--token错误---"),
+    SAVE_ERROR(204,"数据添加失败"),
+    UPDATE_ERROR(205,"数据修改失败");
     // 响应状态码
     private Integer code;
     // 响应信息

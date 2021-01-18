@@ -13,9 +13,10 @@ import java.util.List;
  */
 public interface CcTeacherMapper {
     /*
-    * 分页
+    * 查询可以拉入答辩组的教师
     * */
-    List<CcTeacher> findPage();
+    List<CcTeacher> findReplyTeacherList(Long schoolId,Long majorId,String teacherName,
+                                         String majorName,Integer grade);
     /*
     * 根据教师ID和角色名称查询数量
     * */

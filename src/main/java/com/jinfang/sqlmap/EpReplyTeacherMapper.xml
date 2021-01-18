@@ -13,9 +13,56 @@
         <result column="is_del" property="isDel" />
     </resultMap>
 
+    <resultMap id="ExtResultMap" type="com.jinfang.entity.EpReplyTeacher" extends="BaseResultMap">
+        <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
+        <result column="major_name" jdbcType="VARCHAR" property="majorName" />
+    </resultMap>
+
     <select id="findByTeacher" resultMap="BaseResultMap">
         select * from ep_reply_teacher
         where grade=#{grade} and teacher_id=#{teacherId} and role_id=#{roleId} and is_del=0
     </select>
 
+    <select id="findPage" resultMap="ExtResultMap">
+        select ert.*,ct.name teacher_name,so.name major_name
+         from ep_reply_teacher ert
+        left join cc_teacher ct on ert.teacher_id=ct.id
+        left join sys_office so on so.id=ert.major_id and so.type=2
+        where ert.is_del=0 and ert.major_id=#{majorId}
+        <if test ="null != grade and grade != ''"> and ert.grade = #{grade}</if>
+        <if test ="null != groupName and groupName != '' "> and ert.group_name = #{groupName}</if>
+        <if test ="null != teacherName and teacherName != ''"> and ct.name = #{teacherName}</if>
+         order by ert.grade,ert.group_name,so.name
+    </select>
+
+    <select id="findGradeIsOpen" resultType="map">
+        SELECT
+            cp.*
+        FROM
+	      cc_course_periode cp
+	      inner join cc_teacher ct on ct.id=cp.teacher_id
+	    where cp.is_del=0 and ct.major_id=#{majorId} and period_date=#{grade} and course_type=2
+
+    </select>
+    <update id="update" parameterType="com.jinfang.entity.EpReplyTeacher">
+        UPDATE ep_reply_teacher
+        <set>
+            <if test ="null != roleId and roleId !=''">role_id = #{roleId},</if>
+            <if test ="null != isDel and isDel != ''">is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="updateByGroupName" parameterType="com.jinfang.entity.EpReplyTeacher">
+        UPDATE ep_reply_teacher
+        set role_id = 1
+        WHERE group_name = #{groupName}
+    </update>
+    <!--拉入教师-->
+    <insert id="save" parameterType="list">
+        insert into ep_reply_teacher(grade,major_id,group_name,teacher_id,role_id)
+        values
+        <foreach collection="list" item="v1" separator=",">
+            (#{v1.grade},#{v1.majorId},#{v1.groupName},#{v1.teacherId},#{v1.roleId})
+        </foreach>
+    </insert>
 </mapper>

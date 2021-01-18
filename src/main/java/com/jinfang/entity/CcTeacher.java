@@ -195,16 +195,26 @@ public class CcTeacher extends PageEntity implements Serializable {
     * 隶属专业编号
     */
     private Long majorId;
+    /**
+     * 隶属专业名称
+     */
+    private String majorName;
 
     /**
     * 隶属学院编号
     */
     private Long instituteId;
 
+    private String instituteName;
+
     /**
     * 隶属学校编号
     */
     private Long schoolId;
+    /**
+     * 学校ID
+     */
+    private String schoolName;
 
 
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpAssessRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpAssessRole" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="major_id" property="majorId" />
+        <result column="course_gradecompose_id" property="courseGradecomposeId" />
+        <result column="role_ids" property="roleIds" />
+    </resultMap>
+
+
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpAssessRole">
+        INSERT INTO ep_assess_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                grade,
+            </if>
+            <if test ='null != majorId'>
+                major_id,
+            </if>
+            <if test ='null != courseGradecomposeId'>
+                course_gradecompose_id,
+            </if>
+            <if test ='null != roleIds'>
+                role_ids
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                #{grade},
+            </if>
+            <if test ='null != majorId'>
+                #{majorId},
+            </if>
+            <if test ='null != courseGradecomposeId'>
+                #{courseGradecomposeId},
+            </if>
+            <if test ='null != roleIds'>
+                #{roleIds}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_assess_role
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpAssessRole">
+        UPDATE ep_assess_role
+          set role_ids = #{roleIds}
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+                id,
+                grade,
+                major_id,
+                gradecompose_id,
+                role_ids
+        FROM ep_assess_role
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" resultType="com.jinfang.entity.EpAssessRole">
+        SELECT
+            period_date grade, ccg.id courseGradecomposeId,cg.name gradecomposeName,ear.role_ids roleIds,ear.id
+        FROM
+            cc_course_periode cp
+            inner join cc_teacher_course ctc on ctc.course_id=cp.course_id and ctc.teacher_id=cp.teacher_id and ctc.is_del=0
+            inner join cc_educlass ce on ce.id=cp.class_id and ce.is_del=0 and ce.teacher_course_id=ctc.id
+            left join cc_course_gradecompose ccg on ccg.teacher_course_id=ctc.id and ccg.is_del=0
+            left join cc_gradecompose cg on cg.id=ccg.gradecompose_id and cg.is_del=0
+            left join ep_assess_role ear on ear.course_gradecompose_id=ccg.id and cp.period_date=ear.grade
+        WHERE cp.is_del=0 and cp.course_type=2
+        <if test="grade !=null and grade !='' ">
+            and cp.period_date=#{grade}
+        </if>
+        order by period_date desc
+    </select>
+    <!--评分角色列表-->
+    <select id="findRoleList" resultType="com.jinfang.entity.EpSysRole">
+        select * from ep_sys_role
+        where type=#{type}
+        <if test="roleIds!=null and roleIds !='' ">
+            and FIND_IN_SET(id ,#{roleIds})
+        </if>
+    </select>
+</mapper>

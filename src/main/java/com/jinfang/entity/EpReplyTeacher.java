@@ -1,39 +1,57 @@
 package com.jinfang.entity;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
+import com.jinfang.page.PageEntity;
 import lombok.Data;
-import java.util.Date;
-import java.util.List;
+
 
 /**
- * ep_reply_teache
- * @author GJM 2021-01-12
+ *  ep_reply_teacher答辩组教师管理
+ * @author GJM 2021-01-14
  */
 @Data
-@ApiModel("ep_reply_teache")
-public class EpReplyTeacher {
+public class EpReplyTeacher extends PageEntity {
 
-    @ApiModelProperty("编号")
+
+    /**
+     * 编号
+     */
     private Long id;
 
-    @ApiModelProperty("届别")
+    /**
+     * 届别
+     */
     private Integer grade;
 
-    @ApiModelProperty("配置所属专业id")
+    /**
+     * 配置所属专业id
+     */
     private Long majorId;
 
-    @ApiModelProperty("组名")
+    /**
+     * 组名
+     */
     private String groupName;
 
-    @ApiModelProperty("教师id")
+    /**
+     * 教师id
+     */
     private Long teacherId;
+    /**
+     * 教师名称
+     */
+    private String teacherName;
+    /**
+     * 教师名称
+     */
+    private String majorName;
 
-    @ApiModelProperty("角色（1教师2组长）")
+    /**
+     * 角色（1教师2组长）
+     */
     private Integer roleId;
 
-    @ApiModelProperty("删除标识")
+    /**
+     * 删除标识
+     */
     private Integer isDel;
 
 

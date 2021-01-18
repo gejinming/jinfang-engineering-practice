@@ -1,6 +1,7 @@
 package com.jinfang.service;
 
 import com.jinfang.entity.EpReplyTeacher;
+import com.jinfang.vo.IntoTeacherVo;
 
 import java.util.List;
 
@@ -23,4 +24,7 @@ public interface EpReplyTeacherService extends CurdService<EpReplyTeacher> {
 
     boolean isGroupLeader(Integer grade, Long teacherId,Integer roleType);
 
+    int save(List<EpReplyTeacher> vo);
+
+    boolean isGradeOpen(Integer grade ,Long majorId);
 }

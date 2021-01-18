@@ -37,7 +37,13 @@ public interface CurdService<T> {
 	 */
 	T findById(Long id);
 
-	
+	/**
+	 * 根据ID修改
+	 * @param id
+	 * @return
+	 */
+	int update(T record);
+
     Result findPage(T record);
 	
 }

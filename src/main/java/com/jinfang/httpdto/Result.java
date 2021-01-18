@@ -45,6 +45,7 @@ public class Result {
                 .setCode(Code)
                 .setMessage(message);
     }
+
     public static Result error(String message) {
         return new Result()
                 .setCode(ResultEnum.UNKNOWN_ERROR.getCode())

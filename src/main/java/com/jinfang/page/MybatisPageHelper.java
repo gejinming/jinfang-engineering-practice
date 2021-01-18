@@ -6,7 +6,7 @@ import com.jinfang.util.ReflectionUtils;
 
 import java.util.List;
 
-public class MybatisPageHelper {
+public class MybatisPageHelper{
 
 	public static final String findPage = "findPage";
 	/*
@@ -25,8 +25,8 @@ public class MybatisPageHelper {
 	 * @param queryMethodName 要分页的查询方法名
 	 * @param args 方法参数
 	 * @return
-	 *//*
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	 */
+/*	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static PageResult findPage( Object mapper, String queryMethodName, Object... args) {
 		// 设置分页参数
 		int pageNum = pageRequest.getPageNum();
@@ -35,14 +35,20 @@ public class MybatisPageHelper {
 		// 利用反射调用查询方法
 		Object result = ReflectionUtils.invoke(mapper, queryMethodName, args);
 		return getPageResult(pageRequest, new PageInfo((List) result));
+	}*/
+
+	public static void pageHelper(Integer page,Integer limit){
+		if (page !=null && page !=null ){
+			PageHelper.startPage(page, limit);
+		}
 	}
-*/
 	/**
 	 * 将分页信息封装到统一的接口
 	 * @param pageInfo
 	 * @return
 	 */
-	public static PageResult getPageResult( PageInfo<?> pageInfo) {
+	public static PageResult getPageResult( List<?> list) {
+		PageInfo<?> pageInfo = new PageInfo<>(list);
 		PageResult pageResult = new PageResult();
         pageResult.setPageNum(pageInfo.getPageNum());
         pageResult.setPageSize(pageInfo.getPageSize());

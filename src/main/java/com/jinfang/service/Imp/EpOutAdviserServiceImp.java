@@ -55,6 +55,11 @@ public class EpOutAdviserServiceImp implements EpOutAdviserService {
     }
 
     @Override
+    public int update(EpOutAdviser record) {
+        return 0;
+    }
+
+    @Override
     public Result findPage(EpOutAdviser record) {
         return null;
     }

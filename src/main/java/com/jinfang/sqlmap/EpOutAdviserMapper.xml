@@ -19,7 +19,7 @@
     <select id="findOutAdviser" resultMap="BaseResultMap">
         select * from ep_out_adviser
         where phone=#{phone} and is_del=0
-        <if test="password!=null || password!='' ">
+        <if test="password!=null and password!='' ">
             and password=#{password}
         </if>
 

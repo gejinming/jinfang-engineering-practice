@@ -54,8 +54,7 @@ public class LoginController {
     @ApiOperation("token登录入口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token",value = "token"),
-    }
-    )
+    })
     @PostMapping("/tokenLogin")
     public Result tokenLogin(String token){
         return systemService.tokenLogin(token);

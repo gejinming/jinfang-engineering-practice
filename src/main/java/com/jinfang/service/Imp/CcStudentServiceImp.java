@@ -61,6 +61,11 @@ public class CcStudentServiceImp implements CcStudentService {
     }
 
     @Override
+    public int update(CcStudent record) {
+        return 0;
+    }
+
+    @Override
     public Result findPage(CcStudent record) {
         return null;
     }

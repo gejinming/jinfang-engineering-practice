@@ -45,9 +45,29 @@
         <result column="institute_id" jdbcType="BIGINT" property="instituteId"/>
         <result column="school_id" jdbcType="BIGINT" property="schoolId"/>
     </resultMap>
-    <select id="findPage" resultMap="BaseResultMap">
-        select *
-        from cc_teacher where is_del=0
+
+    <resultMap id="ExtResultMap" type="com.jinfang.entity.CcTeacher" extends="BaseResultMap">
+        <result column="major_name"  property="majorName"/>
+        <result column="institute_name" property="instituteName"/>
+        <result column="school_name"  property="schoolName"/>
+    </resultMap>
+    <!--查询答辩组可以拉入的教师/*去除此届别已经存在的教师*/-->
+    <select id="findReplyTeacherList" resultMap="ExtResultMap">
+        select ct.*,major.name major_name,institute.name institute_name,school.name school_name
+        from cc_teacher ct
+        left join sys_office major on major.type=2 and major.id=ct.major_id
+        left join sys_office institute on institute.type=1 and ct.institute_id=institute.id
+        left join sys_office school on school.type=0 and school.id=ct.school_id
+        where ct.is_del=0
+        and ct.school_id=#{schoolId}
+
+        and ct.id not in (
+          select teacher_id from ep_reply_teacher
+          where grade=#{grade} and is_del=0 and major_id=#{majorId}
+        )
+        <if test="teacherName != null and  teacherName !=''"  >and ct.name=#{teacherName}</if>
+        <if test="majorName != null and majorName !=''">and major.name like concat('%',#{majorName},'%') </if>
+
     </select>
     <!--根据教师角色名称 和id 查询-->
     <select id="selectCountByRoleName" resultType="int">

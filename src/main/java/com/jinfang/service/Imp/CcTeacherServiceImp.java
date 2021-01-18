@@ -45,14 +45,16 @@ public class CcTeacherServiceImp implements CcteacherService {
     }
 
     @Override
-    public Result findPage(CcTeacher record) {
-        if (record !=null && record.getPage() !=null ){
-            PageHelper.startPage(record.getPage(), record.getLimit());
-        }
-        List<CcTeacher> list = ccTeacherMapper.findPage();
-        PageInfo<CcTeacher> pageInfo = new PageInfo<>(list);
-        return Result.ok( MybatisPageHelper.getPageResult(pageInfo));
+    public int update(CcTeacher record) {
+        return 0;
     }
+
+    @Override
+    public Result findPage(CcTeacher record) {
+       /* List<CcTeacher> list = ccTeacherMapper.findPage();*/
+        return Result.ok();
+    }
+
     /*
      * @param teacherId
      * @return boolean
@@ -62,5 +64,11 @@ public class CcTeacherServiceImp implements CcteacherService {
     public boolean isSchoolLeader(Long teacherId) {
         int count = ccTeacherMapper.selectCountByRoleName(teacherId, SystemRole.LEADER.getName());
         return count > 0;
+    }
+
+    @Override
+    public List<CcTeacher> findReplyTeacherList(Long schoolId,Long majorId,String teacherName,
+                                                String majorName,Integer grade) {
+        return ccTeacherMapper.findReplyTeacherList(schoolId,majorId,teacherName,majorName,grade);
     }
 }

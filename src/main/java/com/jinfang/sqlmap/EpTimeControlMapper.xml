@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpTimeControlMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpTimeControl" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="major_id" property="majorId" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="create_date" property="createDate" />
+        <result column="user_id" property="userId" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+                id,
+                grade,
+                major_id,
+                start_time,
+                end_time,
+                modify_date,
+                create_date,
+                user_id,
+                is_del
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpTimeControl">
+        INSERT INTO ep_time_control
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ="null != grade and grade !=''">
+                grade,
+            </if>
+            <if test ="null != majorId and majorId !=''">
+                major_id,
+            </if>
+            <if test ="null != startTime ">
+                start_time,
+            </if>
+            <if test ="null != endTime ">
+                end_time,
+            </if>
+            <if test ="null != modifyDate ">
+                modify_date,
+            </if>
+            <if test ="null != createDate">
+                create_date,
+            </if>
+            <if test ="null != userId and userId !=''">
+                user_id,
+            </if>
+            <if test ="null != isDel and isDel !=''">
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ="null != grade and grade !=''">
+                #{grade},
+            </if>
+            <if test ="null != majorId and majorId !=''">
+                #{majorId},
+            </if>
+            <if test ="null != startTime">
+                #{startTime},
+            </if>
+            <if test ="null != endTime">
+                #{endTime},
+            </if>
+            <if test ="null != modifyDate">
+                #{modifyDate},
+            </if>
+            <if test ="null != createDate">
+                #{createDate},
+            </if>
+            <if test ="null != userId and userId !=''">
+                #{userId},
+            </if>
+            <if test ="null != isDel and isDel !=''">
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_time_control
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpTimeControl">
+        UPDATE ep_time_control
+        <set>
+            <if test ="null != grade and grade !=''">grade = #{grade},</if>
+            <if test ="null != majorId and majorId !=''">major_id = #{majorId},</if>
+            <if test ="null != startTime ">start_time = #{startTime},</if>
+            <if test ="null != endTime ">end_time = #{endTime},</if>
+            <if test ="null != modifyDate ">modify_date = #{modifyDate},</if>
+            <if test ="null != createDate ">create_date = #{createDate},</if>
+            <if test ="null != userId and userId !=''">user_id = #{userId},</if>
+            <if test ="null != isDel and isDel !=''">is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM ep_time_control
+        WHERE id = #{id} and is_del=0;
+    </select>
+
+    <select id="findByGrade" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM ep_time_control
+        WHERE grade = #{grade} and major_id=#{majorId} and is_del=0;
+    </select>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        ccp.period_date grade,ctc.start_time,ctc.end_time,ctc.id,
+        ctc.create_date,ctc.modify_date
+        from cc_course_periode ccp
+        left join cc_teacher ct on ccp.teacher_id=ct.id
+        left join ep_time_control ctc on ctc.major_id=ct.major_id and ccp.period_date=ctc.grade and ctc.is_del=0
+        where ccp.is_del=0 and ccp.course_type=2
+        <if test ="grade != null and grade != ''"> and ccp.period_date = #{grade}</if>
+
+    </select>
+
+
+
+</mapper>

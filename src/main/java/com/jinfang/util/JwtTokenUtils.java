@@ -34,7 +34,7 @@ public class JwtTokenUtils implements Serializable {
     private static final String ISSUER = "Jinfang";
 
     /**
-     * 有效期12小时
+     * 有效期6小时
      */
     private static final long EXPIRE_TIME = 6 * 60 * 60 * 1000;
 
@@ -55,7 +55,7 @@ public class JwtTokenUtils implements Serializable {
      * 生成token（专业认证系统生成规则）
      *
      * @param username 用户名，一般为教师ID或者学生学号
-     * @param role     角色，目前 teacher, student
+     * @param role     角色，目前 majorLeaer, student
      * @return token
      */
     public static String createToken(String username, String role) {
@@ -182,24 +182,5 @@ public class JwtTokenUtils implements Serializable {
         }
     }
 
-    /**
-     * 获取请求token并验证
-     */
-    public static String getToken(HttpServletRequest request) {
-        String token = request.getHeader("token");
-       // String tokenHead = "Bearer ";
-        if (StringUtils.isEmpty(token)) {
-            throw new CustomerDefinedException(ResultEnum.TOKEN_ERR);
-        }
-        else if (token == null) {
-            token = request.getHeader("token");
-        } else  {
-
-        }
-
-
-
-        return token;
-    }
 
 }

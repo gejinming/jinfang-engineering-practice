@@ -40,6 +40,7 @@ spring:
 logging:
   level:
     com.jinfang.mapper: debug
+    io.swagger.models.parameters.AbstractSerializableParameter: error
 
 
 #分页插件设置

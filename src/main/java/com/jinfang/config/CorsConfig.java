@@ -34,5 +34,11 @@ public class CorsConfig implements WebMvcConfigurer {
         corsConfiguration.setAllowCredentials(true);
         return corsConfiguration;
     }
-
+    // 添加CorsFilter拦截器，对任意的请求使用
+  /*  @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", buildConfig());
+        return new CorsFilter(source);
+    }*/
 }
