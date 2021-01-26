@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpTaskBookPlanMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpTaskBookPlan" >
+        <result column="id" property="id" />
+        <result column="book_id" property="bookId" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="content" property="content" />
+        <result column="is_del" property="isDel" />
+        <result column="is_history" property="isHistory" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                book_id,
+                start_date,
+                end_date,
+                content,
+                is_del,
+                is_history
+    </sql>
+
+    <insert id="save"  parameterType="list">
+        INSERT INTO ep_task_book_plan(book_id,start_date,end_date,content,is_del,is_history)
+        VALUES
+        <foreach collection="list" item="v1" separator=",">
+            (#{v1.bookId},#{v1.startDate},#{v1.endDate},#{v1.content},0,0)
+        </foreach>
+    </insert>
+
+
+    <update id="update" parameterType="com.jinfang.entity.EpTaskBookPlan">
+        UPDATE ep_task_book_plan
+        <set>
+            <if test ='null != isHistory'>is_history = #{isHistory}</if>
+        </set>
+        WHERE book_id = #{bookId}
+    </update>
+
+
+    <select id="findTaskBookPlan" resultMap="BaseResultMap">
+        SELECT *
+        FROM ep_task_book_plan
+        WHERE book_id = #{bookId} and is_del=0
+    </select>
+
+
+
+
+</mapper>

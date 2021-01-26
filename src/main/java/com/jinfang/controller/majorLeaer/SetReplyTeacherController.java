@@ -23,7 +23,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/SetReplyTeacher")
-@Api("答辩组教师管理接口")
+@Api(tags = "答辩组教师管理接口")
 public class SetReplyTeacherController extends BaseController {
     @Autowired
     EpReplyTeacherService epReplyTeacherService;

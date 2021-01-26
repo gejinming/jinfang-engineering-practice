@@ -41,7 +41,7 @@ public class BaseController {
         return  Result.error(ResultEnum.SAVE_ERROR.getCode(),ResultEnum.SAVE_ERROR.getMessage());
     }
     protected Result getUpdateResultState(int update){
-        if (update>0){
+        if (update>=0){
             return Result.ok();
         }
         return  Result.error(ResultEnum.UPDATE_ERROR.getCode(),ResultEnum.UPDATE_ERROR.getMessage());

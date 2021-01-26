@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpStudentCompanyMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpStudentCompany" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="student_id" property="studentId" />
+        <result column="company_id" property="companyId" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="is_del" property="isDel" />
+        <result column="is_end" property="isEnd" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                grade,
+                student_id,
+                company_id,
+                create_date,
+                modify_date,
+                is_del,
+                is_end
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpStudentCompany">
+        INSERT INTO ep_student_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                grade,
+            </if>
+            <if test ='null != studentId'>
+                student_id,
+            </if>
+            <if test ='null != companyId'>
+                company_id,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != modifyDate'>
+                modify_date,
+            </if>
+            <if test ='null != isDel'>
+                is_del,
+            </if>
+            <if test ='null != isEnd'>
+                is_end
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                #{grade},
+            </if>
+            <if test ='null != studentId'>
+                #{studentId},
+            </if>
+            <if test ='null != companyId'>
+                #{companyId},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != modifyDate'>
+                #{modifyDate},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel},
+            </if>
+            <if test ='null != isEnd'>
+                #{isEnd}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_student_company
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpStudentCompany">
+        UPDATE ep_student_company
+        <set>
+            <if test ='null != grade'>grade = #{grade},</if>
+            <if test ='null != studentId'>student_id = #{studentId},</if>
+            <if test ='null != companyId'>company_id = #{companyId},</if>
+            <if test ='null != createDate'>create_date = #{createDate},</if>
+            <if test ='null != modifyDate'>modify_date = #{modifyDate},</if>
+            <if test ='null != isDel'>is_del = #{isDel},</if>
+            <if test ='null != isEnd'>is_end = #{isEnd}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM ep_student_company
+        WHERE id = #{id}
+    </select>
+
+    <select id="findCompanyStudentList" resultType="com.jinfang.entity.CcStudent">
+        SELECT
+          esc.id studentCompanyId,cs.name,cs.student_no studentNo ,so.name className ,eoas.adviser_id adviserId
+        FROM
+            ep_student_company esc
+            LEFT JOIN ep_out_adviser_student eoas ON eoas.student_company_id = esc.id
+            AND eoas.is_del = 0
+            LEFT JOIN cc_student cs ON cs.id = esc.student_id
+            left join sys_office so on so.id=cs.class_id and so.type=3
+        WHERE
+            esc.company_id = #{companyId}
+            AND esc.is_del = 0
+            AND esc.grade = #{grade}
+            <if test="isAllot==0">
+                AND eoas.id IS NOT NULL
+            </if>
+            <if test="isAllot==1">
+                AND eoas.id IS NULL
+            </if>
+
+    </select>
+
+</mapper>

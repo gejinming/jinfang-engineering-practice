@@ -19,7 +19,7 @@ import java.util.List;
  * @create: 2021-01-14 09:32
  **/
 @Service
-public class EpTimeControlServiceImpl implements EpTimeControlService {
+public class EpTimeControlServiceImp implements EpTimeControlService {
     @Autowired(required = false)
     EpTimeControlMapper epTimeControlMapper;
 

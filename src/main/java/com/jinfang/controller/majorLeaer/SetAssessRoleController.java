@@ -11,10 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +35,7 @@ public class SetAssessRoleController extends BaseController {
     })
     @GetMapping("/findPage")
     public Result findPage(EpAssessRole assessRole){
+        assessRole.setMajorId(getUserInfo().getMajorId());
        return epAssessRoleService.findPage(assessRole);
     }
     @ApiOperation("查询评分角色列表")
@@ -55,8 +53,8 @@ public class SetAssessRoleController extends BaseController {
 
     })
     @PostMapping("/setGradecomposeRole")
-    public Result setGradecomposeRole(EpAssessRole assessRole){
-        if (assessRole.getGrade()==null || assessRole.getRoleIds()==null ){
+    public Result setGradecomposeRole(@RequestBody EpAssessRole assessRole){
+        if (assessRole.getGrade()==null){
             return Result.error(ResultEnum.PARAM_ERROR.getCode(),"届别未获取到，请检查!");
         }
         if (assessRole.getRoleIds()==null ){

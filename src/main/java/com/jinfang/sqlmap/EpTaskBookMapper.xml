@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpTaskBookMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpTaskBook" >
+        <result column="id" property="id" />
+        <result column="practice_name" property="practiceName" />
+        <result column="content" property="content" />
+        <result column="definice_require" property="definiceRequire" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="state" property="state" />
+        <result column="student_id" property="studentId" />
+        <result column="receive_time" property="receiveTime" />
+        <result column="is_del" property="isDel" />
+        <result column="is_history" property="isHistory" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                practice_name,
+                content,
+                definice_require,
+                create_date,
+                modify_date,
+                state,
+                adviser_student_id,
+                receive_time,
+                is_del,
+                is_history
+    </sql>
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpTaskBook">
+        INSERT INTO ep_task_book
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != practiceName'>
+                practice_name,
+            </if>
+            <if test ='null != content'>
+                content,
+            </if>
+            <if test ='null != definiceRequire'>
+                definice_require,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != modifyDate'>
+                modify_date,
+            </if>
+            <if test ='null != state'>
+                state,
+            </if>
+            <if test ='null != adviserStudentId'>
+                adviser_student_id,
+            </if>
+            <if test ='null != receiveTime'>
+                receive_time,
+            </if>
+                is_del,
+                is_history
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != practiceName'>
+                #{practiceName},
+            </if>
+            <if test ='null != content'>
+                #{content},
+            </if>
+            <if test ='null != definiceRequire'>
+                #{definiceRequire},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != modifyDate'>
+                #{modifyDate},
+            </if>
+            <if test ='null != state'>
+                #{state},
+            </if>
+            <if test ='null != adviserStudentId'>
+                #{adviserStudentId},
+            </if>
+            <if test ='null != receiveTime'>
+                #{receiveTime},
+            </if>
+           0,0
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_task_book
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpTaskBook">
+        UPDATE ep_task_book
+        <set>
+            <if test ='null != state'>state = #{state},</if>
+            <if test ='null != modifyDate'>modify_date = #{modifyDate},</if>
+            <if test ='null != sendDate'>send_date = #{sendDate},</if>
+            <if test ='null != receiveTime'>receive_time = #{receiveTime},</if>
+            <if test ='null != isHistory'>is_history = #{isHistory}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT *
+        FROM ep_task_book
+        WHERE id = #{id} and is_del=0
+    </select>
+
+    <resultMap id="resultTaskList" type="com.jinfang.entity.EpAdviserStudent">
+        <result column="adviserStudentId" property="id" />
+        <result column="grade" property="grade" />
+        <result column="studentName" property="studentName" />
+        <result column="studentNo" property="studentNo" />
+        <result column="className" property="className" />
+        <result column="state" property="state" />
+        <result column="studentId" property="studentId" />
+        <result column="taksBookId" property="taksBookId" />
+        <result column="adviserStudentId" property="adviserStudentId" />
+    </resultMap>
+
+    <select id="findPage" resultMap="resultTaskList">
+        SELECT
+            eas.id adviserStudentId,
+            eas.grade,
+            cs.NAME studentName,
+            cs.id studentId,
+            cs.student_no studentNo,
+            class.NAME className,
+            major.NAME majorName,
+            college.NAME colleageName,
+            etb.id taksBookId,
+            etb.state
+        FROM
+            ep_adviser_student eas
+            LEFT JOIN cc_student cs ON cs.id = eas.student_id
+            LEFT JOIN ep_task_book etb ON etb.adviser_student_id = eas.id
+            AND etb.is_history=0
+            LEFT JOIN sys_office class ON cs.class_id = class.id
+            AND class.type = 3
+            LEFT JOIN sys_office major ON major.id = class.parentid
+            AND major.type = 2
+            LEFT JOIN sys_office college ON college.id = major.parentid
+            AND college.type = 1
+        WHERE
+            eas.teacher_id = #{teacherId}
+            AND eas.is_del = 0
+            <if test="grade!=null and grade !=''">
+                AND eas.grade = #{grade}
+            </if>
+            <if test="state!=null and state !='' and state !=3 ">
+                AND etb.state = #{state}
+            </if>
+            <if test="state ==3 ">
+                AND etb.state is null
+            </if>
+
+
+        ORDER BY
+            eas.grade,cs.id DESC
+    </select>
+
+    <select id="findHistory" resultType="com.jinfang.entity.EpTaskBook">
+        SELECT
+            etb.id,
+            etb.send_date sendDate,
+            etb.receive_time receiveTime,
+            cs.NAME studentName
+        FROM
+            ep_task_book etb
+            LEFT JOIN ep_adviser_student eas ON etb.adviser_student_id = eas.id
+            LEFT JOIN cc_student cs ON cs.id = eas.student_id
+        WHERE
+            etb.is_history = 1
+            AND etb.is_del = 0
+            AND etb.adviser_student_id=#{adviserStudentId}
+    </select>
+
+    <select id="findStudentTaskBook" resultType="com.jinfang.entity.StudentTaskBook">
+        SELECT
+            epc.NAME companyName,
+            eoa.NAME adviserName,
+            ct.NAME teacherName,
+            etb.id taskBookId,
+            etb.state
+        FROM
+            ep_student_company esc
+            LEFT JOIN ep_practice_company epc ON esc.company_id = epc.id
+            AND epc.is_del = 0
+            LEFT JOIN ep_out_adviser_student eoas ON eoas.student_company_id = esc.id
+            AND eoas.is_del = 0
+            LEFT JOIN ep_out_adviser eoa ON eoa.id = eoas.adviser_id
+            AND eoa.is_del = 0
+            LEFT JOIN ep_adviser_student eas ON eas.grade = esc.grade
+            AND eas.is_del = 0
+            AND esc.student_id = eas.student_id
+            LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
+            LEFT JOIN ep_task_book etb ON etb.adviser_student_id = eas.id
+            AND etb.is_del = 0
+            AND etb.is_history = 0
+        WHERE
+            esc.student_id = #{studentId} and etb.state>0
+    </select>
+
+    <select id="findTaskBook" resultMap="BaseResultMap">
+        select * from ep_task_book where adviser_student_id=#{adviserStudentId} and is_del=0 and is_history=0
+    </select>
+</mapper>

@@ -12,7 +12,14 @@
         <result column="create_date" property="createDate" />
         <result column="modify_date" property="modifyDate" />
         <result column="is_del" property="isDel" />
+        <result column="loadingStudentNum" property="loadingStudentNum" />
+        <result column="outAdviserNum" property="outAdviserNum" />
+        <result column="sumStudentNum" property="sumStudentNum" />
+        <result column="grade" property="grade" />
+        <result column="studentCompanyId" property="studentCompanyId" />
     </resultMap>
+
+
 
     <sql id="Base_Column_List">
                 id,
@@ -83,11 +90,9 @@
     <update id="update" parameterType="com.jinfang.entity.EpPracticeCompany">
         UPDATE ep_practice_company
         <set>
-            <if test ='null != majorId'>major_id = #{majorId},</if>
             <if test ='null != name'>name = #{name},</if>
             <if test ='null != address'>address = #{address},</if>
             <if test ='null != phone'>phone = #{phone},</if>
-            <if test ='null != createDate'>create_date = #{createDate},</if>
             <if test ='null != modifyDate'>modify_date = #{modifyDate},</if>
             <if test ='null != isDel'>is_del = #{isDel}</if>
         </set>
@@ -95,17 +100,101 @@
     </update>
 
 
-    <select id="load" resultMap="BaseResultMap">
+    <select id="findById" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM ep_practice_company
         WHERE id = #{id}
     </select>
 
     <select id="findPage" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
-        FROM ep_practice_company epc
-        where epc.is_del=0
+        SELECT
+        epc.*,
+        ifnull( eoa.outAdviserNum, 0 ) outAdviserNum,
+        ifnull( esc.sumStudentNum, 0 ) sumStudentNum,
+        ifnull( escq.loadingStudentNum , 0 ) loadingStudentNum
+        FROM
+        ep_practice_company epc
+        LEFT JOIN ( SELECT count( id ) outAdviserNum, company_id FROM ep_out_adviser WHERE is_del = 0 GROUP BY company_id ) eoa ON eoa.company_id = epc.id
+        LEFT JOIN ( SELECT count( student_id ) sumStudentNum, company_id FROM ep_student_company WHERE is_del = 0 GROUP BY company_id ) esc ON esc.company_id = epc.id
+        LEFT JOIN ( SELECT count( student_id ) loadingStudentNum, company_id FROM ep_student_company WHERE is_del = 0 AND is_end = 0 GROUP BY company_id ) escq ON escq.company_id = epc.id
+        WHERE
+        epc.is_del = 0
+        AND epc.major_id = #{majorId}
+        <if test="name !=null and name !=''">
+            and epc.name=#{name}
+        </if>
+        ORDER BY
+        epc.id
     </select>
 
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM ep_practice_company epc
+        where epc.is_del=0 and  epc.major_id=#{majorId} and epc.name=#{name}
+    </select>
 
+    <select id="chooseCompanyStudentList" resultType="com.jinfang.entity.EpStudentCompany">
+        select * from ep_student_company where company_id=#{companyId} and is_del=0
+    </select>
+        <!--这个语句的逻辑是，根据开启的工程实习的届别的教学班id对应学生选择的实习单位，只有有学生选择的单位才会显示-->
+    <select id="allotAdviserStudentList" resultMap="BaseResultMap">
+        select
+          ccp.period_date grade ,epc.id ,epc.name
+        from cc_course_periode ccp
+        inner join cc_educlass_student ces on ces.class_id=ccp.class_id and ces.is_del=0
+        inner join ep_student_company esc on esc.student_id=ces.student_id
+                  and esc.is_del=0 and esc.grade=ccp.period_date
+        left join ep_practice_company epc on epc.id=esc.company_id and epc.is_del=0
+        where ccp.course_type=2 and ccp.major_id=#{majorId} and ccp.is_del=0
+        group by ccp.period_date,epc.name
+        order by ccp.period_date desc
+    </select>
+
+    <select id="allotStudentNum" resultType="Integer">
+        select count(ccp.id) studentNum
+        from cc_course_periode ccp
+        left join cc_educlass_student ces on ccp.class_id=ces.class_id and ces.is_del=0
+        left join ep_student_company esc on esc.student_id= ces.student_id and esc.is_del=0
+        left join ep_out_adviser_student eoas on eoas.student_company_id=esc.id and eoas.is_del=0
+        where ccp.course_type=2 and ccp.major_id=#{majorId}
+        <if test="isAllTo == 0">
+            and eoas.id is null
+            and esc.id is not null
+        </if>
+        <if test="isAllTo == 1">
+            and esc.id is null
+        </if>
+
+        group by ccp.period_date,ccp.class_id
+        order by ccp.period_date desc
+        limit 1
+    </select>
+
+    <select id="chooseCompanyFindPageList" resultMap="BaseResultMap">
+        SELECT
+        epc.*
+        FROM
+        ep_practice_company epc
+        WHERE
+        epc.is_del = 0
+        AND epc.major_id = #{majorId}
+        <if test="name !=null and name !=''">
+            and epc.name=#{name}
+        </if>
+        ORDER BY
+        epc.id
+    </select>
+
+    <select id="chooseCompany" resultMap="BaseResultMap">
+        SELECT
+            epc.*
+        FROM
+            ep_practice_company epc
+        left join ep_student_company esc on esc.company_id=epc.id and esc.is_del=0
+        WHERE
+            epc.is_del = 0
+            AND esc.student_id = #{studentId}
+        ORDER BY
+            epc.id
+    </select>
 </mapper>

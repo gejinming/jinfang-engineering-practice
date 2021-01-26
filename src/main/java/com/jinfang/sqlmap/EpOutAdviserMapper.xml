@@ -32,4 +32,84 @@
         where su.id=#{id} and su.is_del=0 and eoa.is_del=0
     </select>
 
+    <insert id="save" parameterType="list">
+        insert into ep_out_adviser(company_id,name,phone,password,is_del)
+        values
+        <foreach collection="list" item="v1" separator=",">
+            (#{v1.companyId},#{v1.name},#{v1.phone},#{v1.password},0)
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.jinfang.entity.EpOutAdviser">
+        insert into ep_out_adviser(company_id,name,phone,password,is_del)
+        values (#{companyId},#{name},#{phone},#{password},0)
+    </insert>
+
+    <select id="findByCompanyId" resultMap="BaseResultMap">
+        select * from ep_out_adviser
+        where is_del=0 and company_id=#{companyId}
+    </select>
+
+    <update id="update" parameterType="com.jinfang.entity.EpOutAdviser">
+        UPDATE ep_out_adviser
+        <set>
+            <if test ='null != companyId'>company_id = #{companyId},</if>
+            <if test ='null != name'>name = #{name},</if>
+            <if test ='null != phone'>phone = #{phone},</if>
+            <if test ='null != password'>password = #{password},</if>
+            <if test ='null != isDel'>is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete" parameterType="Long">
+        UPDATE ep_out_adviser
+            set is_del=1
+        WHERE company_id = #{companyId}
+    </update>
+
+
+    <select id="findAdviserStudentNum" resultType="com.jinfang.entity.EpOutAdviser">
+        SELECT
+            esc.grade,
+            esc.company_id companyId,
+            eoa.NAME,
+            count( eoas.student_company_id ) studentNum
+        FROM
+            ep_out_adviser_student eoas
+            LEFT JOIN ep_student_company esc ON eoas.student_company_id = esc.id
+            AND esc.is_del = 0
+            LEFT JOIN ep_out_adviser eoa ON eoa.id = eoas.adviser_id
+            AND eoa.is_del = 0
+            LEFT JOIN ep_practice_company epc ON epc.id = eoa.company_id
+        WHERE
+            eoas.is_del = 0
+            AND epc.major_id = #{majorId}
+        GROUP BY
+            esc.grade,
+            eoa.company_id,
+            eoa.NAME
+    </select>
+
+
+    <select id="findNoAllotStudentNum" resultType="com.jinfang.entity.EpOutAdviser">
+        SELECT
+            esc.company_id companyId,
+            esc.grade,
+            count( esc.student_id ) studentNum
+        FROM
+            ep_student_company esc
+            LEFT JOIN ep_out_adviser_student eoas ON eoas.student_company_id = esc.id
+            AND eoas.is_del = 0
+            LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+            AND epc.is_del = 0
+        WHERE
+            esc.is_del = 0
+            AND eoas.id IS NULL
+            AND epc.major_id = #{majorId}
+        GROUP BY
+            esc.company_id,
+            esc.grade
+    </select>
+
 </mapper>

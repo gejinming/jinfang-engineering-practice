@@ -149,32 +149,34 @@ public class SystemService {
         ArrayList<String> menuRoleList = new ArrayList<>();
         //默认按照当前年份为届别
         int grade = DateUtil.getYear(new Date());
-        //判断是否是专业负责人，这个是专业认证的独有的角色
         Long teacherId = sysUser.getId();
-        boolean schoolLeader = ccteacherService.isSchoolLeader(teacherId);
-        if (schoolLeader){
-            menuRoleList.add(SystemRole.LEADER.getRoleName());
-        }
-        //所有老师都是校内指导老师
-        menuRoleList.add(SystemRole.TEACHER.getRoleName());
-        //判断是否是答辩组长
-        boolean groupLeader = epReplyTeacherService.isGroupLeader(grade, teacherId, ReplyTeacherType.HEADMAN.getCode());
-        //答辩组长和答辩教师是互斥关系，如果不是答辩组长再判断是否是答辩教师
-        if (!groupLeader){
-            boolean replyTeacher= epReplyTeacherService.isGroupLeader(grade, teacherId, ReplyTeacherType.DEFENSE.getCode());
-            if (replyTeacher){
-                menuRoleList.add(SystemRole.DEFENSE.getRoleName());
-            }
-        }else{
-            menuRoleList.add(SystemRole.HEADMAN.getRoleName());
-        }
-
         //是否是校外老师
             /* String phone = loginName.substring(loginName.indexOf("-")+1);
             boolean outAdviser = epOutAdviserService.isOutAdviser(phone, null);*/
         if (sysUser.getType()==2){
             menuRoleList.add(SystemRole.OUTTEACHER.getRoleName());
+        }else{
+            //判断是否是专业负责人，这个是专业认证的独有的角色
+            boolean schoolLeader = ccteacherService.isSchoolLeader(teacherId);
+            if (schoolLeader){
+                menuRoleList.add(SystemRole.LEADER.getRoleName());
+            }
+            //判断是否是答辩组长
+            boolean groupLeader = epReplyTeacherService.isGroupLeader(grade, teacherId, ReplyTeacherType.HEADMAN.getCode());
+            //答辩组长和答辩教师是互斥关系，如果不是答辩组长再判断是否是答辩教师
+            if (!groupLeader){
+                boolean replyTeacher= epReplyTeacherService.isGroupLeader(grade, teacherId, ReplyTeacherType.DEFENSE.getCode());
+                if (replyTeacher){
+                    menuRoleList.add(SystemRole.DEFENSE.getRoleName());
+                }
+            }else{
+                menuRoleList.add(SystemRole.HEADMAN.getRoleName());
+            }
+            //所有老师都是校内指导老师
+            menuRoleList.add(SystemRole.TEACHER.getRoleName());
         }
+
+
         return  menuRoleList;
     }
 

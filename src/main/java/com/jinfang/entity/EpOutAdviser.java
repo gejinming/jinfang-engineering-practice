@@ -2,10 +2,7 @@ package com.jinfang.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
-import java.util.Date;
-import java.util.List;
 
 /**
  * ep_out_adviser校外指导老师
@@ -35,6 +32,11 @@ public class EpOutAdviser {
 
     @ApiModelProperty("专业")
     private Long majorId;
-   
+
+    private Long schoolId;
+
+    private Integer studentNum;
+
+    private Integer grade;
 
 }

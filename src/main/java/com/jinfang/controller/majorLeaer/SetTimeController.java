@@ -57,7 +57,7 @@ public class SetTimeController extends BaseController {
     }
 
 
-    @ApiOperation(value = "获取时间控制列表")
+    @ApiOperation(value = "分页时间控制列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page",value = "页码"),
             @ApiImplicitParam(name = "limit",value = "显示行数"),

@@ -141,6 +141,12 @@ public class CcStudent {
      * 学校ID
      */
     private String schoolName;
+    /**
+     * 校外指导教师ID
+     */
+    private Long adviserId;
+
+    private Long studentCompanyId;
 
 
 

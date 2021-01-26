@@ -1,6 +1,9 @@
 package com.jinfang.service;
 
 import com.jinfang.entity.EpOutAdviser;
+import com.jinfang.entity.EpOutAdviserStudent;
+
+import java.util.List;
 
 /**
  * @author ：Gjm
@@ -24,4 +27,10 @@ public interface EpOutAdviserService extends CurdService<EpOutAdviser> {
      * @date 2021/1/13 15:47
      */
     EpOutAdviser findAdviserInfoBySysId(Long id);
+
+    int delete(Long companyId);
+
+    List<EpOutAdviser> findByCompanyId(Long companyId);
+
+
 }

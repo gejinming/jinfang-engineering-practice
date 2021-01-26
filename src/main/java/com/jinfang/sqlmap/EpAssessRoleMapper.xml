@@ -78,7 +78,7 @@
             left join cc_course_gradecompose ccg on ccg.teacher_course_id=ctc.id and ccg.is_del=0
             left join cc_gradecompose cg on cg.id=ccg.gradecompose_id and cg.is_del=0
             left join ep_assess_role ear on ear.course_gradecompose_id=ccg.id and cp.period_date=ear.grade
-        WHERE cp.is_del=0 and cp.course_type=2
+        WHERE cp.is_del=0 and cp.course_type=2  and cp.major_id=#{majorId}
         <if test="grade !=null and grade !='' ">
             and cp.period_date=#{grade}
         </if>

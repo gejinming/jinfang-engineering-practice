@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpOutAdviserStudentMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpOutAdviserStudent" >
+        <result column="id" property="id" />
+        <result column="student_company_id" property="studentCompanyId" />
+        <result column="adviser_id" property="adviserId" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+               id,
+                student_company_id,
+                adviser_id,
+                is_del
+    </sql>
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpOutAdviserStudent">
+        INSERT INTO ep_out_adviser_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != studentCompanyId'>
+                student_company_id,
+            </if>
+            <if test ='null != adviserId'>
+                adviser_id,
+            </if>
+            <if test ='null != isDel'>
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != studentCompanyId'>
+                #{studentCompanyId},
+            </if>
+            <if test ='null != adviserId'>
+                #{adviserId},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_out_adviser_student
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpOutAdviserStudent">
+        UPDATE ep_out_adviser_student
+        <set>
+            <if test ="null != adviserId and adviserId!=''">
+                adviser_id = #{adviserId},
+            </if>
+            <if test ="null != isDel and isDel !='' ">is_del = #{isDel}</if>
+        </set>
+        WHERE student_company_id = #{studentCompanyId}
+    </update>
+
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM ep_out_adviser_student
+        WHERE id = #{id}
+    </select>
+
+    <select id="findTeacherStudent" resultMap="BaseResultMap">
+        select * from ep_out_adviser_student eps
+        where eps.adviser_id=#{teacherId} and eps.is_del=0
+    </select>
+</mapper>

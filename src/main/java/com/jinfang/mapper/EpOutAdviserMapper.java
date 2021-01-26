@@ -1,6 +1,10 @@
 package com.jinfang.mapper;
 
 import com.jinfang.entity.EpOutAdviser;
+import com.jinfang.entity.EpOutAdviserStudent;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * @author ：Gjm
@@ -25,4 +29,33 @@ public interface EpOutAdviserMapper {
      * @date 2021/1/13 15:47
      */
     EpOutAdviser findAdviserInfoBySysId(Long id);
+
+    int save(List<EpOutAdviser> list);
+
+    int insert(EpOutAdviser epOutAdviser);
+
+    int update(EpOutAdviser epOutAdviser);
+
+    List<EpOutAdviser> findByCompanyId(Long companyId);
+    /*
+     * @Description:删除实习单位下的指导老师
+     * @Author: Gjm
+     * @Date: 2021/1/21 16:13
+     **/
+    int delete(Long companyId);
+
+    /*
+     * @Description:查询专业分配给校外指导老师的学生数
+     * @Author: Gjm
+     * @Date: 2021/1/22 15:23
+     **/
+    List<EpOutAdviser> findAdviserStudentNum(Long majorId);
+    /*
+     * @Description:查询专业 未分配给校外指导老师的学生数
+     * @Author: Gjm
+     * @Date: 2021/1/22 15:55
+     **/
+    List<EpOutAdviser> findNoAllotStudentNum(Long majorId);
+
+
 }

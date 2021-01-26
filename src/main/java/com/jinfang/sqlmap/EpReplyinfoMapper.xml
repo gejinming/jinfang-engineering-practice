@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpReplyinfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpReplyinfo" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="major_id" property="majorId" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="address" property="address" />
+        <result column="group_name" property="groupName" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                grade,
+                major_id,
+                start_time,
+                end_time,
+                address,
+                group_name,
+                create_date,
+                modify_date,
+                is_del
+    </sql>
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpReplyinfo">
+        INSERT INTO ep_replyinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                grade,
+            </if>
+            <if test ='null != majorId'>
+                major_id,
+            </if>
+            <if test ='null != startTime'>
+                start_time,
+            </if>
+            <if test ='null != endTime'>
+                end_time,
+            </if>
+            <if test ='null != address'>
+                address,
+            </if>
+            <if test ='null != groupName'>
+                group_name,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != modifyDate'>
+                modify_date,
+            </if>
+            <if test ='null != isDel'>
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                #{grade},
+            </if>
+            <if test ='null != majorId'>
+                #{majorId},
+            </if>
+            <if test ='null != startTime'>
+                #{startTime},
+            </if>
+            <if test ='null != endTime'>
+                #{endTime},
+            </if>
+            <if test ='null != address'>
+                #{address},
+            </if>
+            <if test ='null != groupName'>
+                #{groupName},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != modifyDate'>
+                #{modifyDate},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_replyinfo
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpReplyinfo">
+        UPDATE ep_replyinfo
+        <set>
+            <if test ='null != startTime'>start_time = #{startTime},</if>
+            <if test ='null != endTime'>end_time = #{endTime},</if>
+            <if test ='null != address'>address = #{address},</if>
+            <if test ='null != modifyDate'>modify_date = #{modifyDate},</if>
+            <if test ='null != isDel'>is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM ep_replyinfo
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT
+            ert.grade,
+            ert.group_name,
+            er.start_time,
+            er.address,
+            er.id,
+            er.create_date,
+            er.modify_date
+        FROM
+            ep_reply_teacher ert
+            LEFT JOIN ep_replyinfo er ON ert.major_id = er.major_id
+            AND ert.grade = er.grade
+            AND ert.group_name = er.group_name
+            AND er.is_del=0
+        WHERE
+            ert.major_id = #{majorId} and ert.is_del=0
+            <if test="grade !=null and grade !=''">
+                and  ert.grade=#{grade}
+            </if>
+        GROUP BY
+            ert.grade,
+            group_name
+        ORDER BY
+            ert.grade DESC
+    </select>
+
+
+
+</mapper>

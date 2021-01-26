@@ -2,6 +2,8 @@ package com.jinfang.mapper;
 
 import com.jinfang.entity.SysUser;
 
+import java.util.List;
+
 /**
  * @description: 用户mapper
  * @author: Gjm
@@ -13,4 +15,6 @@ public interface SysUserMapper {
     SysUser findById(Long id);
 
     SysUser findByName(String name);
+
+    int insert(List<SysUser> list);
 }

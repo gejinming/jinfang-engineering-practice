@@ -47,7 +47,18 @@
     </resultMap>
 
     <select id="findByStudentLogin" resultMap="BaseResultMap">
-        select * from cc_student where student_no=#{studentNo} and password=#{password} and is_del=0
+        SELECT
+            cs.*
+        FROM
+            cc_course_periode ccp
+            LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id
+            AND ces.is_del = 0
+            LEFT JOIN cc_student cs ON cs.id = ces.student_id
+        WHERE
+            ccp.course_type = 2
+            AND ccp.is_del = 0
+            AND cs.student_no = #{studentNo}
+            AND cs.password=#{password}
     </select>
 
     <select id="findByStudentById" resultMap="BaseResultMap">

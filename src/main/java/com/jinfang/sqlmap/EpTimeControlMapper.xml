@@ -122,9 +122,8 @@
         ccp.period_date grade,ctc.start_time,ctc.end_time,ctc.id,
         ctc.create_date,ctc.modify_date
         from cc_course_periode ccp
-        left join cc_teacher ct on ccp.teacher_id=ct.id
-        left join ep_time_control ctc on ctc.major_id=ct.major_id and ccp.period_date=ctc.grade and ctc.is_del=0
-        where ccp.is_del=0 and ccp.course_type=2
+        left join ep_time_control ctc on ctc.major_id=ccp.major_id and ccp.period_date=ctc.grade and ctc.is_del=0
+        where ccp.is_del=0 and ccp.course_type=2 and ccp.major_id=#{majorId}
         <if test ="grade != null and grade != ''"> and ccp.period_date = #{grade}</if>
 
     </select>

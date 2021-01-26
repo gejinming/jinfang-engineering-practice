@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpGuideStudentnumMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpGuideStudentnum" >
+        <result column="id" property="id" />
+        <result column="major_id" property="majorId" />
+        <result column="grade" property="grade" />
+        <result column="student_num" property="studentNum" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                major_id,
+                grade,
+                student_num,
+                create_date,
+                modify_date,
+                is_del
+    </sql>
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpGuideStudentnum">
+        INSERT INTO ep_guide_studentnum
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != majorId'>
+                major_id,
+            </if>
+            <if test ='null != grade'>
+                grade,
+            </if>
+            <if test ='null != studentNum'>
+                student_num,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != modifyDate'>
+                modify_date,
+            </if>
+            <if test ='null != isDel'>
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != majorId'>
+                #{majorId},
+            </if>
+            <if test ='null != grade'>
+                #{grade},
+            </if>
+            <if test ='null != studentNum'>
+                #{studentNum},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != modifyDate'>
+                #{modifyDate},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_guide_studentnum
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpGuideStudentnum">
+        UPDATE ep_guide_studentnum
+        <set>
+            <if test ='null != majorId'>major_id = #{majorId},</if>
+            <if test ='null != grade'>grade = #{grade},</if>
+            <if test ='null != studentNum'>student_num = #{studentNum},</if>
+            <if test ='null != createDate'>create_date = #{createDate},</if>
+            <if test ='null != modifyDate'>modify_date = #{modifyDate},</if>
+            <if test ='null != isDel'>is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM ep_guide_studentnum
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT
+            ccp.period_date grade,egs.id,egs.student_num,egs.create_date,egs.modify_date
+        FROM
+            cc_course_periode ccp
+            LEFT JOIN ep_guide_studentnum egs ON ccp.period_date = egs.grade
+            AND egs.major_id = ccp.major_id
+            AND egs.is_del = 0
+        WHERE ccp.is_del=0 and course_type=2 and  ccp.major_id=#{majorId}
+        <if test="grade != null and grade !=''">
+            and ccp.period_date=#{grade}
+        </if>
+    </select>
+
+    <select id="upStudentNum" resultType="int">
+        select
+          ifnull(student_num,0) studentNum
+        from ep_guide_studentnum
+        where grade=#{grade} and major_id=#{majorId} and is_del=0
+    </select>
+
+</mapper>

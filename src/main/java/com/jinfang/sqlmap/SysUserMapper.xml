@@ -31,4 +31,15 @@
     <select id="findByName" parameterType="String" resultMap="BaseResultMap">
         select * from sys_user where loginName= #{loginName}
     </select>
+
+    <insert id="insert" parameterType="list">
+        insert into sys_user(
+        id,create_date,modify_date,is_enabled,is_locked,login_failure_count,name,
+        loginName,password,type,is_bind_email,is_bind_mobile,is_del
+        )
+        values
+        <foreach collection="list" item="v1" separator=",">
+            (#{v1.id},#{v1.createDate},#{v1.modifyDate},1,0,0,#{v1.name},#{v1.loginName},#{v1.password},2,0,0,0)
+        </foreach>
+    </insert>
 </mapper>

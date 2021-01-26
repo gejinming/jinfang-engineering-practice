@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpAdviserStudentMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpAdviserStudent" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="major_id" property="majorId" />
+        <result column="teacher_id" property="teacherId" />
+        <result column="student_id" property="studentId" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                grade,
+                major_id,
+                teacher_id,
+                student_id,
+                is_del
+    </sql>
+
+    <insert id="save"  parameterType="list">
+        INSERT INTO ep_adviser_student(grade,major_id,teacher_id,student_id,is_del)
+        values
+        <foreach collection="list" item="v" separator="," >
+            (#{v.grade},#{v.majorId},#{v.teacherId},#{v.studentId},0)
+        </foreach>
+    </insert>
+
+    <!--<delete id="delete" parameterType="java.util.List">
+        DELETE FROM ep_adviser_student
+        WHERE id = #{id}
+    </delete>-->
+
+    <update id="delete" parameterType="java.util.List">
+        UPDATE ep_adviser_student
+          set is_del = 1
+        WHERE id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+
+
+    <select id="findPage" resultType="com.jinfang.entity.EpAdviserStudent">
+       SELECT
+            ccp.period_date grade,
+            ctt.NAME teacherName,
+            so.NAME majorName,
+            ifnull( count( eas.student_id ), 0 ) studentNum,
+            ctt.id teacherId,
+            ctt.major_id majorId
+        FROM
+            cc_course_periode ccp
+            LEFT JOIN cc_teacher ctt ON ctt.major_id = ccp.major_id
+            LEFT JOIN ep_adviser_student eas ON ctt.id = eas.teacher_id
+            AND eas.grade = ccp.period_date and eas.is_del=0
+            LEFT JOIN sys_office so ON so.id = ctt.major_id
+        WHERE
+           ccp.major_id = #{majorId}
+            AND ctt.is_del = 0
+            AND ccp.course_type = 2
+
+        GROUP BY
+            ctt.NAME
+        ORDER BY
+            ctt.id
+    </select>
+    <!--查询最近的一个届别未分配的学生-->
+    <select id="unallocatedStudent" resultType="Integer">
+        SELECT
+        count(ces.student_id) studentNum
+        FROM
+            (
+              select * from cc_course_periode
+              where major_id=#{majorId} and course_type = 2 and is_del=0
+              order by period_date desc limit 1
+              ) ccp
+            LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id
+            AND ces.is_del = 0
+            LEFT JOIN ep_adviser_student eas ON ccp.period_date = eas.grade
+            AND ccp.major_id = eas.major_id
+            AND ces.student_id = eas.student_id
+            AND eas.is_del=0
+        WHERE
+             eas.id IS NULL
+
+    </select>
+
+    <select id="findAllocatStudentList" resultType="com.jinfang.entity.CcStudent">
+        SELECT
+            eas.id,
+            eas.student_id studentId,
+            cs.name,
+            cs.student_no studentNo,
+            so.name className
+        FROM
+            ep_adviser_student eas
+            LEFT JOIN cc_student cs ON eas.student_id = cs.id
+            LEFT JOIN sys_office so ON so.type = 3
+            AND so.id = cs.class_id
+        WHERE
+            eas.is_del = 0
+            AND eas.grade = #{grade}
+            AND eas.major_id = #{majorId}
+            AND eas.teacher_id = #{teacherId}
+    </select>
+
+    <select id="findUnAllocatStudentList" resultType="com.jinfang.entity.CcStudent">
+        SELECT
+            cs.id,cs.name,cs.student_no studentNo,so.name className
+        FROM
+            cc_course_periode ccp
+            LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id
+            AND ces.is_del = 0
+            LEFT JOIN ep_adviser_student eas ON ccp.period_date = eas.grade
+            AND ccp.major_id = eas.major_id
+            AND ces.student_id = eas.student_id
+            AND eas.is_del=0
+            left join cc_student cs on cs.id=ces.student_id
+            left join sys_office so on so.type=3 and so.id=cs.class_id
+        WHERE
+             ccp.major_id=#{majorId}
+             and ccp.period_date=#{grade}
+             and ccp.course_type = 2
+             and ccp.is_del=0
+             and eas.id IS  NULL
+    </select>
+</mapper>
