@@ -187,13 +187,13 @@
 
     <select id="chooseCompany" resultMap="BaseResultMap">
         SELECT
-            epc.*
+            epc.*,esc.id studentCompanyId
         FROM
             ep_practice_company epc
         left join ep_student_company esc on esc.company_id=epc.id and esc.is_del=0
         WHERE
             epc.is_del = 0
-            AND esc.student_id = #{studentId}
+            AND esc.student_id = #{studentId} AND esc.grade=#{grade}
         ORDER BY
             epc.id
     </select>

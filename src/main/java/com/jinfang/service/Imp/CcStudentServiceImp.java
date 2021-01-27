@@ -57,7 +57,7 @@ public class CcStudentServiceImp implements CcStudentService {
 
     @Override
     public CcStudent findById(Long id) {
-        return null;
+        return ccStudentMapper.findStudentInfo(id);
     }
 
     @Override

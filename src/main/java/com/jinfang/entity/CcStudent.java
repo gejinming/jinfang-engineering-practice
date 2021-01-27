@@ -148,6 +148,8 @@ public class CcStudent {
 
     private Long studentCompanyId;
 
+    private Integer periodDate;
+
 
 
 }

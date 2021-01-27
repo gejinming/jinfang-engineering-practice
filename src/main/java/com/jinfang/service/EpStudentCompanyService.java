@@ -2,6 +2,7 @@ package com.jinfang.service;
 
 import com.jinfang.entity.CcStudent;
 import com.jinfang.entity.EpStudentCompany;
+import com.jinfang.httpdto.Result;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ import java.util.List;
 public interface EpStudentCompanyService extends CurdService<EpStudentCompany> {
 
     List<CcStudent> findCompanyStudentList(Long companyId, Integer grade,Integer isAllot);
+
+    Result chooseCompany(EpStudentCompany record);
 }

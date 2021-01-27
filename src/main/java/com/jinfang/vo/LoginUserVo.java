@@ -25,6 +25,8 @@ public class LoginUserVo {
     private Long schoolId;
     //专业
     private Long majorId;
+    //届别
+    private Integer grade;
 
 
 }

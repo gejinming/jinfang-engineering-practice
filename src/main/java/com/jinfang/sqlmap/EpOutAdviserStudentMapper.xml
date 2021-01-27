@@ -70,4 +70,21 @@
         select * from ep_out_adviser_student eps
         where eps.adviser_id=#{teacherId} and eps.is_del=0
     </select>
+
+    <select id="findStudentAdviser" resultType="com.jinfang.entity.EpOutAdviserStudent">
+        SELECT
+            eoas.id,
+            eoa.NAME adviserName,
+            eoa.id adviserId,
+            esc.id studentCompanyId
+        FROM
+            ep_out_adviser_student eoas
+            LEFT JOIN ep_student_company esc ON esc.id = eoas.student_company_id
+            AND esc.is_del = 0
+            LEFT JOIN ep_out_adviser eoa ON eoa.id = eoas.adviser_id
+            AND eoa.is_del = 0
+        WHERE
+            esc.student_id = #{studentId} and esc.grade=#{grade}
+            AND eoas.is_del =0
+    </select>
 </mapper>

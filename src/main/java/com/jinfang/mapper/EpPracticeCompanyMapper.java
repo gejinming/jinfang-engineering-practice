@@ -38,7 +38,7 @@ public interface EpPracticeCompanyMapper extends CurdMapper<EpPracticeCompany> {
      * @Author: Gjm
      * @Date: 2021/1/26 15:53
      **/
-    EpPracticeCompany chooseCompany(Long studentId);
+    EpPracticeCompany chooseCompany(Long studentId,Integer grade);
 
     List<EpPracticeCompany> chooseCompanyFindPageList(EpPracticeCompany epPracticeCompany);
 

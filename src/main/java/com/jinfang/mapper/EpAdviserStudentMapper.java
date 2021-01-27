@@ -1,6 +1,7 @@
 package com.jinfang.mapper;
 
 import com.jinfang.entity.CcStudent;
+import com.jinfang.entity.CheckReportList;
 import com.jinfang.entity.EpAdviserStudent;
 
 import java.util.List;
@@ -38,6 +39,11 @@ public interface EpAdviserStudentMapper extends CurdMapper<EpAdviserStudent> {
      * @Date: 2021/1/21 11:03
      **/
     int save(List<EpAdviserStudent> list);
-
+    /*
+     * @Description:检查周、日报列表
+     * @Author: Gjm
+     * @Date: 2021/1/27 16:00
+     **/
+    List<CheckReportList> CheckReportPage(CheckReportList record);
 
 }

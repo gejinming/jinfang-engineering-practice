@@ -81,7 +81,7 @@ public class EpPracticeCompany extends PageEntity implements Serializable {
 
     private ArrayList<HashMap<String, String>> allotAdviserStudentNumList;
 
-    private ArrayList<HashMap<String, Integer>> noAllotStudentNums;
+    private HashMap<String, Integer> noAllotStudentNums;
 
     private Long studentCompanyId;
 

@@ -168,12 +168,11 @@ public class EpPracticeCompanyServiceImp implements EpPracticeCompanyService {
                 }
 
             }
-            ArrayList<HashMap<String, Integer>> noAllotStudentNums = new ArrayList<>();
+            HashMap<String, Integer> noAllotStudentNums = new HashMap<>();
             for (EpOutAdviser ea : noAllotStudentNum){
                 if (ea.getCompanyId().equals(companyId) && ea.getGrade().equals(grade)){
-                    HashMap<String, Integer> noAllotStudentNumMap = new HashMap<>();
-                    noAllotStudentNumMap.put("studentNum",ea.getStudentNum());
-                    noAllotStudentNums.add(noAllotStudentNumMap);
+
+                    noAllotStudentNums.put("studentNum",ea.getStudentNum());
                 }
             }
             company.setGrade(grade);
@@ -203,7 +202,7 @@ public class EpPracticeCompanyServiceImp implements EpPracticeCompanyService {
         List<EpPracticeCompany> epPracticeCompanies = epPracticeCompanyMapper.chooseCompanyFindPageList(epPracticeCompany);
         PageResult pageResult = MybatisPageHelper.getPageResult(epPracticeCompanies);
         //当前学生选择的实习单位信息
-        EpPracticeCompany chooseCompany = epPracticeCompanyMapper.chooseCompany(studentId);
+        EpPracticeCompany chooseCompany = epPracticeCompanyMapper.chooseCompany(studentId,epPracticeCompany.getGrade());
         map.put("companyList",pageResult);
         map.put("chooseCompany",chooseCompany);
         return Result.ok(map);

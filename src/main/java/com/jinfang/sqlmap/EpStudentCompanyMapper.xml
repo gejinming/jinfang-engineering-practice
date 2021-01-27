@@ -25,7 +25,7 @@
                 is_end
     </sql>
 
-    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpStudentCompany">
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpStudentCompany">
         INSERT INTO ep_student_company
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test ='null != grade'>
@@ -83,10 +83,8 @@
     <update id="update" parameterType="com.jinfang.entity.EpStudentCompany">
         UPDATE ep_student_company
         <set>
-            <if test ='null != grade'>grade = #{grade},</if>
-            <if test ='null != studentId'>student_id = #{studentId},</if>
+
             <if test ='null != companyId'>company_id = #{companyId},</if>
-            <if test ='null != createDate'>create_date = #{createDate},</if>
             <if test ='null != modifyDate'>modify_date = #{modifyDate},</if>
             <if test ='null != isDel'>is_del = #{isDel},</if>
             <if test ='null != isEnd'>is_end = #{isEnd}</if>

@@ -34,6 +34,7 @@
         <result column="is_del" property="isDel" />
         <result column="remark" property="remark" />
         <result column="password" property="password" />
+        <result column="period_date" property="periodDate" />
     </resultMap>
 
     <resultMap id="ExtResultMap" type="com.jinfang.entity.CcStudent" extends="BaseResultMap">
@@ -48,7 +49,7 @@
 
     <select id="findByStudentLogin" resultMap="BaseResultMap">
         SELECT
-            cs.*
+            cs.*,ccp.period_date
         FROM
             cc_course_periode ccp
             LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id
@@ -84,6 +85,23 @@
 
         where cs.id = #{id}
           and cs.is_del = 0
+    </select>
+
+    <select id="findStudentInfo" resultMap="BaseResultMap">
+        SELECT
+            ccp.period_date ,cs.*
+        FROM
+            cc_course_periode ccp
+            LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id
+            LEFT JOIN cc_student cs ON cs.id = ces.student_Id
+            AND ces.is_del = 0
+        WHERE
+            ccp.is_del = 0
+            AND ccp.course_type = 2
+            AND ces.student_id = #{studentId}
+        ORDER BY
+            period_date DESC
+            LIMIT 1
     </select>
 
 </mapper>

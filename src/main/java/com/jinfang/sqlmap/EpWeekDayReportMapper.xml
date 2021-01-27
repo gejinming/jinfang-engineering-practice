@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpWeekDayReportMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpWeekDayReport" >
+        <result column="id" property="id" />
+        <result column="student_company_id" property="studentCompanyId" />
+        <result column="content" property="content" />
+        <result column="create_date" property="createDate" />
+        <result column="report_type" property="reportType" />
+        <result column="assess_content" property="assessContent" />
+        <result column="assess_date" property="assessDate" />
+        <result column="is_del" property="isDel" />
+        <result column="name" property="companyName" />
+    </resultMap>
+
+
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpWeekDayReport">
+        INSERT INTO ep_week_day_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != studentCompanyId'>
+                student_company_id,
+            </if>
+            <if test ='null != content'>
+                content,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != reportType'>
+                report_type,
+            </if>
+            <if test ='null != assessContent'>
+                assess_content,
+            </if>
+            <if test ='null != assessDate'>
+                assess_date,
+            </if>
+            <if test ='null != isDel'>
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != studentCompanyId'>
+                #{studentCompanyId},
+            </if>
+            <if test ='null != content'>
+                #{content},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != reportType'>
+                #{reportType},
+            </if>
+            <if test ='null != assessContent'>
+                #{assessContent},
+            </if>
+            <if test ='null != assessDate'>
+                #{assessDate},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_week_day_report
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpWeekDayReport">
+        UPDATE ep_week_day_report
+        <set>
+            <if test ='null != content'>content = #{content},</if>
+            <if test ='null != assessContent'>assess_content = #{assessContent},</if>
+            <if test ='null != assessDate'>assess_date = #{assessDate},</if>
+            <if test ='null != isDel'>is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT *
+        FROM ep_week_day_report
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT
+            ewr.*,epc.name
+        FROM
+            ep_week_day_report ewr
+            LEFT JOIN ep_student_company esc ON ewr.student_company_id = esc.id
+            AND esc.is_del = 0
+            LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+            AND epc.is_del = 0
+        WHERE
+            esc.grade = #{grade}
+            AND esc.student_id = #{studentId}
+            AND ewr.is_del =0
+    </select>
+
+    <select id="findTeacherStudentReport" resultMap="BaseResultMap">
+        SELECT
+            ewr.*
+        FROM
+            ep_week_day_report ewr
+            LEFT JOIN ep_student_company esc ON ewr.student_company_id = esc.id
+            AND esc.is_del = 0
+            LEFT JOIN ep_adviser_student eas ON eas.grade = esc.grade
+            AND eas.student_id = esc.student_id
+            AND eas.is_del = 0
+        WHERE
+            eas.teacher_id = #{teacherId}
+            AND eas.major_id=#{majorId}
+            AND ewr.is_del =0
+    </select>
+
+    <select id="studentReportList" resultMap="BaseResultMap">
+        select * from ep_week_day_report where is_del=0 and student_company_id=#{studentCompanyId}
+    </select>
+</mapper>

@@ -85,12 +85,15 @@ public class SystemService {
 
         }else{
             CcStudent student = ccStudentService.findByStudentLogin(loginName, password);
-            LoginUserName=student.getName();
             if (student == null ){
                 return  Result.error(201,"账号或密码错误");
             }
+            LoginUserName=student.getName();
+            //届别
+            Integer periodDate = student.getPeriodDate();
             menuRoleList.add(SystemRole.STUDENT.getRoleName());
             userId=student.getId().toString();
+            loginUserVo.setGrade(periodDate);
         }
         //发放token
         String token = JwtTokenUtils.createToken(userId, role);
@@ -106,6 +109,11 @@ public class SystemService {
         return Result.ok(result);
     }
 
+    /*
+     * @Description:token登录
+     * @Author: Gjm
+     * @Date: 2021/1/27 10:11
+     **/
     public Result tokenLogin(String token){
         LoginUserVo loginUserVo = JwtTokenUtils.getUserInfo(token);
         Map<Object,Object> result=new HashMap() ;
@@ -127,9 +135,11 @@ public class SystemService {
             if (student == null){
                 return  Result.error(201,"token验证失败，找不到用户信息");
             }
+            Integer periodDate = student.getPeriodDate();
             menuRoleList.add(SystemRole.STUDENT.getRoleName());
             userId=student.getId().toString();
             LoginUserName=student.getName();
+            loginUserVo.setGrade(periodDate);
         }
         loginUserVo.setUserId(Long.parseLong(userId));
         //loginUserVo.setLoginName(loginName);

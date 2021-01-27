@@ -1,5 +1,6 @@
 package com.jinfang.mapper;
 
+import com.jinfang.entity.CcCoursePeriode;
 import com.jinfang.entity.CcStudent;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,5 +37,11 @@ public interface CcStudentMapper {
      * @date 2021/1/13 16:05
      */
     CcStudent findInfoById(Long id);
+    /*
+     * @Description:查询学生属于哪个届别
+     * @Author: Gjm
+     * @Date: 2021/1/27 9:25
+     **/
+    CcStudent findStudentInfo(Long studentId);
 
 }

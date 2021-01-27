@@ -129,4 +129,31 @@
              and ccp.is_del=0
              and eas.id IS  NULL
     </select>
+
+    <select id="CheckReportPage" resultType="com.jinfang.entity.CheckReportList">
+        SELECT
+            eas.grade,
+            epc.NAME companyName,
+            cs.NAME studentName,
+            esc.id studentCompanyId
+        FROM
+            ep_adviser_student eas
+            INNER JOIN ep_student_company esc ON eas.grade = esc.grade
+            AND eas.student_id = esc.student_id
+            AND esc.is_del = 0
+            LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+            AND epc.is_del = 0
+            LEFT JOIN cc_student cs ON cs.id = eas.student_id
+        WHERE
+            eas.teacher_id = #{teacherId}
+            AND eas.major_id = #{majorId}
+            AND eas.is_del =0
+            <if test="companyName!=null and companyName!=''">
+                AND  epc.NAME = #{companyName}
+            </if>
+            <if test="studentName!=null and studentName!=''">
+                AND  cs.NAME =#{studentName}
+            </if>
+        order by eas.id
+    </select>
 </mapper>

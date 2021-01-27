@@ -15,4 +15,7 @@ public interface EpStudentCompanyMapper extends CurdMapper<EpStudentCompany> {
 
     List<CcStudent> findCompanyStudentList(Long companyId, Integer grade,Integer isAllot);
 
+
+
+
 }

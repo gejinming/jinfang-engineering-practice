@@ -19,4 +19,10 @@ public interface EpOutAdviserStudentMapper extends CurdMapper<EpOutAdviserStuden
      **/
     List<EpOutAdviserStudent> findTeacherStudent(Long teacherId);
 
+    /*
+     * @Description:查询学生分配的校外指导老师
+     * @Author: Gjm
+     * @Date: 2021/1/27 9:48
+     **/
+    EpOutAdviserStudent findStudentAdviser(Long studentId,Integer grade);
 }
