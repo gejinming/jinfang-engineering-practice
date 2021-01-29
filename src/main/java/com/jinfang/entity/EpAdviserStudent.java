@@ -81,6 +81,8 @@ public class EpAdviserStudent extends PageEntity implements Serializable {
 
     private Long adviserStudentId;
 
+    private String companyName;
+
 
 
 

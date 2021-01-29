@@ -26,4 +26,6 @@ public class CheckReportList extends PageEntity {
     private Long teacherId;
 
     private Long majorId;
+
+    private Long studentId;
 }

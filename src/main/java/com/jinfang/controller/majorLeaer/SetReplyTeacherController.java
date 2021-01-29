@@ -50,11 +50,20 @@ public class SetReplyTeacherController extends BaseController {
             @ApiImplicitParam(name = "id",value = "id"),
             @ApiImplicitParam(name = "roleId",value = "设置教师填1，组长填2"),
             @ApiImplicitParam(name = "groupName",value = "组名"),
+            @ApiImplicitParam(name = "grade",value = "届别"),
             @ApiImplicitParam(name = "isDel",value = "如果删除，填1"),
 
     })
     @PostMapping("/update")
     public Result update(EpReplyTeacher epReplyTeacher){
+        Long majorId = getUserInfo().getMajorId();
+        if (majorId==null){
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"所属专业未获取到，请检查!");
+        }
+        if (epReplyTeacher.getGrade()==null){
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"所属届别未获取到，请检查!");
+        }
+        epReplyTeacher.setMajorId(majorId);
         return getUpdateResultState(epReplyTeacherService.update(epReplyTeacher));
     }
     @ApiOperation("拉入教师")

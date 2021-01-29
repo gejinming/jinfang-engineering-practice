@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.xml.crypto.Data;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @description: 设置答辩信息
@@ -83,5 +84,18 @@ public class SetReplyInfoController extends BaseController {
         epReplyinfo.setModifyDate(date);
         return getUpdateResultState(epReplyinfoService.update(epReplyinfo));
     }
+    @ApiOperation("查看答辩信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name ="page",value = "页码"),
+            @ApiImplicitParam(name = "limit",value = "条数")
+    })
+    @GetMapping("/findReplyInfo")
+    public Result findReplyInfo(Integer page,Integer limit){
+        Long majorId = getUserInfo().getMajorId();
+        if (majorId==null){
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"专业id未获取到，请检查!");
+        }
 
+        return epReplyinfoService.findReplyInfo(majorId,page,limit);
+    }
 }

@@ -80,7 +80,7 @@ public class EpReplyTeacherServiceImp implements EpReplyTeacherService {
     public int update(EpReplyTeacher record) {
         //修改教师组长之前先把存在的组长设为教师
         if (record.getRoleId()== ReplyTeacherType.HEADMAN.getCode()){
-            epReplyTeacherMapper.updateByGroupName(record.getGroupName());
+            epReplyTeacherMapper.updateByGroupName(record.getGroupName(),record.getGrade(),record.getMajorId());
         }
         return epReplyTeacherMapper.update(record);
     }

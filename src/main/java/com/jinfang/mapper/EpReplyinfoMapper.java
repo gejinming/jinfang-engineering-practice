@@ -2,6 +2,8 @@ package com.jinfang.mapper;
 
 import com.jinfang.entity.EpReplyinfo;
 
+import java.util.List;
+
 /**
  * @author ：Gjm
  * @date ：Created in 2021/1/20 11:29
@@ -9,5 +11,7 @@ import com.jinfang.entity.EpReplyinfo;
  * @version: 1.0
  */
 public interface EpReplyinfoMapper extends CurdMapper<EpReplyinfo> {
+
+    List<EpReplyinfo> findReplyInfo(Long majorId);
 
 }

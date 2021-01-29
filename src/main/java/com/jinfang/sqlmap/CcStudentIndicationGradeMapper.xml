@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.CcStudentIndicationGradeMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.CcStudentIndicationGrade" >
+        <result column="name" property="gradecomposeName" />
+        <result column="course_gradecompose_id" property="courseGradecomposeId" />
+        <result column="role_name" property="roleName" />
+        <result column="content" property="content" />
+        <result column="sort" property="sort" />
+        <result column="gradecompose_indication_id" property="gradecomposeIndicationId" />
+        <result column="grade" property="grade" />
+        <result column="student_id" property="studentId" />
+        <result column="id" property="id" />
+    </resultMap>
+
+    <select id="findGradecomposeList" resultMap="BaseResultMap">
+        SELECT
+            cg.name,
+            ear.course_gradecompose_id,
+            esr.role_name
+        FROM
+            ep_assess_role ear
+            LEFT JOIN cc_course_gradecompose ccg ON ear.course_gradecompose_id = ccg.id
+            LEFT JOIN cc_gradecompose cg ON cg.id = ccg.gradecompose_id
+            LEFT JOIN ep_sys_role esr ON esr.id = ear.role_ids
+        WHERE
+            ear.major_id = #{majorId}
+            AND esr.role_name = #{roleName}
+            AND ear.grade = #{grade}
+    </select>
+
+    <select id="findGradeIndication" resultMap="BaseResultMap">
+        SELECT
+            ci.content,
+            ci.sort,
+            cgi.id gradecompose_indication_id,
+            cssi.id ,
+            cssi.grade,
+            cssi.student_id
+        FROM
+            cc_course_gradecompose_indication cgi
+            LEFT JOIN cc_indication ci ON cgi.indication_id = ci.id
+            AND ci.is_del = 0
+            LEFT JOIN cc_score_stu_indigrade cssi ON cssi.gradecompose_indication_id = cgi.id
+            AND cssi.is_del = 0
+        WHERE
+            cgi.course_gradecompose_id = #{courseGradecomposeId}
+            AND cssi.student_id = #{studentId}
+            AND cgi.is_del =0
+
+    </select>
+
+    <insert id="save" parameterType="list">
+        INSERT INTO cc_score_stu_indigrade ( id,create_date,modify_date,gradecompose_indication_id,
+        student_id,grade,type,is_del )
+        VALUES
+        <foreach collection="list" item="v1" separator=",">
+            (#{v1.id},#{v1.createDate},#{v1.modifyDate},#{v1.gradecomposeIndicationId},#{v1.studentId},
+            #{v1.grade},1,0)
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="java.util.List">
+        <foreach collection="list" item="v1" index="index"  separator=";">
+            update cc_score_stu_indigrade
+            <set>
+                grade=#{v1.grade},modify_date=#{v1.modifyDate}
+            </set>
+            where id = #{v1.id}
+        </foreach>
+    </update>
+
+    <select id="findStudentGrade" resultType="com.jinfang.entity.CcScoreStuIndigrade">
+        select * from cc_score_stu_indigrade where gradecompose_indication_id=#{gradecomposeIndicationId} and student_id=#{studentId}
+    </select>
+
+</mapper>

@@ -66,5 +66,9 @@ public class EpReplyinfo extends PageEntity implements Serializable {
     */
     private Integer isDel;
 
+    private String Teacher;
+
+    private String Student;
+
 
 }

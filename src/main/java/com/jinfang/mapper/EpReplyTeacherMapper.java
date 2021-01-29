@@ -31,12 +31,13 @@ public interface EpReplyTeacherMapper extends CurdMapper<EpReplyTeacher>{
      * @Author: Gjm
      * @Date: 2021/1/18 11:21
      **/
-    int updateByGroupName(String groupName);
+    int updateByGroupName(String groupName,Integer grade,Long majorId);
     /*
      * @Description:判断开启的届别是否存在
      * @Author: Gjm
      * @Date: 2021/1/18 15:21
      **/
     Map<String,Object> findGradeIsOpen(Integer grade,Long majorId);
+
 
 }

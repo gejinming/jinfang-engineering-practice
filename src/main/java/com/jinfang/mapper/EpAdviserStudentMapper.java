@@ -46,4 +46,13 @@ public interface EpAdviserStudentMapper extends CurdMapper<EpAdviserStudent> {
      **/
     List<CheckReportList> CheckReportPage(CheckReportList record);
 
+    List<EpAdviserStudent> findGradeStudentList(Long majorId,Integer grade);
+
+    /*
+     * @Description:通用查询学生姓名、班级、实习单位信息
+     * 筛选条件专业id、届别、分配的教师id
+     * @Author: Gjm
+     * @Date: 2021/1/29 17:18
+     **/
+    List<EpAdviserStudent> findStudentInfo(Long majorId,Integer grade,Long teacherId);
 }

@@ -82,7 +82,7 @@
         <if test="grade !=null and grade !='' ">
             and cp.period_date=#{grade}
         </if>
-        order by period_date desc
+        order by cp.period_date,ccg.gradecompose_id desc
     </select>
     <!--评分角色列表-->
     <select id="findRoleList" resultType="com.jinfang.entity.EpSysRole">

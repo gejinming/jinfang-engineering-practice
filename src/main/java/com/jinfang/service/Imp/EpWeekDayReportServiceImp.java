@@ -48,7 +48,7 @@ public class EpWeekDayReportServiceImp implements EpWeekDayReportService {
 
     @Override
     public int update(EpWeekDayReport record) {
-        return 0;
+        return epWeekDayReportMapper.update(record);
     }
 
     @Override

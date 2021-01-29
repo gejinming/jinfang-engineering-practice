@@ -139,9 +139,17 @@
             ert.grade,
             group_name
         ORDER BY
-            ert.grade DESC
+            ert.grade,ert.group_name DESC
     </select>
 
-
+    <select id="findReplyInfo" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            ep_replyinfo er
+        WHERE
+            er.is_del = 0
+            AND er.grade = ( SELECT max( grade ) FROM ep_replyinfo WHERE is_del = 0 )
+    </select>
 
 </mapper>

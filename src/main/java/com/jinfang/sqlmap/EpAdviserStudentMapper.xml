@@ -9,6 +9,7 @@
         <result column="major_id" property="majorId" />
         <result column="teacher_id" property="teacherId" />
         <result column="student_id" property="studentId" />
+        <result column="studentName" property="studentName" />
         <result column="is_del" property="isDel" />
     </resultMap>
 
@@ -135,6 +136,7 @@
             eas.grade,
             epc.NAME companyName,
             cs.NAME studentName,
+            cs.id studentId,
             esc.id studentCompanyId
         FROM
             ep_adviser_student eas
@@ -155,5 +157,58 @@
                 AND  cs.NAME =#{studentName}
             </if>
         order by eas.id
+    </select>
+
+    <select id="findGradeStudentList" resultMap="BaseResultMap">
+        SELECT
+            eas.teacher_id,
+            cs.NAME studentName
+        FROM
+            ep_adviser_student eas
+            LEFT JOIN cc_student cs ON eas.student_id = cs.id
+        WHERE
+            eas.is_del = 0
+            AND eas.major_id=#{majorId}
+            AND eas.grade=#{grade}
+    </select>
+
+    <select id="findStudentInfo" resultType="com.jinfang.entity.EpAdviserStudent">
+        SELECT
+            eas.id adviserStudentId,
+            eas.grade,
+            cs.NAME studentName,
+            cs.id studentId,
+            cs.student_no studentNo,
+            class.NAME className,
+            major.NAME majorName,
+            college.NAME colleageName,
+            epc.NAME companyName
+        FROM
+            ep_adviser_student eas
+            LEFT JOIN cc_student cs ON cs.id = eas.student_id
+            LEFT JOIN sys_office class ON cs.class_id = class.id
+            AND class.type = 3
+            LEFT JOIN sys_office major ON major.id = class.parentid
+            AND major.type = 2
+            LEFT JOIN sys_office college ON college.id = major.parentid
+            AND college.type = 1
+            LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
+            AND esc.student_id = eas.student_id
+            AND esc.is_del = 0
+            LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+        WHERE
+            eas.is_del = 0
+            <if test="teacherId !=null">
+                AND eas.teacher_id = #{teacherId}
+            </if>
+            <if test="majorId !=null">
+               AND  eas.major_id = #{majorId}
+            </if>
+            <if test="grade !=null">
+                AND  eas.grade = #{grade}
+            </if>
+        ORDER BY
+            eas.grade,
+            cs.id DESC
     </select>
 </mapper>
