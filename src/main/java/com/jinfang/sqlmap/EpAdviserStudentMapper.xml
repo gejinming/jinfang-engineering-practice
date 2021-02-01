@@ -198,11 +198,14 @@
             LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
         WHERE
             eas.is_del = 0
-            <if test="teacherId !=null">
+            <if test="teacherList.size>null and teacherList !=null ">
                 AND eas.teacher_id = #{teacherId}
             </if>
             <if test="majorId !=null">
                AND  eas.major_id = #{majorId}
+            </if>
+            <if test="studentName !=null">
+                AND  cs.NAME = #{studentName}
             </if>
             <if test="grade !=null">
                 AND  eas.grade = #{grade}

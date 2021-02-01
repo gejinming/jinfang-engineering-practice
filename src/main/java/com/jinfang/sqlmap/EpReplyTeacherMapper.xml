@@ -32,6 +32,7 @@
         <if test ="null != grade and grade != ''"> and ert.grade = #{grade}</if>
         <if test ="null != groupName and groupName != '' "> and ert.group_name = #{groupName}</if>
         <if test ="null != teacherName and teacherName != ''"> and ct.name = #{teacherName}</if>
+        <if test ="null != roleId and roleId != ''"> and ert.role_id = #{roleId}</if>
          order by ert.grade,ert.group_name,ct.id,so.name
     </select>
 

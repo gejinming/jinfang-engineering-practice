@@ -6,6 +6,7 @@ import com.jinfang.entity.CcStudentIndicationGrade;
 import com.jinfang.httpdto.Result;
 import com.jinfang.httpdto.ResultEnum;
 import com.jinfang.service.CcStudentIndicationGradeService;
+import com.jinfang.vo.LoginUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -74,5 +75,22 @@ public class WriteStudentScoreController extends BaseController {
     @PostMapping("/save")
     public Result save(@RequestBody List<CcScoreStuIndigrade> ccScoreStuIndigrades){
         return studentIndicationGradeService.save(ccScoreStuIndigrades);
+    }
+
+    @ApiOperation("答辩组长查询学生打分列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "studentName",value = "学生姓名"),
+            @ApiImplicitParam(name = "state",value = "状态(0未打分，1已打分)"),
+            @ApiImplicitParam(name = "grade",value = "届别")
+    })
+    @GetMapping("/findStudentList")
+    public Result findStudentList(Integer grade,String StringName,Integer state){
+        LoginUserVo userInfo = getUserInfo();
+        Long userId = userInfo.getUserId();
+        if (userId==null){
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"用户id未获取到，请重试!");
+        }
+
+        return Result.ok();
     }
 }

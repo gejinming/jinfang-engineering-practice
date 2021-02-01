@@ -31,4 +31,6 @@ public interface CcStudentIndicationGradeService {
      * @Date: 2021/1/28 16:00
      **/
     Result save(List<CcScoreStuIndigrade> list);
+
+    Result findStudentList(Integer grade,String StringName,Integer state,Long majorId,Long teacherId);
 }

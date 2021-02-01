@@ -5,6 +5,7 @@ import com.jinfang.entity.CcStudentIndicationGrade;
 import com.jinfang.httpdto.Result;
 import com.jinfang.httpdto.ResultEnum;
 import com.jinfang.mapper.CcStudentIndicationGradeMapper;
+import com.jinfang.mapper.EpAdviserStudentMapper;
 import com.jinfang.service.CcStudentIndicationGradeService;
 import com.jinfang.service.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class CcStudentIndicationGradeServiceImp implements CcStudentIndicationGr
     private CcStudentIndicationGradeMapper csmapper;
     @Autowired(required = false)
     private IdGenerator idGenerator;
+    @Autowired(required = false)
+    private EpAdviserStudentMapper epAdviserStudentMapper;
     @Override
     public List<CcStudentIndicationGrade> findGradecomposeList(Long majorId, String roleName,Integer grade) {
         return csmapper.findGradecomposeList(majorId,roleName,grade);
@@ -77,5 +80,17 @@ public class CcStudentIndicationGradeServiceImp implements CcStudentIndicationGr
             return Result.ok("保存成功");
         }
         return Result.error("保存失败，请重试！");
+    }
+
+    @Override
+    public Result findStudentList(Integer grade, String StringName, Integer state,Long majorId,Long teacherId) {
+       /*
+        1.先查询当前登录的人是否是答辩组长
+        2.查询跟这个答辩组长同一组的所有老师id
+        */
+
+        //先查询学生列表
+
+        return null;
     }
 }
