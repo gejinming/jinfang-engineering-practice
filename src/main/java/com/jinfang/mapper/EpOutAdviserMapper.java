@@ -58,4 +58,7 @@ public interface EpOutAdviserMapper {
     List<EpOutAdviser> findNoAllotStudentNum(Long majorId);
 
 
+    EpOutAdviser findById(Long id);
+
+
 }

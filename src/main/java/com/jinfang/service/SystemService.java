@@ -229,7 +229,11 @@ public class SystemService {
                 //如果不存在，则继续判断是否在校外教师表里
                 if (teacher==null){
                     EpOutAdviser epOutAdviser = epOutAdviserService.findAdviserInfoBySysId(loginUserVo.getUserId());
+                    if (epOutAdviser==null){
+                        log.error("-------校外指导老师信息获取失败--------");
+                    }
                     loginUserVo.setMajorId(epOutAdviser.getMajorId());
+                    loginUserVo.setAdviserId(epOutAdviser.getId());
                 }else{
                     loginUserVo.setMajorId(teacher.getMajorId());
                     loginUserVo.setSchoolId(teacher.getSchoolId());

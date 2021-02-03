@@ -8,6 +8,7 @@ import com.jinfang.mapper.EpPracticeCompanyMapper;
 import com.jinfang.mapper.SysUserMapper;
 import com.jinfang.page.MybatisPageHelper;
 import com.jinfang.page.PageResult;
+import com.jinfang.service.EpOutAdviserService;
 import com.jinfang.service.EpPracticeCompanyService;
 import com.jinfang.service.IdGenerator;
 import com.jinfang.util.PasswdKit;
@@ -35,6 +36,8 @@ public class EpPracticeCompanyServiceImp implements EpPracticeCompanyService {
     private SysUserMapper sysUserMapper;
     @Autowired(required = false)
     private IdGenerator idGenerator;
+    @Autowired
+    private EpOutAdviserService epOutAdviserService;
 
 
 
@@ -51,13 +54,14 @@ public class EpPracticeCompanyServiceImp implements EpPracticeCompanyService {
                 ArrayList<SysUser> sysUserList = new ArrayList<>();
                 for (EpOutAdviser temp : outAdvisers){
                     temp.setCompanyId(record.getId());
+                    temp.setLoginName(schoolId+"-"+temp.getPhone());
                     String tempPassword = temp.getPassword();
                     SysUser sysUser = new SysUser();
                     sysUser.setId(idGenerator.getNextValue());
                     sysUser.setCreateDate(date);
                     sysUser.setModifyDate(date);
                     sysUser.setName(temp.getName());
-                    sysUser.setLoginName(schoolId+"-"+record.getPhone());
+                    sysUser.setLoginName(schoolId+"-"+temp.getPhone());
                     sysUser.setPassword(PasswdKit.entryptPassword(tempPassword));
                     sysUserList.add(sysUser);
                 }
@@ -93,8 +97,12 @@ public class EpPracticeCompanyServiceImp implements EpPracticeCompanyService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int update(EpPracticeCompany record) {
-
+        if (record.getIsDel()!=null && record.getIsDel()==1){
+            //删除校外指导老师
+            int delete = epOutAdviserService.delete(record.getId());
+        }
         return epPracticeCompanyMapper.update(record);
     }
 

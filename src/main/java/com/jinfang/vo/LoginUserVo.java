@@ -27,6 +27,8 @@ public class LoginUserVo {
     private Long majorId;
     //届别
     private Integer grade;
+    //校外指导老师ID
+    private Long adviserId;
 
 
 }

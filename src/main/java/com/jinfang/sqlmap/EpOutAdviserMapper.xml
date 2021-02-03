@@ -9,6 +9,7 @@
         <result column="name" property="name" />
         <result column="phone" property="phone" />
         <result column="password" property="password" />
+        <result column="login_name" property="loginName" />
         <result column="is_del" property="isDel" />
     </resultMap>
 
@@ -24,25 +25,27 @@
         </if>
 
     </select>
-
-    <select id="findAdviserInfoBySysId" resultMap="BaseResultMap">
+    <select id="findById" resultMap="BaseResultMap">
+        select * from ep_out_adviser where id=#{id}
+    </select>
+    <select id="findAdviserInfoBySysId" resultMap="ExtResultMap">
         select eoa.*,epc.major_id from ep_out_adviser eoa
-        left join sys_user su on eoa.phone=su.loginName
+        left join sys_user su on eoa.login_name=su.loginName
         left join ep_practice_company epc on epc.id=eoa.company_id
         where su.id=#{id} and su.is_del=0 and eoa.is_del=0
     </select>
 
     <insert id="save" parameterType="list">
-        insert into ep_out_adviser(company_id,name,phone,password,is_del)
+        insert into ep_out_adviser(company_id,name,phone,password,is_del,login_name)
         values
         <foreach collection="list" item="v1" separator=",">
-            (#{v1.companyId},#{v1.name},#{v1.phone},#{v1.password},0)
+            (#{v1.companyId},#{v1.name},#{v1.phone},#{v1.password},0,#{v1.loginName})
         </foreach>
     </insert>
 
     <insert id="insert" parameterType="com.jinfang.entity.EpOutAdviser">
-        insert into ep_out_adviser(company_id,name,phone,password,is_del)
-        values (#{companyId},#{name},#{phone},#{password},0)
+        insert into ep_out_adviser(company_id,name,phone,password,is_del,login_name)
+        values (#{companyId},#{name},#{phone},#{password},0,#{loginName})
     </insert>
 
     <select id="findByCompanyId" resultMap="BaseResultMap">
@@ -53,11 +56,12 @@
     <update id="update" parameterType="com.jinfang.entity.EpOutAdviser">
         UPDATE ep_out_adviser
         <set>
-            <if test ='null != companyId'>company_id = #{companyId},</if>
-            <if test ='null != name'>name = #{name},</if>
-            <if test ='null != phone'>phone = #{phone},</if>
-            <if test ='null != password'>password = #{password},</if>
-            <if test ='null != isDel'>is_del = #{isDel}</if>
+            <if test ="null != companyId and companyId !=''">company_id = #{companyId},</if>
+            <if test ="null != name and name != ''">name = #{name},</if>
+            <if test ="null != phone and phone != ''">phone = #{phone},</if>
+            <if test ="null != password and password != ''">password = #{password},</if>
+            <if test ="null != loginName and loginName !='' ">login_name = #{loginName},</if>
+            <if test ="null != isDel and isDel != ''">is_del = #{isDel}</if>
         </set>
         WHERE id = #{id}
     </update>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpSchoolOutAccessMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpSchoolOutAccess" >
+        <result column="id" property="id" />
+        <result column="adviser_student_id" property="adviserStudentId" />
+        <result column="practice_case" property="practiceCase" />
+        <result column="job" property="job" />
+        <result column="company_remark" property="companyRemark" />
+        <result column="create_date" property="createDate" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpSchoolOutAccess">
+        INSERT INTO ep_school_out_access
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ="null != adviserStudentId and adviserStudentId != ''">
+                adviser_student_id,
+            </if>
+            <if test ="null != practiceCase and practiceCase != ''">
+                practice_case,
+            </if>
+            <if test ="null != job and job !=''">
+                job,
+            </if>
+            <if test ="null != companyRemark and companyRemark !=''">
+                company_remark,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != modifyDate'>
+                modify_date,
+            </if>
+            <if test ='null != isDel'>
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ="null != adviserStudentId and adviserStudentId !='' ">
+                #{adviserStudentId},
+            </if>
+            <if test ="null != practiceCase and practiceCase !=''">
+                #{practiceCase},
+            </if>
+            <if test ="null != job and job !=''">
+                #{job},
+            </if>
+            <if test ="null != companyRemark and companyRemark!='' ">
+                #{companyRemark},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != modifyDate'>
+                #{modifyDate},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_school_out_access
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpSchoolOutAccess">
+        UPDATE ep_school_out_access
+        <set>
+            <if test ="null != practiceCase and practiceCase != ''">practice_case = #{practiceCase},</if>
+            <if test ="null != job and job != ''">job = #{job},</if>
+            <if test ="null != companyRemark and companyRemark != ''">company_remark = #{companyRemark},</if>
+            <if test ="null != modifyDate ">modify_date = #{modifyDate},</if>
+            <if test ='null != isDel'>is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findPage" resultType="com.jinfang.entity.ResultStudentInfoEntity">
+        SELECT
+            esc.grade,cs.id studentId,cs.name studentName,cs.student_no studentNo,class.name className,major.id majoirId
+            ,major.name majorName,college.name collegeName
+            ,esa.id outAssessId,epc.name companyName,epc.address companyAdress,eos.id adviserStudentId
+        FROM
+            ep_student_company esc
+            LEFT JOIN ep_out_adviser_student eos ON esc.id = eos.student_company_id
+            AND eos.is_del = 0
+            LEFT JOIN ep_school_out_access esa ON eos.id = esa.adviser_student_id
+            AND esa.is_del = 0
+            LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+            LEFT JOIN cc_student cs ON cs.id = esc.student_id
+            LEFT JOIN sys_office class ON cs.class_id = class.id
+            AND class.type = 3
+            LEFT JOIN sys_office major ON major.id = class.parentid
+            AND major.type = 2
+            LEFT JOIN sys_office college ON college.id = major.parentid
+            AND college.type = 1
+            where esc.is_del=0
+            and eos.adviser_id=#{adviserId}
+            <if test="grade !=null and grade != ''">
+                and esc.grade=#{grade}
+            </if>
+            <if test="studentName!=null and studentName!=''">
+                and cs.name =#{studentName}
+            </if>
+            <if test="state!=null and state==0">
+                and esa.id is null
+            </if>
+            <if test="state!=null and state==1">
+                and esa.id is not null
+            </if>
+        order by esc.grade,cs.id desc
+
+
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        select * from ep_school_out_access where id=#{id}
+    </select>
+
+
+</mapper>

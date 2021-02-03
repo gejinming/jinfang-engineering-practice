@@ -33,6 +33,8 @@ public class EpOutAdviser {
     @ApiModelProperty("专业")
     private Long majorId;
 
+    private String loginName;
+
     private Long schoolId;
 
     private Integer studentNum;

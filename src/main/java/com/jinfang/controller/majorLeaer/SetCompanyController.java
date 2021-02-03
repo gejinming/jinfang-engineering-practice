@@ -174,10 +174,6 @@ public class SetCompanyController extends BaseController {
         epPracticeCompany.setIsDel(1);
         epPracticeCompany.setModifyDate(new Date());
         int deleCompany = epPracticeCompanyService.update(epPracticeCompany);
-        if (deleCompany>0){
-            //删除单位下的指导老师
-            deleCompany = epOutAdviserService.delete(epPracticeCompany.getId());
-        }
         return  getUpdateResultState(deleCompany);
 
     }
@@ -228,6 +224,10 @@ public class SetCompanyController extends BaseController {
                 return Result.error(ResultEnum.PARAM_ERROR.getCode(),"该老师存在实习学生不能删除，请检查!");
             }
         }
+        if (epOutAdviser.getPhone()==null){
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"手机号未获取到，请检查!");
+        }
+        epOutAdviser.setSchoolId(getUserInfo().getSchoolId());
        return getUpdateResultState(epOutAdviserService.update(epOutAdviser));
     }
 }

@@ -131,7 +131,7 @@
              and eas.id IS  NULL
     </select>
 
-    <select id="CheckReportPage" resultType="com.jinfang.entity.CheckReportList">
+    <select id="CheckReportPage" resultType="com.jinfang.entity.CheckReportEntity">
         SELECT
             eas.grade,
             epc.NAME companyName,
@@ -199,15 +199,18 @@
         WHERE
             eas.is_del = 0
             <if test="teacherList.size>null and teacherList !=null ">
-                AND eas.teacher_id = #{teacherId}
+                AND eas.teacher_id in
+                <foreach collection="teacherList" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
             </if>
-            <if test="majorId !=null">
+            <if test="majorId !=null and majorId != ''">
                AND  eas.major_id = #{majorId}
             </if>
-            <if test="studentName !=null">
+            <if test="studentName !=null and studentName != ''">
                 AND  cs.NAME = #{studentName}
             </if>
-            <if test="grade !=null">
+            <if test="grade !=null and grade != ''">
                 AND  eas.grade = #{grade}
             </if>
         ORDER BY

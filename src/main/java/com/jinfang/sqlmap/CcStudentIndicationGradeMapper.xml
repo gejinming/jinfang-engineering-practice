@@ -47,7 +47,9 @@
             AND cssi.is_del = 0
         WHERE
             cgi.course_gradecompose_id = #{courseGradecomposeId}
-            AND cssi.student_id = #{studentId}
+            <if test="studentId != null and studentId != ''">
+                AND cssi.student_id = #{studentId}
+            </if>
             AND cgi.is_del =0
 
     </select>

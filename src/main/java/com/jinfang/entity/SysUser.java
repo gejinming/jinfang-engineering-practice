@@ -87,6 +87,11 @@ public class SysUser extends PageEntity implements Serializable {
     private String loginName;
 
     /**
+     * loginname原始
+     */
+    private String outloginName;
+
+    /**
     * 用户类型(0：管理员）
     */
     private Integer type;
@@ -104,7 +109,7 @@ public class SysUser extends PageEntity implements Serializable {
     /**
     * 是否删除
     */
-    private String isDel;
+    private Integer isDel;
 
 
 }

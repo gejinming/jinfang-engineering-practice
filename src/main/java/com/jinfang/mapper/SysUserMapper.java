@@ -17,4 +17,8 @@ public interface SysUserMapper {
     SysUser findByName(String name);
 
     int insert(List<SysUser> list);
+
+    int update(SysUser sysUser);
+
+    int updatelist(List<String> list);
 }

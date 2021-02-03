@@ -42,4 +42,23 @@
             (#{v1.id},#{v1.createDate},#{v1.modifyDate},1,0,0,#{v1.name},#{v1.loginName},#{v1.password},2,0,0,0)
         </foreach>
     </insert>
+
+    <update id="update" parameterType="com.jinfang.entity.SysUser">
+        update sys_user
+        <set>
+
+            <if test ="null != name and name != ''">name = #{name},</if>
+            <if test ="null != loginName and loginName !=''">loginName = #{loginName},</if>
+            <if test ="null != isDel and isDel !=''">is_del = #{isDel}</if>
+        </set>
+        where loginName=#{outloginName}
+    </update>
+
+    <update id="updatelist" parameterType="list">
+         update sys_user set is_del=1
+         where loginName in
+        <foreach collection="list" item="loginName" index="index" open="(" close=")" separator=",">
+            #{loginName}
+        </foreach>
+    </update>
 </mapper>

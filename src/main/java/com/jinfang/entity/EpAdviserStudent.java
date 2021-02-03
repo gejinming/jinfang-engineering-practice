@@ -83,6 +83,7 @@ public class EpAdviserStudent extends PageEntity implements Serializable {
 
     private String companyName;
 
+    private String roleName;
 
 
 

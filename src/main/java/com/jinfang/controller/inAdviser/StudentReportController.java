@@ -1,7 +1,7 @@
 package com.jinfang.controller.inAdviser;
 
 import com.jinfang.controller.BaseController;
-import com.jinfang.entity.CheckReportList;
+import com.jinfang.entity.CheckReportEntity;
 import com.jinfang.entity.EpWeekDayReport;
 import com.jinfang.httpdto.Result;
 import com.jinfang.httpdto.ResultEnum;
@@ -40,7 +40,7 @@ public class StudentReportController extends BaseController {
     })
 
     @GetMapping("/findPage")
-    public Result findPage(CheckReportList checkReportList){
+    public Result findPage(CheckReportEntity checkReportList){
         LoginUserVo userInfo = getUserInfo();
         if (userInfo.getUserId()==null){
             return Result.error(ResultEnum.PARAM_ERROR.getCode(),"未获取到用户id，请检查!");

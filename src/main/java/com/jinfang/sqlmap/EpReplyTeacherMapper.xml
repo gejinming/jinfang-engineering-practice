@@ -20,7 +20,8 @@
 
     <select id="findByTeacher" resultMap="BaseResultMap">
         select * from ep_reply_teacher
-        where grade=#{grade} and teacher_id=#{teacherId} and role_id=#{roleId} and is_del=0
+        where   teacher_id=#{teacherId} and role_id=#{roleId} and is_del=0
+        <if test ="null != grade and grade != ''"> and grade=#{grade} </if>
     </select>
 
     <select id="findPage" resultMap="ExtResultMap">

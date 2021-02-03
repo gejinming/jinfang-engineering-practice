@@ -1,7 +1,7 @@
 package com.jinfang.service.Imp;
 
 import com.jinfang.entity.CcStudent;
-import com.jinfang.entity.CheckReportList;
+import com.jinfang.entity.CheckReportEntity;
 import com.jinfang.entity.EpAdviserStudent;
 import com.jinfang.entity.EpWeekDayReport;
 import com.jinfang.httpdto.Result;
@@ -81,13 +81,13 @@ public class EpAdviserStudentServiceImp implements EpAdviserStudentService {
     }
 
     @Override
-    public Result CheckReportPage(CheckReportList record) {
+    public Result CheckReportPage(CheckReportEntity record) {
         MybatisPageHelper.pageHelper(record.getPage(),record.getLimit());
         //指导老师分配学生并且选择实习单位得列表
-        List<CheckReportList> checkReportLists = epAdviserStudentMapper.CheckReportPage(record);
+        List<CheckReportEntity> checkReportLists = epAdviserStudentMapper.CheckReportPage(record);
         //指导老师分配学生填写周报日报得列表
         List<EpWeekDayReport> studentReport = epWeekDayReportMapper.findTeacherStudentReport(record.getTeacherId(), record.getMajorId());
-        for (CheckReportList temp : checkReportLists){
+        for (CheckReportEntity temp : checkReportLists){
             Long studentCompanyId = temp.getStudentCompanyId();
             //周报数
             Integer weekNums=0;

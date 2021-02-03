@@ -9,7 +9,7 @@ import lombok.Data;
  * @create: 2021-01-27 15:54
  **/
 @Data
-public class CheckReportList extends PageEntity {
+public class CheckReportEntity extends PageEntity {
 
     private Integer grade;
 

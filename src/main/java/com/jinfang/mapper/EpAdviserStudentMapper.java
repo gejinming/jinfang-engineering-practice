@@ -1,7 +1,7 @@
 package com.jinfang.mapper;
 
 import com.jinfang.entity.CcStudent;
-import com.jinfang.entity.CheckReportList;
+import com.jinfang.entity.CheckReportEntity;
 import com.jinfang.entity.EpAdviserStudent;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public interface EpAdviserStudentMapper extends CurdMapper<EpAdviserStudent> {
      * @Author: Gjm
      * @Date: 2021/1/27 16:00
      **/
-    List<CheckReportList> CheckReportPage(CheckReportList record);
+    List<CheckReportEntity> CheckReportPage(CheckReportEntity record);
 
     List<EpAdviserStudent> findGradeStudentList(Long majorId,Integer grade);
 

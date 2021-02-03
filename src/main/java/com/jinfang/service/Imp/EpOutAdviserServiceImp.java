@@ -46,8 +46,22 @@ public class EpOutAdviserServiceImp implements EpOutAdviserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int delete(Long companyId) {
-        return epOutAdviserMapper.delete(companyId);
+        List<EpOutAdviser> epOutAdvisers = epOutAdviserMapper.findByCompanyId(companyId);
+        ArrayList<String> loginNamelist = new ArrayList<>();
+        for (EpOutAdviser temp :epOutAdvisers){
+            loginNamelist.add(temp.getLoginName());
+        }
+        //先删除sys_user中的数据
+        int updatelist=0;
+        if (loginNamelist.size()>0){
+            updatelist= sysUserMapper.updatelist(loginNamelist);
+        }
+        //删除校外表数据
+        updatelist=epOutAdviserMapper.delete(companyId);
+
+        return updatelist;
     }
 
     @Override
@@ -59,8 +73,9 @@ public class EpOutAdviserServiceImp implements EpOutAdviserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int save(EpOutAdviser record) {
-        int insert = epOutAdviserMapper.insert(record);
         Long schoolId = record.getSchoolId();
+        record.setLoginName(schoolId+"-"+record.getPhone());
+        int insert = epOutAdviserMapper.insert(record);
         //将指导老师的账号加入sys_user中
         if (insert>0){
             Date date = new Date();
@@ -94,8 +109,23 @@ public class EpOutAdviserServiceImp implements EpOutAdviserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int update(EpOutAdviser record) {
-        return epOutAdviserMapper.update(record);
+        String newLoginName = record.getSchoolId() + "-" + record.getPhone();
+        record.setLoginName(newLoginName);
+        EpOutAdviser epOutAdviser = epOutAdviserMapper.findById(record.getId());
+        String outloginName = epOutAdviser.getLoginName();
+        int update = epOutAdviserMapper.update(record);
+        //修改登陆表信息sys_user
+        if( update>0){
+            SysUser sysUser = new SysUser();
+            sysUser.setLoginName(newLoginName);
+            sysUser.setOutloginName(outloginName);
+            sysUser.setName(record.getName());
+            sysUser.setIsDel(record.getIsDel());
+            update=sysUserMapper.update(sysUser);
+        }
+        return update;
     }
 
     @Override

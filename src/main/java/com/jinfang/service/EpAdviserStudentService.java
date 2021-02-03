@@ -1,7 +1,7 @@
 package com.jinfang.service;
 
 import com.jinfang.entity.CcStudent;
-import com.jinfang.entity.CheckReportList;
+import com.jinfang.entity.CheckReportEntity;
 import com.jinfang.entity.EpAdviserStudent;
 import com.jinfang.httpdto.Result;
 
@@ -43,5 +43,5 @@ public interface EpAdviserStudentService extends CurdService<EpAdviserStudent> {
      * @Author: Gjm
      * @Date: 2021/1/27 16:00
      **/
-    Result CheckReportPage(CheckReportList record);
+    Result CheckReportPage(CheckReportEntity record);
 }

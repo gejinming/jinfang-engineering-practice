@@ -2,6 +2,7 @@ package com.jinfang.service;
 
 import com.jinfang.entity.CcScoreStuIndigrade;
 import com.jinfang.entity.CcStudentIndicationGrade;
+import com.jinfang.entity.EpAdviserStudent;
 import com.jinfang.httpdto.Result;
 
 import java.util.List;
@@ -32,5 +33,5 @@ public interface CcStudentIndicationGradeService {
      **/
     Result save(List<CcScoreStuIndigrade> list);
 
-    Result findStudentList(Integer grade,String StringName,Integer state,Long majorId,Long teacherId);
+    Result findStudentList(EpAdviserStudent epAdviserStudent);
 }

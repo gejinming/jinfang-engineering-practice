@@ -3,9 +3,11 @@ package com.jinfang.controller.inAdviser;
 import com.jinfang.controller.BaseController;
 import com.jinfang.entity.CcScoreStuIndigrade;
 import com.jinfang.entity.CcStudentIndicationGrade;
+import com.jinfang.entity.EpAdviserStudent;
 import com.jinfang.httpdto.Result;
 import com.jinfang.httpdto.ResultEnum;
 import com.jinfang.service.CcStudentIndicationGradeService;
+import com.jinfang.util.DateUtil;
 import com.jinfang.vo.LoginUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,16 +84,22 @@ public class WriteStudentScoreController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "studentName",value = "学生姓名"),
             @ApiImplicitParam(name = "state",value = "状态(0未打分，1已打分)"),
-            @ApiImplicitParam(name = "grade",value = "届别")
+            @ApiImplicitParam(name = "grade",value = "届别默认当前年限"),
+            @ApiImplicitParam(name = "roleName",value = "当前菜单的角色名"),
     })
     @GetMapping("/findStudentList")
-    public Result findStudentList(Integer grade,String StringName,Integer state){
+    public Result findStudentList(EpAdviserStudent epAdviserStudent){
         LoginUserVo userInfo = getUserInfo();
         Long userId = userInfo.getUserId();
+        Long majorId = userInfo.getMajorId();
         if (userId==null){
             return Result.error(ResultEnum.PARAM_ERROR.getCode(),"用户id未获取到，请重试!");
         }
-
-        return Result.ok();
+        if (epAdviserStudent.getGrade()==null){
+            epAdviserStudent.setGrade(DateUtil.getYear(new Date()));
+        }
+        epAdviserStudent.setMajorId(majorId);
+        epAdviserStudent.setTeacherId(userId);
+        return studentIndicationGradeService.findStudentList(epAdviserStudent);
     }
 }
