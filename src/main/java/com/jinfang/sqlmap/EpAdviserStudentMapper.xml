@@ -186,8 +186,8 @@
         FROM
             ep_adviser_student eas
             LEFT JOIN cc_student cs ON cs.id = eas.student_id
-            LEFT JOIN sys_office class ON cs.class_id = class.id
-            AND class.type = 3
+           LEFT JOIN sys_office class ON cs.class_id = class.id
+             AND class.type = 3
             LEFT JOIN sys_office major ON major.id = class.parentid
             AND major.type = 2
             LEFT JOIN sys_office college ON college.id = major.parentid
@@ -212,6 +212,9 @@
             </if>
             <if test="grade !=null and grade != ''">
                 AND  eas.grade = #{grade}
+            </if>
+            <if test="companyName !=null and companyName != ''">
+                AND  epc.NAME = #{companyName}
             </if>
         ORDER BY
             eas.grade,

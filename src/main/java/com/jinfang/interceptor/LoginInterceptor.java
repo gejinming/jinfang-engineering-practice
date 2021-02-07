@@ -29,11 +29,12 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
         //此处为不需要登录的接口放行
-        //String requestURI = arg0.getRequestURI();
+        String requestURI = arg0.getRequestURI();
         String method = arg0.getMethod();
 
 
-        if (method.equals("OPTIONS") || arg0.getRequestURI().contains("/login") || arg0.getRequestURI().contains("/register") || arg0.getRequestURI().contains("/error") || arg0.getRequestURI().contains("/static")) {
+        /*if (method.equals("OPTIONS") || arg0.getRequestURI().contains("/login")
+                || arg0.getRequestURI().contains("/register") || arg0.getRequestURI().contains("/error") || arg0.getRequestURI().contains("/static")) {
             return true;
         }else{
             //验证token
@@ -66,9 +67,9 @@ public class LoginInterceptor implements HandlerInterceptor {
            // outMessage(arg1,200,"访问成功",true);
             return  true;
 
-        }
+        }*/
 
-
+return true;
     }
 
     private static void outMessage(HttpServletResponse arg1,Integer code,String message,boolean state){

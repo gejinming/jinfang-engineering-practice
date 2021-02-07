@@ -191,22 +191,24 @@
             etb.id taskBookId,
             etb.state
         FROM
-            ep_student_company esc
-            LEFT JOIN ep_practice_company epc ON esc.company_id = epc.id
-            AND epc.is_del = 0
-            LEFT JOIN ep_out_adviser_student eoas ON eoas.student_company_id = esc.id
-            AND eoas.is_del = 0
-            LEFT JOIN ep_out_adviser eoa ON eoa.id = eoas.adviser_id
-            AND eoa.is_del = 0
-            LEFT JOIN ep_adviser_student eas ON eas.grade = esc.grade
-            AND eas.is_del = 0
-            AND esc.student_id = eas.student_id
-            LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
-            LEFT JOIN ep_task_book etb ON etb.adviser_student_id = eas.id
-            AND etb.is_del = 0
-            AND etb.is_history = 0
+            ep_task_book etb
+                LEFT JOIN ep_adviser_student eas ON etb.adviser_student_id = eas.id
+                AND eas.is_del = 0
+                LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
+                LEFT JOIN ep_student_company esc ON eas.grade = esc.grade
+                AND esc.is_del = 0
+                AND esc.student_id = eas.student_id
+                LEFT JOIN ep_practice_company epc ON esc.company_id = epc.id
+                AND epc.is_del = 0
+                LEFT JOIN ep_out_adviser_student eoas ON eoas.student_company_id = esc.id
+                AND eoas.is_del = 0
+                LEFT JOIN ep_out_adviser eoa ON eoa.id = eoas.adviser_id
+                AND eoa.is_del = 0
         WHERE
-            esc.student_id = #{studentId} and etb.state>0
+            eas.student_id = #{studentId}
+              AND etb.is_del = 0
+              AND etb.is_history = 0
+              AND etb.state > 0
     </select>
 
     <select id="findTaskBook" resultMap="BaseResultMap">

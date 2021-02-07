@@ -118,7 +118,7 @@ public class CcStudentIndicationGradeServiceImp implements CcStudentIndicationGr
             }
         }
         //答辩组所有学生列表
-        List<EpAdviserStudent> epAdviserStudentList = epAdviserStudentMapper.findStudentInfo(majorId, studentName, grade, teacherIds);
+        List<EpAdviserStudent> epAdviserStudentList = epAdviserStudentMapper.findStudentInfo(majorId, studentName, grade, teacherIds,null);
         //再验证是否已经打分，
         /*
         * 1.先看当前登陆人的角色有哪些成绩组成打分的权限

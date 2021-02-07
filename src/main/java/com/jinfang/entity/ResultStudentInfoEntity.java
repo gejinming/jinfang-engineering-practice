@@ -19,7 +19,7 @@ public class ResultStudentInfoEntity extends PageEntity {
     //学号
     private String studentNo;
     //专业ID
-    private Long majorID;
+    private Long majorId;
     //专业名称
     private String majorName;
     //学院名称
@@ -36,7 +36,7 @@ public class ResultStudentInfoEntity extends PageEntity {
     private String companyName;
     //实习单位地址
     private String companyAdress;
-    //校外指导老师分配学生编号ID
+    //校内指导老师分配学生编号ID
     private Long adviserStudentId;
     //校外评定表ID
     private Long outAssessId;
@@ -48,6 +48,11 @@ public class ResultStudentInfoEntity extends PageEntity {
     private Long adversionId;
     //校内指导老师姓名
     private String adversionName;
+    //实习报告ID
+    private Long reportId;
+
+    private String roleName;
+
 
 
 }

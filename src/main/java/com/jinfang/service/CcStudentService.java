@@ -1,6 +1,10 @@
 package com.jinfang.service;
 
 import com.jinfang.entity.CcStudent;
+import com.jinfang.entity.ResultStudentInfoEntity;
+import com.jinfang.httpdto.Result;
+
+import java.util.List;
 
 /**
  * @description:
@@ -15,4 +19,12 @@ public interface CcStudentService extends CurdService<CcStudent>  {
     boolean findStudentById(Long id);
 
     CcStudent findInfoById(Long id);
+
+    /*
+     * @Description:查询专业所有学生
+     * @Author: Gjm
+     * @Date: 2021/2/5 4:30 下午
+     * @return: 学生信息
+     **/
+    Result findMajorStudentlist(Long userId,ResultStudentInfoEntity record);
 }

@@ -36,6 +36,11 @@ spring:
         multipart:
           max-file-size: 20971520     # 文件上传大小限制为20M
           max-request-size: 20971520  # 请求大小限制为20M
+#文件上传路径
+storage:
+  disk: /Volumes/工作盘/upload/
+  domain: http://localhost/pdf/
+  zip: /Volumes/工作盘/upload/zip/
 
   #打印sql
 logging:

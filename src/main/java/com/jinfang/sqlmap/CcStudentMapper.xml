@@ -104,4 +104,43 @@
             LIMIT 1
     </select>
 
+    <select id="findMajorStudentlist" resultType="com.jinfang.entity.ResultStudentInfoEntity">
+        SELECT
+            ccp.period_date grade,
+            cs.NAME studentName,
+            cs.student_no studentNo,
+            clazz.NAME className,
+            major.id majorId,
+            major.NAME majorName,
+            institute.NAME collegeName,
+            epc.name companyName
+        FROM
+            cc_course_periode ccp
+                LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id and ces.is_del=0
+                LEFT JOIN cc_student cs ON cs.id = ces.student_Id
+                AND ces.is_del = 0
+                LEFT JOIN cc_class cc ON cc.id = cs.class_id
+                LEFT JOIN sys_office clazz ON clazz.id = cc.id  AND clazz.type = 3
+                LEFT JOIN sys_office major ON major.id = clazz.parentid AND major.type = 2
+                LEFT JOIN sys_office institute ON institute.id = major.parentid AND institute.type = 1
+                left join ep_student_company esc on esc.grade=ccp.period_date and esc.student_id=cs.id and esc.is_del=0
+                left join ep_practice_company epc on epc.id=esc.company_id
+        WHERE
+            ccp.is_del = 0
+          AND ccp.course_type = 2
+          AND ccp.major_id = #{majorId}
+        <if test="grade!=null and grade !=''">
+           AND ccp.period_date=#{grade}
+        </if>
+        <if test="studentName!=null and studentName !=''">
+            AND cs.NAME=#{studentName}
+        </if>
+        <if test="companyName!=null and companyName !=''">
+            AND  epc.name=#{companyName}
+        </if>
+        ORDER BY
+            period_date,
+            cs.id DESC
+    </select>
+
 </mapper>

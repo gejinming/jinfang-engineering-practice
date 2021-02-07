@@ -2,6 +2,7 @@ package com.jinfang.mapper;
 
 import com.jinfang.entity.CcCoursePeriode;
 import com.jinfang.entity.CcStudent;
+import com.jinfang.entity.ResultStudentInfoEntity;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -43,5 +44,11 @@ public interface CcStudentMapper {
      * @Date: 2021/1/27 9:25
      **/
     CcStudent findStudentInfo(Long studentId);
-
+    /*
+     * @Description:查询专业所有学生
+     * @Author: Gjm
+     * @Date: 2021/2/5 4:30 下午
+     * @return: 学生信息
+     **/
+    List<ResultStudentInfoEntity> findMajorStudentlist(Long majorId,Integer grade,String studentName,String companyName);
 }

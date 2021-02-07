@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpPracticeReportMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpPracticeReport" >
+        <result column="id" property="id" />
+        <result column="adviser_student_id" property="adviserStudentId" />
+        <result column="file_id" property="fileId" />
+        <result column="create_date" property="createDate" />
+        <result column="submit_date" property="submitDate" />
+        <result column="state" property="state" />
+        <result column="teacher_opinion" property="teacherOpinion" />
+        <result column="check_date" property="checkDate" />
+        <result column="check_id" property="checkId" />
+        <result column="is_del" property="isDel" />
+        <result column="is_history" property="isHistory" />
+        <result column="companyName" property="companyName" />
+        <result column="adviserName" property="adviserName" />
+        <result column="adviserStudentIds" property="adviserStudentIds" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                adviser_student_id,
+                file_id,
+                create_date,
+                submit_date,
+                state,
+                teacher_opinion,
+                check_date,
+                check_id,
+                is_del,
+                is_history
+    </sql>
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpPracticeReport">
+        INSERT INTO ep_practice_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != adviserStudentId'>
+                adviser_student_id,
+            </if>
+            <if test ='null != fileId'>
+                file_id,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != submitDate'>
+                submit_date,
+            </if>
+            <if test ='null != state'>
+                state,
+            </if>
+            <if test ='null != teacherOpinion'>
+                teacher_opinion,
+            </if>
+            <if test ='null != checkDate'>
+                check_date,
+            </if>
+            <if test ='null != checkId'>
+                check_id,
+            </if>
+            <if test ='null != isDel'>
+                is_del,
+            </if>
+            <if test ='null != isHistory'>
+                is_history
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != adviserStudentId'>
+                #{adviserStudentId},
+            </if>
+            <if test ='null != fileId'>
+                #{fileId},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != submitDate'>
+                #{submitDate},
+            </if>
+            <if test ='null != state'>
+                #{state},
+            </if>
+            <if test ='null != teacherOpinion'>
+                #{teacherOpinion},
+            </if>
+            <if test ='null != checkDate'>
+                #{checkDate},
+            </if>
+            <if test ='null != checkId'>
+                #{checkId},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel},
+            </if>
+            <if test ='null != isHistory'>
+                #{isHistory}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_practice_report
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpPracticeReport">
+        UPDATE ep_practice_report
+        <set>
+            <if test ="null != adviserStudentId and adviserStudentId!=''">adviser_student_id = #{adviserStudentId},</if>
+            <if test ="null != fileId and fileId!=''">file_id = #{fileId},</if>
+            <if test ='null != createDate'>create_date = #{createDate},</if>
+            <if test ='null != submitDate'>submit_date = #{submitDate},</if>
+            <if test ="null != state and state != ''">state = #{state},</if>
+            <if test ="null != teacherOpinion and teacherOpinion !=''">teacher_opinion = #{teacherOpinion},</if>
+            <if test ='null != checkDate'>check_date = #{checkDate},</if>
+            <if test ="null != checkId and checkId != ''">check_id = #{checkId},</if>
+            <if test ="null != isDel and isDel != ''">is_del = #{isDel},</if>
+            <if test ="null != isHistory and isHistory != ''">is_history = #{isHistory}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT *
+        FROM ep_practice_report
+        WHERE id = #{id}
+    </select>
+
+    <select id="findStudentReport" resultMap="BaseResultMap">
+        SELECT
+            epc.NAME companyName,
+            ct.NAME adviserName,
+            epr.*,
+            eas.id adviserStudentIds
+        FROM
+            ep_adviser_student eas
+                LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
+                LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
+                AND esc.student_id = eas.student_id
+                AND esc.is_del = 0
+                LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+                LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
+                AND epr.is_del = 0
+                AND epr.is_history = #{isHistory}
+        WHERE
+            eas.is_del = 0
+          AND eas.student_id = #{studentId}
+         <if test="isHistory==1">
+             AND epr.is_history = #{isHistory}
+         </if>
+    </select>
+
+</mapper>

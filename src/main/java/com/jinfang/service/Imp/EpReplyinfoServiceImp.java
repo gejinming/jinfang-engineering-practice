@@ -83,12 +83,14 @@ public class EpReplyinfoServiceImp implements EpReplyinfoService {
                 Long teacherId = teacher.getTeacherId();
                 if (groupName.equals(teacher.getGroupName())){
                     teacherString=teacherString+teacher.getTeacherName()+"、";
-                }
-                for (EpAdviserStudent student : gradeStudentList){
-                    if (teacherId.equals(student.getTeacherId())){
-                        studentString=studentString+student.getStudentName()+"、";
+                    //组合当前组的学生
+                    for (EpAdviserStudent student : gradeStudentList){
+                        if (teacherId.equals(student.getTeacherId())){
+                            studentString=studentString+student.getStudentName()+"、";
+                        }
                     }
                 }
+
             }
             temp.setTeacher(teacherString);
             temp.setStudent(studentString);
