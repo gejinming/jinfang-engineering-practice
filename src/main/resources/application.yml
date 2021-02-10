@@ -39,8 +39,9 @@ spring:
 #文件上传路径
 storage:
   disk: /Volumes/工作盘/upload/
-  domain: http://localhost/pdf/
-  zip: /Volumes/工作盘/upload/zip/
+#生成word文档位置生成压缩包之后就删除了
+template:
+  target: /Volumes/工作盘/template/
 
   #打印sql
 logging:

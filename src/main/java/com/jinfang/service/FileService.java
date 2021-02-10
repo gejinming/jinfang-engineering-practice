@@ -33,22 +33,11 @@ public class FileService {
     @Value("${storage.disk}")
     private String storageDisk;
 
-    /**
-     * 生成的网络预览路径
-     */
-    @Value("${storage.domain}")
-    private String storageDomain;
 
-    /**
-     * 生成 zip 磁盘路径，方便下载
-     */
-    @Value("${storage.zip}")
-    private String storageZip;
-
-   private final EpPracticeReportDocMapper epPracticeReportDocMapper;
+    private final EpPracticeReportDocMapper epPracticeReportDocMapper;
     private final EpPracticeReportService epPracticeReportService;
 
-    public Result upload(MultipartFile multipartFile,Long adviserStudentId) {
+    public Result upload(MultipartFile multipartFile, Long adviserStudentId, Long id) {
         if (multipartFile == null) {
             return Result.error("上传文件数据为空");
         }
@@ -62,20 +51,21 @@ public class FileService {
             }
 
 
-            return saveFiled(multipartFile.getOriginalFilename(), fileUploadResult,adviserStudentId);
+            return saveFiled(multipartFile.getOriginalFilename(), fileUploadResult, adviserStudentId, id);
         } catch (Exception e) {
             log.error("multipartFile[{}]. type[{}] upload failed", multipartFile.getOriginalFilename(), e);
             return Result.error("文件上传失败");
         }
 
     }
+
     /*
      * @Description:将上传文件信息保存到EpPracticeReportDoc表中
      * @Author: Gjm
      * @Date: 2021/2/4 4:20 下午
      * @return: java.lang.Long
      **/
-    private Result saveFiled(String originName, FileUploadUtil.FileUploadResult fileUploadResult,Long adviserStudentId) {
+    private Result saveFiled(String originName, FileUploadUtil.FileUploadResult fileUploadResult, Long adviserStudentId, Long id) {
         EpPracticeReportDoc docMeta = EpPracticeReportDoc.builder().originName(originName).newName(fileUploadResult.getFilename())
                 .size(fileUploadResult.getFileSize()).path(fileUploadResult
                         .getFileFullName()).url(fileUploadResult.getUrlPathName())
@@ -85,6 +75,13 @@ public class FileService {
         if (result <= 0) {
             throw new RuntimeException("file[" + fileUploadResult.getFileFullName() + "] insert failed");
         }
+        //说明是重新提交的实习报告，把原实习报告作为历史记录
+        if (id != null && id != 0) {
+            EpPracticeReport practiceReport = new EpPracticeReport();
+            practiceReport.setId(id);
+            practiceReport.setIsHistory(1);
+            int update = epPracticeReportService.update(practiceReport);
+        }
         EpPracticeReport epPracticeReport = new EpPracticeReport();
         epPracticeReport.setState(0);
         epPracticeReport.setFileId(docMeta.getId());
@@ -93,7 +90,7 @@ public class FileService {
         epPracticeReport.setIsHistory(0);
         epPracticeReport.setIsDel(0);
         int save = epPracticeReportService.save(epPracticeReport);
-        if (save>0){
+        if (save > 0) {
             return Result.ok();
         }
         return Result.error("上传失败");
@@ -130,64 +127,6 @@ public class FileService {
         return Result.ok(url);
     }
 
-   /*public ResponseEntity<InputStreamResource> download(List<String> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            log.error("download failed by ids is empty.");
-            return null;
-        }
-
-        List<GpDocMeta> gpDocMetas = gpDocMetaMapper.findByIds(ids);
-        if (CollectionUtils.isEmpty(gpDocMetas)) {
-            log.warn("Can not find any data by id[{}]", gpDocMetas);
-            return null;
-        }
-
-        List<ZipUtil.ZipFileMeta> zipFileMetas = new ArrayList<>();
-        for (GpDocMeta gpDocMeta : gpDocMetas) {
-            FileBizType bizType = FileBizType.of(gpDocMeta.getType());
-            if (FileBizType.UNKNOWN == bizType) {
-                continue;
-            }
-
-            String newFileName = gpDissertationService.findByFileId(gpDocMeta.getId(), bizType);
-            if (StringUtils.isEmpty(newFileName)) {
-                continue;
-            }
-
-            // 拼接文件扩展名
-            newFileName = newFileName + FileUploadUtil.getFileExtName(gpDocMeta.getNewName());
-
-            zipFileMetas.add(ZipUtil.ZipFileMeta.builder().originFileName(gpDocMeta.getPath()).newFileName(newFileName).build());
-        }
-
-        return getZipFile(zipFileMetas);
-    }*/
-
-//    private List<String> findFileNamesByIds(String id) {
-//        if (StringUtils.isEmpty(ids)) {
-//            log.error("ids[{}] is empty", ids);
-//            return null;
-//        }
-//
-//        List<String> fileNames = new ArrayList<>();
-//        String[] loanDocIdArray = ids.split(",");
-//        List<GpDocMeta> loanDocList = gpDocMetaMapper.findByIds(Arrays.asList(loanDocIdArray));
-//
-//        List<String> fileNames = new ArrayList<>();
-//        for (FileMeta loanDoc : loanDocList) {
-//            if (loanDoc == null) {
-//                continue;
-//            }
-//
-//            if (isPdf) {
-//                fileNames.add(loanDoc.getPdfPath());
-//            } else {
-//                fileNames.add(loanDoc.getDocPath());
-//            }
-//        }
-//
-//        return fileNames;
-//    }
 
     /**
      * 获取携带日期格式路径
@@ -204,32 +143,5 @@ public class FileService {
                 + "-" + RandomUtil.randomCode();
     }
 
-    /**
-     * 返回 将文件压缩成ZIP包数据流
-     *
-     * @param zipFileMetas 需要压缩的文件名称数组
-     * @return ZIP数据流
-     */
-    private ResponseEntity<InputStreamResource> getZipFile(List<ZipUtil.ZipFileMeta> zipFileMetas) {
-        if (CollectionUtils.isEmpty(zipFileMetas)) {
-            log.warn("Can not find any zip files");
-            return null;
-        }
-
-
-        FileDirectoryUtil.DirMeta dirMeta = getDirWithDate(storageZip);
-        String targetFileName = getDateTimeFileName(zipFileMetas.size()) + ".zip";
-        String targetFileFullName = dirMeta.getPath() + File.separator + targetFileName;
-
-        log.info("====Download file :{}", JSON.toJSONString(zipFileMetas));
-
-        boolean isZipOk = ZipUtil.zip(zipFileMetas, targetFileFullName);
-        if (!isZipOk) {
-            log.error("docFileNames[{}] zip failed", zipFileMetas);
-            return null;
-        }
-
-        return FileDownloadUtil.download(targetFileFullName, targetFileName);
-    }
 
 }

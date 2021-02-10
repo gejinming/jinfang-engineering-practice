@@ -129,6 +129,16 @@
              and ccp.course_type = 2
              and ccp.is_del=0
              and eas.id IS  NULL
+            <if test="studentName !=null and studentName!=''">
+                and cs.name=#{studentName}
+            </if>
+            <if test="studentNo !=null and studentNo!=''">
+                and cs.student_no=#{studentNo}
+            </if>
+            <if test="className !=null and className!=''">
+                and so.name=#{className}
+            </if>
+        order by cs.id desc
     </select>
 
     <select id="CheckReportPage" resultType="com.jinfang.entity.CheckReportEntity">
@@ -182,7 +192,8 @@
             class.NAME className,
             major.NAME majorName,
             college.NAME colleageName,
-            epc.NAME companyName
+            epc.NAME companyName,
+        eoas.adviser_id outAdviserId
         FROM
             ep_adviser_student eas
             LEFT JOIN cc_student cs ON cs.id = eas.student_id
@@ -196,6 +207,8 @@
             AND esc.student_id = eas.student_id
             AND esc.is_del = 0
             LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+            left join ep_out_adviser_student eoas on eoas.student_company_id=esc.id
+            and eoas.is_del=0
         WHERE
             eas.is_del = 0
             <if test="teacherList.size>null and teacherList !=null ">

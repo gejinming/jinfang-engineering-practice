@@ -83,10 +83,13 @@ public class AllotAdviserStudentController extends BaseController {
     }
     @ApiOperation("查询可以分配的学生列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name ="grade",value = "届别")
+            @ApiImplicitParam(name ="grade",value = "届别"),
+            @ApiImplicitParam(name ="studentName",value = "学生姓名（筛选）"),
+            @ApiImplicitParam(name ="studentNo",value = "学号（筛选）"),
+            @ApiImplicitParam(name ="className",value = "班级（筛选）")
     })
     @GetMapping("/findUnAllocatStudentList")
-    public Result findUnAllocatStudentList(Integer grade){
+    public Result findUnAllocatStudentList(Integer grade,String studentName,String studentNo,String className){
         if (grade==null){
             return Result.error(ResultEnum.PARAM_ERROR.getCode(),"届别未获取到，请检查!");
         }
@@ -94,7 +97,7 @@ public class AllotAdviserStudentController extends BaseController {
         if (majorId==null){
             return Result.error(ResultEnum.PARAM_ERROR.getCode(),"所属专业编号未获取到，请检查!");
         }
-        return Result.ok(epAdviserStudentService.findUnAllocatStudentList(grade,majorId));
+        return Result.ok(epAdviserStudentService.findUnAllocatStudentList(grade,majorId,studentName,studentNo,className));
     }
     @ApiOperation("分配学生")
     @ApiImplicitParams({
@@ -137,7 +140,7 @@ public class AllotAdviserStudentController extends BaseController {
         int willStudentNum = epAdviserStudents.size();
         if (allocatStudentNum+willStudentNum>studentNum){
             return Result.error(ResultEnum.PARAM_ERROR.getCode(),"该教师已经分配了"
-                    +allocatStudentNum+"名学生，分配上限为"+studentNum+"名，该教师还可以分配"+(studentNum-allocatStudentNum)+"名学生。");
+                    +allocatStudentNum+"名学生，分配上限为"+studentNum+"名");
         }
 
         return getSaveResultState(epAdviserStudentService.save(epAdviserStudents));

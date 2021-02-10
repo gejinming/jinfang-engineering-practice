@@ -40,6 +40,18 @@ public class EpWeekDayReport extends PageEntity implements Serializable {
     * 报告类型（1日报，2周报）
     */
     private Integer reportType;
+    /**
+     * 第几周
+     */
+    private Integer weekNum;
+    /**
+     * 开始时间
+     */
+    private Date startDate;
+    /**
+     * 结束时间
+     */
+    private Date endDate;
 
     /**
     * 评语

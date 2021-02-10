@@ -17,5 +17,5 @@ public interface EpPracticeReportMapper extends CurdMapper<EpPracticeReport> {
      * @Date: 2021/2/4 3:28 下午
      * @return: 学生个人的信息
      **/
-    List<ResultStudentInfoEntity> findStudentReport(Long studentId,Integer isHistory);
+    List<EpPracticeReport> findStudentReport(Long studentId,Integer isHistory);
 }

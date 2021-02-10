@@ -27,4 +27,6 @@ public interface EpTaskBookMapper extends CurdMapper<EpTaskBook> {
     List<StudentTaskBook> findStudentTaskBook(Long studentId);
 
     EpTaskBook findTaskBook(Long adviserStudentId);
+
+    EpTaskBook findStudentTaskBooks(Integer grade,Long studentId);
 }

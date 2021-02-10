@@ -34,54 +34,51 @@ public class FileController extends BaseController {
     private EpPracticeReportDocMapper epPracticeReportDocMapper;
 
     @PostMapping(value = "/upload")
-    @ApiOperation(value = "上传文件", httpMethod = "POST")
+    @ApiOperation(value = "上传实习报告文件", httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="file",value = "文件"),
-            @ApiImplicitParam(name="adviserStudentId",value = "指导老师分配学生ID"),
+            @ApiImplicitParam(name = "file", value = "文件"),
+            @ApiImplicitParam(name = "adviserStudentId", value = "指导老师分配学生ID"),
+            @ApiImplicitParam(name = "id", value = "实习报告被驳回重新提交实习报告时传原来的报告ID,第一次提交就填0"),
     })
-    public Result upload(@RequestParam("file") MultipartFile file,Long adviserStudentId) {
-        if (file==null){
-            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"实习报告文件未获取到，请检查!");
+    public Result upload(@RequestParam("file") MultipartFile file, Long adviserStudentId, Long id) {
+        if (file == null) {
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(), "实习报告文件未获取到，请检查!");
         }
-        if (adviserStudentId==null){
-            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"指导老师分配学生ID未获取到，请检查!");
+        if (adviserStudentId == null) {
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(), "指导老师分配学生ID未获取到，请检查!");
         }
-        return fileService.upload(file,adviserStudentId);
+        return fileService.upload(file, adviserStudentId, id);
     }
 
-   /* @PostMapping(value = "/uploadWithType")
-    @ApiOperation(value = "根据文件名称上传", httpMethod = "POST")
-    public HttpResult uploadWithName(@RequestParam("file") MultipartFile file,
-                                     @RequestParam("type") String type) {
-        return fileService.upload(file, type);
-    }
-*/
     @GetMapping(value = "/preview")
     @ApiOperation(value = "获取预览实习报告文件URL", httpMethod = "GET")
-    @ApiImplicitParam(name="fileId",value = "实习报告文件ID")
+    @ApiImplicitParam(name = "fileId", value = "实习报告文件ID")
     public Result preview(Long fileId) {
         return fileService.getFilePreviewUrl(fileId);
     }
 
     @ApiOperation("下载实习报告")
-    @ApiImplicitParam(name = "fileId",value = "实习报告文件ID")
+    @ApiImplicitParam(name = "fileId", value = "实习报告文件ID")
     @GetMapping("/downloadReport")
     public void download(Long fileId, HttpServletResponse response) throws UnsupportedEncodingException {
-        if (fileId==null){
+        if (fileId == null) {
             log.error("fileId为空。");
+            return;
         }
         EpPracticeReportDoc reportDoc = epPracticeReportDocMapper.findById(fileId);
         String path = reportDoc.getPath();
-        if (path==null){
-            log.error("fileId"+fileId+"：文件路径为空");
+        if (path == null) {
+            log.error("fileId" + fileId + "：文件路径为空");
+            return;
         }
         String originName = reportDoc.getOriginName();
         File file = new File(path);
-        if (!file.exists()){
+        if (!file.exists()) {
             log.error("文件没有找到！");
             Result.error("文件没有找到");
+            return;
         }
-        FileDownloadUtil.downLoadfile(path,originName,response);
+        FileDownloadUtil.downLoadfile(path, originName, response);
     }
 
    /* @GetMapping(value = "/download")

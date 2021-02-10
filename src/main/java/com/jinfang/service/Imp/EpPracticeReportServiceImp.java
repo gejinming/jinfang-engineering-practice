@@ -47,12 +47,13 @@ public class EpPracticeReportServiceImp implements EpPracticeReportService {
 
     @Override
     public Result findPage(EpPracticeReport record) {
-        return null;
+        MybatisPageHelper.pageHelper(record.getPage(),record.getLimit());
+        return Result.ok(MybatisPageHelper.getPageResult(epPracticeReportMapper.findPage(record)));
     }
 
     @Override
     public Result findStudentReport(Long studentId,Integer page, Integer limit,Integer isHistory) {
-        List<ResultStudentInfoEntity> studentReport = epPracticeReportMapper.findStudentReport(studentId,isHistory);
+        List<EpPracticeReport> studentReport = epPracticeReportMapper.findStudentReport(studentId,isHistory);
         if (page==null){
             return Result.ok(studentReport);
         }

@@ -18,6 +18,12 @@
         <result column="companyName" property="companyName" />
         <result column="adviserName" property="adviserName" />
         <result column="adviserStudentIds" property="adviserStudentIds" />
+        <result column="path" property="path" />
+        <result column="studentId" property="studentId" />
+        <result column="studentName" property="studentName" />
+        <result column="className" property="className" />
+        <result column="grade" property="grade" />
+
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -110,14 +116,11 @@
     <update id="update" parameterType="com.jinfang.entity.EpPracticeReport">
         UPDATE ep_practice_report
         <set>
-            <if test ="null != adviserStudentId and adviserStudentId!=''">adviser_student_id = #{adviserStudentId},</if>
-            <if test ="null != fileId and fileId!=''">file_id = #{fileId},</if>
-            <if test ='null != createDate'>create_date = #{createDate},</if>
-            <if test ='null != submitDate'>submit_date = #{submitDate},</if>
             <if test ="null != state and state != ''">state = #{state},</if>
             <if test ="null != teacherOpinion and teacherOpinion !=''">teacher_opinion = #{teacherOpinion},</if>
             <if test ='null != checkDate'>check_date = #{checkDate},</if>
             <if test ="null != checkId and checkId != ''">check_id = #{checkId},</if>
+            <if test ="null != submitDate">submit_date = #{submitDate},</if>
             <if test ="null != isDel and isDel != ''">is_del = #{isDel},</if>
             <if test ="null != isHistory and isHistory != ''">is_history = #{isHistory}</if>
         </set>
@@ -136,7 +139,8 @@
             epc.NAME companyName,
             ct.NAME adviserName,
             epr.*,
-            eas.id adviserStudentIds
+            eas.id adviserStudentIds,
+            eprd.path
         FROM
             ep_adviser_student eas
                 LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
@@ -147,12 +151,60 @@
                 LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
                 AND epr.is_del = 0
                 AND epr.is_history = #{isHistory}
+                left join ep_practice_report_doc eprd on eprd.id=epr.file_id
         WHERE
             eas.is_del = 0
           AND eas.student_id = #{studentId}
          <if test="isHistory==1">
              AND epr.is_history = #{isHistory}
          </if>
+        order by epr.create_date desc
+    </select>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT
+            eas.grade,
+            cs.id studentId,
+            cs.name studentName,
+            class.name className,
+            epc.NAME companyName,
+            ct.NAME adviserName,
+            epr.*,
+            eas.id adviserStudentIds,
+            eprd.path
+            FROM
+            ep_adviser_student eas
+            LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
+            LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
+            AND esc.student_id = eas.student_id
+            AND esc.is_del = 0
+            LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+            LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
+            AND epr.is_del = 0
+            AND epr.is_history =0
+            left join ep_practice_report_doc eprd on eprd.id=epr.file_id
+            LEFT JOIN cc_student cs ON cs.id = eas.student_id
+            LEFT JOIN sys_office class ON cs.class_id = class.id
+            AND class.type = 3
+            LEFT JOIN sys_office major ON major.id = class.parentid
+            AND major.type = 2
+        WHERE
+        eas.is_del = 0
+        AND eas.teacher_id = #{teacherId}
+        <if test="grade !=null and grade !=''">
+            AND eas.grade= #{grade}
+        </if>
+        <if test="companyName !=null and companyName !=''">
+            AND epc.NAME = #{companyName}
+        </if>
+        <if test="state !=null and state !='' and state !=0">
+            AND epr.sate = #{state}
+        </if>
+        <if test="state ==0">
+            and epr.state is null
+            or epr.state=0
+        </if>
+        order by  eas.grade,epr.create_date desc
     </select>
 
 </mapper>

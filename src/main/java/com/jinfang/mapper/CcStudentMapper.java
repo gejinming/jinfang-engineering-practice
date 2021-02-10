@@ -27,7 +27,7 @@ public interface CcStudentMapper {
     /*
      * @param id
      * @return com.jinfang.entity.CcStudent
-     * @description: 根据学生id查询
+     * @description: 根据学生id查询学生表的信息
      * @date 2021/1/13 10:52
      */
     CcStudent findByStudentById(Long id);

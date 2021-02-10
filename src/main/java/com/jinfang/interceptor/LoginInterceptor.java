@@ -33,7 +33,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String method = arg0.getMethod();
 
 
-        /*if (method.equals("OPTIONS") || arg0.getRequestURI().contains("/login")
+        if (method.equals("OPTIONS") || arg0.getRequestURI().contains("/login")
                 || arg0.getRequestURI().contains("/register") || arg0.getRequestURI().contains("/error") || arg0.getRequestURI().contains("/static")) {
             return true;
         }else{
@@ -67,9 +67,8 @@ public class LoginInterceptor implements HandlerInterceptor {
            // outMessage(arg1,200,"访问成功",true);
             return  true;
 
-        }*/
+        }
 
-return true;
     }
 
     private static void outMessage(HttpServletResponse arg1,Integer code,String message,boolean state){

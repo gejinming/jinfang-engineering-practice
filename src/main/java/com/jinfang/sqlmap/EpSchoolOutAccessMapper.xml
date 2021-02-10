@@ -11,6 +11,9 @@
         <result column="company_remark" property="companyRemark" />
         <result column="create_date" property="createDate" />
         <result column="is_del" property="isDel" />
+        <result column="outAdviserName" property="outAdviserName" />
+        <result column="companyName" property="companyName" />
+        <result column="address" property="address" />
     </resultMap>
 
 
@@ -124,5 +127,15 @@
         select * from ep_school_out_access where id=#{id}
     </select>
 
+    <select id="findStudentAssess" resultMap="BaseResultMap">
+        select epc.name companyName,epc.address,eoa.name outAdviserName,esoa.*
+        from ep_student_company esc
+                 left join ep_out_adviser_student  eoas on esc.id=eoas.student_company_id and eoas.is_del=0
+                 left join ep_out_adviser eoa on eoa.id=eoas.adviser_id and eoa.is_del=0
+                 left join ep_school_out_access esoa on esoa.adviser_student_id=eoas.id and esoa.is_del=0
+                 left join ep_practice_company epc on epc.id=esc.company_id
+        where esc.student_id=#{studentId} and esc.grade=#{grade} and esc.is_del=0
+
+    </select>
 
 </mapper>

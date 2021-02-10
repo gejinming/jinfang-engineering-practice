@@ -29,7 +29,7 @@ public interface EpAdviserStudentService extends CurdService<EpAdviserStudent> {
      * @Author: Gjm
      * @Date: 2021/1/21 9:57
      **/
-    List<CcStudent> findUnAllocatStudentList(Integer grade,Long majorId);
+    List<CcStudent> findUnAllocatStudentList(Integer grade,Long majorId,String studentName,String studentNo,String className);
 
     /*
      * @Description:分配学生

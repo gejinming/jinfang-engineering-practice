@@ -46,7 +46,12 @@ public class FileDownloadUtil {
 
         return response;
     }
-
+    /*
+     * @Description:fileUrl文件路径fileName文件命名
+     * @Author: Gjm
+     * @Date: 2021/2/8 9:56 上午
+     * @return: void
+     **/
     public static void downLoadfile( String fileUrl,String fileName,HttpServletResponse response) throws UnsupportedEncodingException {
         File file = new File(fileUrl);
         //原始文件名

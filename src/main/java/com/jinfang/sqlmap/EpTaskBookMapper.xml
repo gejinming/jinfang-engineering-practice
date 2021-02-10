@@ -214,4 +214,9 @@
     <select id="findTaskBook" resultMap="BaseResultMap">
         select * from ep_task_book where adviser_student_id=#{adviserStudentId} and is_del=0 and is_history=0
     </select>
+    <select id="findStudentTaskBooks" resultMap="BaseResultMap">
+        select etb.* from ep_task_book etb
+        inner join ep_adviser_student eas ON etb.adviser_student_id = eas.id and eas.is_del=0
+        where etb.is_del=0 and eas.grade=#{grade} and eas.student_id=#{studentId} and  etb.is_history=0
+    </select>
 </mapper>

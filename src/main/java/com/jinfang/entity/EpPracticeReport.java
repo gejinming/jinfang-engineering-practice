@@ -2,6 +2,8 @@ package com.jinfang.entity;
 
 import java.io.PipedReader;
 import java.io.Serializable;
+
+import com.jinfang.page.PageEntity;
 import lombok.Data;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 * @author GJM 2021-02-04
 */
 @Data
-public class EpPracticeReport implements Serializable {
+public class EpPracticeReport extends PageEntity implements Serializable {
 
 
     private static final long serialVersionUID = -7881442684593698300L;
@@ -75,5 +77,17 @@ public class EpPracticeReport implements Serializable {
     private String adviserName;
 
     private Long adviserStudentIds;
+
+    private String path;
+
+    private Long studentId;
+
+    private String studentName;
+
+    private Integer grade;
+
+    private String className;
+
+    private Long teacherId;
 
 }

@@ -47,6 +47,9 @@ public class WriteReportController extends BaseController {
             @ApiImplicitParam(name = "grade",value = "届别"),
             @ApiImplicitParam(name = "reportType",value = "类型，1周报，2日报"),
             @ApiImplicitParam(name = "content",value = "内容"),
+            @ApiImplicitParam(name = "weekNum",value = "周数（周报填写）"),
+            @ApiImplicitParam(name = "startDate",value = "开始时间（周报填写）"),
+            @ApiImplicitParam(name = "endDate",value = "结束时间（周报填写）"),
     })
     @PostMapping("/writeReport")
     public Result writeReport(@RequestBody EpWeekDayReport epWeekDayReport){

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpGradecomposeWeightMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpGradecomposeWeight" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="major_id" property="majorId" />
+        <result column="course_gradecompose_id" property="courseGradecomposeId" />
+        <result column="weight" property="weight" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="is_del" property="isDel" />
+        <result column="gradecomposeName" property="gradecomposeName" />
+    </resultMap>
+
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpGradecomposeWeight">
+        INSERT INTO ep_gradecompose_weight
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                grade,
+            </if>
+            <if test ='null != majorId'>
+                major_id,
+            </if>
+            <if test ='null != courseGradecomposeId'>
+                course_gradecompose_id,
+            </if>
+            <if test ='null != weight'>
+                weight,
+            </if>
+            <if test ='null != createDate'>
+                create_date,
+            </if>
+            <if test ='null != modifyDate'>
+                modify_date,
+            </if>
+            <if test ='null != isDel'>
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != grade'>
+                #{grade},
+            </if>
+            <if test ='null != majorId'>
+                #{majorId},
+            </if>
+            <if test ='null != courseGradecomposeId'>
+                #{courseGradecomposeId},
+            </if>
+            <if test ='null != weight'>
+                #{weight},
+            </if>
+            <if test ='null != createDate'>
+                #{createDate},
+            </if>
+            <if test ='null != modifyDate'>
+                #{modifyDate},
+            </if>
+            <if test ='null != isDel'>
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM ep_gradecompose_weight
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.jinfang.entity.EpGradecomposeWeight">
+        UPDATE ep_gradecompose_weight
+            set is_del=0
+        WHERE grade=#{grade} and major_id#{majorId}
+    </update>
+
+
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT
+            period_date grade,
+            ccg.id course_gradecompose_id,
+            cg.NAME gradecomposeName,
+            egw.weight
+        FROM
+            cc_course_periode cp
+                INNER JOIN cc_teacher_course ctc ON ctc.course_id = cp.course_id
+                AND ctc.teacher_id = cp.teacher_id
+                AND ctc.is_del = 0
+                INNER JOIN cc_educlass ce ON ce.id = cp.class_id
+                AND ce.is_del = 0
+                AND ce.teacher_course_id = ctc.id
+                LEFT JOIN cc_course_gradecompose ccg ON ccg.teacher_course_id = ctc.id
+                AND ccg.is_del = 0
+                LEFT JOIN cc_gradecompose cg ON cg.id = ccg.gradecompose_id
+                AND cg.is_del = 0
+                LEFT JOIN ep_gradecompose_weight egw ON egw.course_gradecompose_id = ccg.id
+                AND cp.period_date = egw.grade
+                AND egw.is_del = 0
+        WHERE
+            cp.is_del = 0
+          AND cp.course_type = 2
+          AND cp.major_id = #{majorId}
+          AND cp.period_date = #{grade}
+        ORDER BY
+            cp.period_date,
+            ccg.gradecompose_id DESC
+    </select>
+
+
+
+</mapper>

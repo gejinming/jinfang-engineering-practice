@@ -45,11 +45,11 @@
             AND ci.is_del = 0
             LEFT JOIN cc_score_stu_indigrade cssi ON cssi.gradecompose_indication_id = cgi.id
             AND cssi.is_del = 0
-        WHERE
-            cgi.course_gradecompose_id = #{courseGradecomposeId}
             <if test="studentId != null and studentId != ''">
                 AND cssi.student_id = #{studentId}
             </if>
+        WHERE
+            cgi.course_gradecompose_id = #{courseGradecomposeId}
             AND cgi.is_del =0
 
     </select>

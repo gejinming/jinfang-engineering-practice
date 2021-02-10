@@ -86,4 +86,6 @@ public class EpPracticeCompany extends PageEntity implements Serializable {
     private Long studentCompanyId;
 
 
+
+
 }

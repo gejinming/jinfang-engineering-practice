@@ -63,4 +63,10 @@ public class EpSchoolOutAccess extends PageEntity implements Serializable {
 
     private Long adviserId;
 
+    private String outAdviserName;
+
+    private String companyName;
+
+    private String address;
+
 }

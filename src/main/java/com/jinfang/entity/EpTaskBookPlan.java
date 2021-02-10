@@ -48,6 +48,10 @@ public class EpTaskBookPlan implements Serializable {
     * 是否为历史（0否，1是）
     */
     private Integer isHistory;
+    /**
+     * 序号
+     */
+    private Integer num;
 
     public EpTaskBookPlan() {
     }

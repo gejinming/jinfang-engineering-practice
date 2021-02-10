@@ -70,9 +70,9 @@ public class EpAdviserStudentServiceImp implements EpAdviserStudentService {
     }
 
     @Override
-    public List<CcStudent> findUnAllocatStudentList(Integer grade, Long majorId) {
+    public List<CcStudent> findUnAllocatStudentList(Integer grade, Long majorId,String studentName,String studentNo,String className) {
 
-        return epAdviserStudentMapper.findUnAllocatStudentList(grade,majorId);
+        return epAdviserStudentMapper.findUnAllocatStudentList(grade,majorId,studentName,studentNo,className);
     }
 
     @Override

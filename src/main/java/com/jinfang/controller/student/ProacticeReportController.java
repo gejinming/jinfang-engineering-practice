@@ -36,8 +36,6 @@ import java.util.Date;
 public class ProacticeReportController extends BaseController {
     @Autowired
     private EpPracticeReportService epPracticeReportService;
-    @Autowired
-    private EpPracticeReportDocMapper epPracticeReportDocMapper;
     @ApiOperation("学生实习报告列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page",value = "页码"),
@@ -45,14 +43,12 @@ public class ProacticeReportController extends BaseController {
             @ApiImplicitParam(name = "isHistory",value = "默认0，1显示历史记录"),
     })
     @GetMapping("/findPage")
-    public Result findPage(Integer page, Integer limit,Integer isHistory){
-
-        LoginUserVo userInfo = getUserInfo();
-        if (userInfo==null){
-            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"用户信息未获取到，请检查!");
+    public Result findPage(Integer page, Integer limit,Integer isHistory,Long studentId){
+        if (studentId==null){
+            return Result.error(ResultEnum.PARAM_ERROR.getCode(),"studentId未获取到，请检查!");
         }
 
-        return  epPracticeReportService.findStudentReport(userInfo.getUserId(),page,limit,isHistory);
+        return  epPracticeReportService.findStudentReport(studentId,page,limit,isHistory);
     }
     @ApiOperation("提交实习报告")
     @ApiImplicitParam(name = "id",value = "实习报告ID")

@@ -50,6 +50,8 @@ public class ResultStudentInfoEntity extends PageEntity {
     private String adversionName;
     //实习报告ID
     private Long reportId;
+    //报告路径
+    private String path;
 
     private String roleName;
 

@@ -54,20 +54,18 @@ public class CcStudentServiceImp implements CcStudentService {
     @Override
     public Result findMajorStudentlist(Long userId,ResultStudentInfoEntity record) {
         MybatisPageHelper.pageHelper(record.getPage(),record.getLimit());
-
-        ArrayList<ResultStudentInfoEntity> resultStudentInfoEntities = new ArrayList<>();
         PageResult pageResult =null;
         ArrayList<Long> teacherIds = new ArrayList<>();
         //如果是专业负责人查询全部
-        if (record.getRoleName().equals(SystemRole.LEADER)){
+        if (record.getRoleName().equals(SystemRole.LEADER.getRoleName())){
             List<ResultStudentInfoEntity> majorStudentlist = ccStudentMapper.findMajorStudentlist(record.getMajorId(), record.getGrade(), record.getStudentName(), record.getCompanyName());
             pageResult = MybatisPageHelper.getPageResult(majorStudentlist);
-        }else if (record.getRoleName().equals(SystemRole.TEACHER)){
+        }else if (record.getRoleName().equals(SystemRole.TEACHER.getRoleName())){
             //指导老师查询自己指导的学生
             teacherIds.add(userId);
             List<EpAdviserStudent> studentInfo = epAdviserStudentMapper.findStudentInfo(record.getMajorId(), record.getStudentName(), record.getGrade(), teacherIds, record.getCompanyName());
             pageResult = MybatisPageHelper.getPageResult(studentInfo);
-        }else if(record.getRoleName().equals(SystemRole.HEADMAN)){
+        }else if(record.getRoleName().equals(SystemRole.HEADMAN.getRoleName())){
             List<EpReplyTeacher> teacher = epReplyTeacherMapper.findByTeacher(record.getGrade(), userId, ReplyTeacherType.HEADMAN.getCode());
             for(EpReplyTeacher temp : teacher){
                 //届别

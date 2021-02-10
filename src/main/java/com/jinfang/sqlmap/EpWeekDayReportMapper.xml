@@ -9,6 +9,9 @@
         <result column="content" property="content" />
         <result column="create_date" property="createDate" />
         <result column="report_type" property="reportType" />
+        <result column="week_num" property="weekNum" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
         <result column="assess_content" property="assessContent" />
         <result column="assess_date" property="assessDate" />
         <result column="is_del" property="isDel" />
@@ -32,6 +35,15 @@
             <if test ='null != reportType'>
                 report_type,
             </if>
+            <if test ="null != weekNum and weekNum != ''">
+                week_num,
+            </if>
+            <if test ='null != startDate'>
+                start_date,
+            </if>
+            <if test ='null != endDate'>
+                end_date,
+            </if>
             <if test ='null != assessContent'>
                 assess_content,
             </if>
@@ -54,6 +66,15 @@
             </if>
             <if test ='null != reportType'>
                 #{reportType},
+            </if>
+            <if test ="null != weekNum and weekNum != ''">
+                #{weekNum},
+            </if>
+            <if test ='null != startDate'>
+                #{startDate},
+            </if>
+            <if test ='null != endDate'>
+                #{endDate},
             </if>
             <if test ='null != assessContent'>
                 #{assessContent},

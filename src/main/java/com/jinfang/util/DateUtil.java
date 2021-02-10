@@ -1,8 +1,10 @@
 package com.jinfang.util;
 
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -64,8 +66,6 @@ public class DateUtil {
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
 
-    public DateUtil() {
-    }
 
     /**
      * 把符合日期格式的字符串转换为日期类型
@@ -101,7 +101,34 @@ public class DateUtil {
         }
         return d;
     }
+    /**
+     * 得到日期字符串 默认格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
+     */
+    public static String formatDate(Date date, Object... pattern) {
+        String formatDate = null;
+        if (pattern != null && pattern.length > 0) {
+            formatDate = DateFormatUtils.format(date, pattern[0].toString());
+        } else {
+            formatDate = DateFormatUtils.format(date, "yyyy-MM-dd");
+        }
+        return formatDate;
+    }
 
+    /**
+     * 日期格式转化
+     */
+    public static Date dateToformater(Date date,String format){
+        if(date==null) {
+            return null;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        try {
+            date= sdf.parse(formatDate(date, format));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
     /**
      * 把日期转换为字符串
      *

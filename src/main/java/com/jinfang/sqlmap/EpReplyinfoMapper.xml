@@ -149,7 +149,8 @@
             ep_replyinfo er
         WHERE
             er.is_del = 0
-            AND er.grade = ( SELECT max( grade ) FROM ep_replyinfo WHERE is_del = 0 )
+            AND er.grade = ( SELECT max( grade ) FROM ep_replyinfo WHERE is_del = 0 and major_id=#{majorId} )
+            and er.major_id=#{majorId}
     </select>
 
 </mapper>
