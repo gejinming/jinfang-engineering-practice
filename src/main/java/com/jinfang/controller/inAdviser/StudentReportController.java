@@ -53,7 +53,7 @@ public class StudentReportController extends BaseController {
         return epAdviserStudentService.CheckReportPage(checkReportList);
 
     }
-    @ApiOperation("学生报告列表")
+    @ApiOperation("学生周报日报报告列表")
     @ApiImplicitParam(name = "studentCompanyId",value = "studentCompanyId")
     @GetMapping("/studentReportList")
     public Result studentReportList(Long studentCompanyId){
@@ -62,7 +62,6 @@ public class StudentReportController extends BaseController {
             return Result.error(ResultEnum.PARAM_ERROR.getCode(),"未获取到studentCompanyId，请检查!");
         }
         List<EpWeekDayReport> epWeekDayReports = epWeekDayReportService.studentReportList(studentCompanyId);
-
         return Result.ok(epWeekDayReports);
 
     }

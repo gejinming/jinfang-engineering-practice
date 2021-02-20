@@ -46,44 +46,5 @@ public class BaseController {
         }
         return  Result.error(ResultEnum.UPDATE_ERROR.getCode(),ResultEnum.UPDATE_ERROR.getMessage());
     }
-    /*protected void addSchoolId(PageRequest pageRequest, LoginUserMeta loginUserMeta) {
-        if (loginUserMeta == null || loginUserMeta.getSchoolId() == null) {
-            throw new IllegalArgumentException("SchoolId is empty");
-        }
 
-//        pageRequest.getColumnFilters().put("schoolId",
-//                ColumnFilter.builder().name("schoolId").value(loginUserMeta.getSchoolId().toString()).build());
-
-        pageRequest.getExtProps().put("schoolId", loginUserMeta.getSchoolId());
-    }
-
-    protected void addTeacherId(PageRequest pageRequest, LoginUserMeta loginUserMeta) {
-        if (loginUserMeta == null || loginUserMeta.getTeacherId() == null) {
-            throw new IllegalArgumentException("SchoolId is empty");
-        }
-
-//        pageRequest.getColumnFilters().put("teacher_id",
-//                ColumnFilter.builder().name("teacher_id").value(loginUserMeta.getTeacherIdText()).build());
-
-        pageRequest.getExtProps().put("teacherId", loginUserMeta.getTeacherId());
-    }
-
-    protected void addGrade(PageRequest pageRequest, LoginUserMeta loginUserMeta) {
-        if (loginUserMeta == null) {
-            throw new IllegalArgumentException("loginUserMeta is empty");
-        }
-
-        pageRequest.getExtProps().put("grade", loginUserMeta.getGrade());
-    }
-
-    protected void addCondition(PageRequest pageRequest, String name, Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException(name + " is empty");
-        }
-
-//        pageRequest.getColumnFilters().put("teacher_id",
-//                ColumnFilter.builder().name("teacher_id").value(loginUserMeta.getTeacherIdText()).build());
-
-        pageRequest.getExtProps().put(name, value);
-    }*/
 }

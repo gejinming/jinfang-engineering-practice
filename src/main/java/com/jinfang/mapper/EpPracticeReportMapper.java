@@ -18,4 +18,12 @@ public interface EpPracticeReportMapper extends CurdMapper<EpPracticeReport> {
      * @return: 学生个人的信息
      **/
     List<EpPracticeReport> findStudentReport(Long studentId,Integer isHistory);
+    /*
+     * @Description:答辩组教师查询学生列表
+     * @Author: Gjm
+     * @Date: 2021/2/19 11:59 上午
+     * @param epPracticeReport:
+     * @return: java.util.List<com.jinfang.entity.EpPracticeReport>
+     **/
+    List<EpPracticeReport> replyReportFindPage(EpPracticeReport epPracticeReport);
 }

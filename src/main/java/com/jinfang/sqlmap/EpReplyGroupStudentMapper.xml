@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpReplyGroupStudentMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpReplyGroupStudent" >
+        <result column="id" property="id" />
+        <result column="major_id" property="majorId" />
+        <result column="grade" property="grade" />
+        <result column="group_name" property="groupName" />
+        <result column="student_id" property="studentId" />
+    </resultMap>
+
+
+    <insert id="save"  parameterType="list">
+        INSERT INTO ep_reply_group_student(grade,major_id,student_id,group_name)
+        values
+        <foreach collection="list" item="v" separator="," >
+            (#{v.grade},#{v.majorId},#{v.studentId},#{v.groupName})
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="com.jinfang.entity.EpReplyGroupStudent">
+        delete from ep_reply_group_student
+        where id=#{id}
+    </delete>
+
+    <select id="findUnAllocatStudentList" resultType="com.jinfang.entity.CcStudent">
+        SELECT
+            cs.id,
+            cs.NAME,
+            cs.student_no studentNo,
+            so.NAME className
+        FROM
+            cc_course_periode ccp
+        LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id
+        AND ces.is_del = 0
+        LEFT JOIN ep_reply_group_student eas ON ccp.period_date = eas.grade
+        AND ccp.major_id = eas.major_id
+        AND ces.student_id = eas.student_id
+        LEFT JOIN cc_student cs ON cs.id = ces.student_id
+        LEFT JOIN sys_office so ON so.type = 3
+        AND so.id = cs.class_id
+        WHERE
+        ccp.major_id=#{majorId}
+        and ccp.period_date=#{grade}
+        and ccp.course_type = 2
+        and ccp.is_del=0
+        and eas.id IS  NULL
+        <if test="studentName !=null and studentName!=''">
+            and cs.name=#{studentName}
+        </if>
+        <if test="studentNo !=null and studentNo!=''">
+            and cs.student_no=#{studentNo}
+        </if>
+        <if test="className !=null and className!=''">
+            and so.name=#{className}
+        </if>
+        order by cs.id desc
+    </select>
+
+    <select id="findAllocatStudentList" resultType="com.jinfang.entity.CcStudent">
+        SELECT
+            eas.id,
+            cs.NAME,
+            cs.student_no studentNo,
+            so.NAME className
+        FROM
+            cc_course_periode ccp
+        LEFT JOIN cc_educlass_student ces ON ces.class_id = ccp.class_id
+        AND ces.is_del = 0
+        LEFT JOIN ep_reply_group_student eas ON ccp.period_date = eas.grade
+        AND ccp.major_id = eas.major_id
+        AND ces.student_id = eas.student_id
+        LEFT JOIN cc_student cs ON cs.id = ces.student_id
+        LEFT JOIN sys_office so ON so.type = 3
+        AND so.id = cs.class_id
+        WHERE
+        ccp.major_id=#{majorId}
+        and ccp.period_date=#{grade}
+        and ccp.course_type = 2
+        and ccp.is_del=0
+        and eas.group_name=#{groupName}
+        order by cs.id desc
+    </select>
+
+    <select id="findGroupStudentInfo" resultType="com.jinfang.entity.EpAdviserStudent">
+        SELECT
+            ergs.id,
+            ergs.grade,
+            cs.NAME studentName,
+            cs.id studentId,
+            cs.student_no studentNo,
+            class.NAME className,
+            major.NAME majorName,
+            college.NAME colleageName,
+            epc.NAME companyName,
+            eoas.adviser_id outAdviserId
+        FROM
+            ep_reply_group_student ergs
+                LEFT JOIN cc_student cs ON cs.id = ergs.student_id
+                LEFT JOIN sys_office class ON cs.class_id = class.id
+                AND class.type = 3
+                LEFT JOIN sys_office major ON major.id = class.parentid
+                AND major.type = 2
+                LEFT JOIN sys_office college ON college.id = major.parentid
+                AND college.type = 1
+                LEFT JOIN ep_student_company esc ON esc.grade = ergs.grade
+                AND esc.student_id = ergs.student_id
+                AND esc.is_del = 0
+                LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+                LEFT JOIN ep_out_adviser_student eoas ON eoas.student_company_id = esc.id
+                AND eoas.is_del = 0
+        WHERE
+            ergs.grade = #{grade}
+          AND ergs.major_id = #{majorId}
+          AND ergs.group_name = #{groupName}
+
+    </select>
+
+</mapper>

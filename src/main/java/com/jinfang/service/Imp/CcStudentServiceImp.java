@@ -6,6 +6,7 @@ import com.jinfang.entityEnum.SystemRole;
 import com.jinfang.httpdto.Result;
 import com.jinfang.mapper.CcStudentMapper;
 import com.jinfang.mapper.EpAdviserStudentMapper;
+import com.jinfang.mapper.EpReplyGroupStudentMapper;
 import com.jinfang.mapper.EpReplyTeacherMapper;
 import com.jinfang.page.MybatisPageHelper;
 import com.jinfang.page.PageResult;
@@ -30,6 +31,8 @@ public class CcStudentServiceImp implements CcStudentService {
     private EpAdviserStudentMapper epAdviserStudentMapper;
     @Autowired
     private EpReplyTeacherMapper epReplyTeacherMapper;
+    @Autowired
+    private EpReplyGroupStudentMapper epReplyGroupStudentMapper;
 
     @Override
     public CcStudent findByStudentLogin(String studentNo, String password) {
@@ -67,22 +70,19 @@ public class CcStudentServiceImp implements CcStudentService {
             pageResult = MybatisPageHelper.getPageResult(studentInfo);
         }else if(record.getRoleName().equals(SystemRole.HEADMAN.getRoleName())){
             List<EpReplyTeacher> teacher = epReplyTeacherMapper.findByTeacher(record.getGrade(), userId, ReplyTeacherType.HEADMAN.getCode());
+            Integer teacherGrade=0;
+            String groupName ="";
+            //答辩组组长或者教师可能是其他专业的老师，所以取配置专业不取教师所在专业
+            Long majorId=null;
             for(EpReplyTeacher temp : teacher){
                 //届别
-                Integer teacherGrade = temp.getGrade();
-                String groupName = temp.getGroupName();
-                EpReplyTeacher epReplyTeacher = new EpReplyTeacher();
-                epReplyTeacher.setGrade(teacherGrade);
-                epReplyTeacher.setMajorId(record.getMajorId());
-                epReplyTeacher.setGroupName(groupName);
-                //查询同一届别，同一组的答辩教师
-                List<EpReplyTeacher> teachers = epReplyTeacherMapper.findPage(epReplyTeacher);
-                for (EpReplyTeacher et : teachers){
-                    teacherIds.add(et.getTeacherId());
-                }
+                 teacherGrade = temp.getGrade();
+                 groupName = temp.getGroupName();
+                 majorId=temp.getMajorId();
             }
             //答辩组长查询整个组的学生
-            List<EpAdviserStudent> studentInfo = epAdviserStudentMapper.findStudentInfo(record.getMajorId(), record.getStudentName(), record.getGrade(), teacherIds, record.getCompanyName());
+            List<EpAdviserStudent> studentInfo = epReplyGroupStudentMapper.
+                    findGroupStudentInfo(majorId, teacherGrade, groupName,record.getStudentName(),record.getCompanyName());
             pageResult = MybatisPageHelper.getPageResult(studentInfo);
         }
         return Result.ok(pageResult);

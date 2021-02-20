@@ -55,4 +55,7 @@ public interface EpAdviserStudentMapper extends CurdMapper<EpAdviserStudent> {
      * @Date: 2021/1/29 17:18
      **/
     List<EpAdviserStudent> findStudentInfo(Long majorId,String studentName,Integer grade,List<Long> teacherList,String companyName);
+
+
+
 }

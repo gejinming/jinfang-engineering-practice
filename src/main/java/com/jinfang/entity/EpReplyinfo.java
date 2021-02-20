@@ -70,5 +70,7 @@ public class EpReplyinfo extends PageEntity implements Serializable {
 
     private String Student;
 
+    private Integer studentNum;
+
 
 }

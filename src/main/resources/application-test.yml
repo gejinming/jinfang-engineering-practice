@@ -38,10 +38,10 @@ spring:
           max-request-size: 20971520  # 请求大小限制为20M
 #文件上传路径
 storage:
-  disk: /Volumes/工作盘/upload/
+  disk: /Volumes/work/upload/
 #生成word文档位置生成压缩包之后就删除了
 template:
-  target: /Volumes/工作盘/template/
+  target: /Volumes/work/template/
 
   #打印sql
 logging:

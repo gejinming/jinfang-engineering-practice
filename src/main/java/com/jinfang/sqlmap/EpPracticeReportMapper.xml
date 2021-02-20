@@ -3,31 +3,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jinfang.mapper.EpPracticeReportMapper">
 
-    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpPracticeReport" >
-        <result column="id" property="id" />
-        <result column="adviser_student_id" property="adviserStudentId" />
-        <result column="file_id" property="fileId" />
-        <result column="create_date" property="createDate" />
-        <result column="submit_date" property="submitDate" />
-        <result column="state" property="state" />
-        <result column="teacher_opinion" property="teacherOpinion" />
-        <result column="check_date" property="checkDate" />
-        <result column="check_id" property="checkId" />
-        <result column="is_del" property="isDel" />
-        <result column="is_history" property="isHistory" />
-        <result column="companyName" property="companyName" />
-        <result column="adviserName" property="adviserName" />
-        <result column="adviserStudentIds" property="adviserStudentIds" />
-        <result column="path" property="path" />
-        <result column="studentId" property="studentId" />
-        <result column="studentName" property="studentName" />
-        <result column="className" property="className" />
-        <result column="grade" property="grade" />
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpPracticeReport">
+        <result column="id" property="id"/>
+        <result column="adviser_student_id" property="adviserStudentId"/>
+        <result column="file_id" property="fileId"/>
+        <result column="create_date" property="createDate"/>
+        <result column="submit_date" property="submitDate"/>
+        <result column="state" property="state"/>
+        <result column="teacher_opinion" property="teacherOpinion"/>
+        <result column="check_date" property="checkDate"/>
+        <result column="check_id" property="checkId"/>
+        <result column="is_del" property="isDel"/>
+        <result column="is_history" property="isHistory"/>
+        <result column="companyName" property="companyName"/>
+        <result column="adviserName" property="adviserName"/>
+        <result column="adviserStudentIds" property="adviserStudentIds"/>
+        <result column="path" property="path"/>
+        <result column="studentId" property="studentId"/>
+        <result column="studentName" property="studentName"/>
+        <result column="className" property="className"/>
+        <result column="grade" property="grade"/>
 
     </resultMap>
 
     <sql id="Base_Column_List">
-                id,
+        id
+        ,
                 adviser_student_id,
                 file_id,
                 create_date,
@@ -40,89 +41,91 @@
                 is_history
     </sql>
 
-    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpPracticeReport">
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.jinfang.entity.EpPracticeReport">
         INSERT INTO ep_practice_report
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test ='null != adviserStudentId'>
+            <if test='null != adviserStudentId'>
                 adviser_student_id,
             </if>
-            <if test ='null != fileId'>
+            <if test='null != fileId'>
                 file_id,
             </if>
-            <if test ='null != createDate'>
+            <if test='null != createDate'>
                 create_date,
             </if>
-            <if test ='null != submitDate'>
+            <if test='null != submitDate'>
                 submit_date,
             </if>
-            <if test ='null != state'>
+            <if test='null != state'>
                 state,
             </if>
-            <if test ='null != teacherOpinion'>
+            <if test='null != teacherOpinion'>
                 teacher_opinion,
             </if>
-            <if test ='null != checkDate'>
+            <if test='null != checkDate'>
                 check_date,
             </if>
-            <if test ='null != checkId'>
+            <if test='null != checkId'>
                 check_id,
             </if>
-            <if test ='null != isDel'>
+            <if test='null != isDel'>
                 is_del,
             </if>
-            <if test ='null != isHistory'>
+            <if test='null != isHistory'>
                 is_history
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test ='null != adviserStudentId'>
+            <if test='null != adviserStudentId'>
                 #{adviserStudentId},
             </if>
-            <if test ='null != fileId'>
+            <if test='null != fileId'>
                 #{fileId},
             </if>
-            <if test ='null != createDate'>
+            <if test='null != createDate'>
                 #{createDate},
             </if>
-            <if test ='null != submitDate'>
+            <if test='null != submitDate'>
                 #{submitDate},
             </if>
-            <if test ='null != state'>
+            <if test='null != state'>
                 #{state},
             </if>
-            <if test ='null != teacherOpinion'>
+            <if test='null != teacherOpinion'>
                 #{teacherOpinion},
             </if>
-            <if test ='null != checkDate'>
+            <if test='null != checkDate'>
                 #{checkDate},
             </if>
-            <if test ='null != checkId'>
+            <if test='null != checkId'>
                 #{checkId},
             </if>
-            <if test ='null != isDel'>
+            <if test='null != isDel'>
                 #{isDel},
             </if>
-            <if test ='null != isHistory'>
+            <if test='null != isHistory'>
                 #{isHistory}
             </if>
         </trim>
     </insert>
 
-    <delete id="delete" >
-        DELETE FROM ep_practice_report
+    <delete id="delete">
+        DELETE
+        FROM ep_practice_report
         WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="com.jinfang.entity.EpPracticeReport">
         UPDATE ep_practice_report
         <set>
-            <if test ="null != state and state != ''">state = #{state},</if>
-            <if test ="null != teacherOpinion and teacherOpinion !=''">teacher_opinion = #{teacherOpinion},</if>
-            <if test ='null != checkDate'>check_date = #{checkDate},</if>
-            <if test ="null != checkId and checkId != ''">check_id = #{checkId},</if>
-            <if test ="null != submitDate">submit_date = #{submitDate},</if>
-            <if test ="null != isDel and isDel != ''">is_del = #{isDel},</if>
-            <if test ="null != isHistory and isHistory != ''">is_history = #{isHistory}</if>
+            <if test="null != state and state != ''">state = #{state},</if>
+            <if test="null != teacherOpinion and teacherOpinion !=''">teacher_opinion = #{teacherOpinion},</if>
+            <if test='null != checkDate'>check_date = #{checkDate},</if>
+            <if test="null != checkId and checkId != ''">check_id = #{checkId},</if>
+            <if test="null != submitDate">submit_date = #{submitDate},</if>
+            <if test="null != isDel and isDel != ''">is_del = #{isDel},</if>
+            <if test="null != isHistory and isHistory != ''">is_history = #{isHistory}</if>
         </set>
         WHERE id = #{id}
     </update>
@@ -136,58 +139,58 @@
 
     <select id="findStudentReport" resultMap="BaseResultMap">
         SELECT
-            epc.NAME companyName,
-            ct.NAME adviserName,
-            epr.*,
-            eas.id adviserStudentIds,
-            eprd.path
+        epc.NAME companyName,
+        ct.NAME adviserName,
+        epr.*,
+        eas.id adviserStudentIds,
+        eprd.path
         FROM
-            ep_adviser_student eas
-                LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
-                LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
-                AND esc.student_id = eas.student_id
-                AND esc.is_del = 0
-                LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
-                LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
-                AND epr.is_del = 0
-                AND epr.is_history = #{isHistory}
-                left join ep_practice_report_doc eprd on eprd.id=epr.file_id
+        ep_adviser_student eas
+        LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
+        LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
+        AND esc.student_id = eas.student_id
+        AND esc.is_del = 0
+        LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+        LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
+        AND epr.is_del = 0
+        AND epr.is_history = #{isHistory}
+        left join ep_practice_report_doc eprd on eprd.id=epr.file_id
         WHERE
-            eas.is_del = 0
-          AND eas.student_id = #{studentId}
-         <if test="isHistory==1">
-             AND epr.is_history = #{isHistory}
-         </if>
+        eas.is_del = 0
+        AND eas.student_id = #{studentId}
+        <if test="isHistory==1">
+            AND epr.is_history = #{isHistory}
+        </if>
         order by epr.create_date desc
     </select>
 
     <select id="findPage" resultMap="BaseResultMap">
         SELECT
-            eas.grade,
-            cs.id studentId,
-            cs.name studentName,
-            class.name className,
-            epc.NAME companyName,
-            ct.NAME adviserName,
-            epr.*,
-            eas.id adviserStudentIds,
-            eprd.path
-            FROM
-            ep_adviser_student eas
-            LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
-            LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
-            AND esc.student_id = eas.student_id
-            AND esc.is_del = 0
-            LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
-            LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
-            AND epr.is_del = 0
-            AND epr.is_history =0
-            left join ep_practice_report_doc eprd on eprd.id=epr.file_id
-            LEFT JOIN cc_student cs ON cs.id = eas.student_id
-            LEFT JOIN sys_office class ON cs.class_id = class.id
-            AND class.type = 3
-            LEFT JOIN sys_office major ON major.id = class.parentid
-            AND major.type = 2
+        eas.grade,
+        cs.id studentId,
+        cs.name studentName,
+        class.name className,
+        epc.NAME companyName,
+        ct.NAME adviserName,
+        epr.*,
+        eas.id adviserStudentIds,
+        eprd.path
+        FROM
+        ep_adviser_student eas
+        LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
+        LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
+        AND esc.student_id = eas.student_id
+        AND esc.is_del = 0
+        LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+        LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
+        AND epr.is_del = 0
+        AND epr.is_history =0
+        left join ep_practice_report_doc eprd on eprd.id=epr.file_id
+        LEFT JOIN cc_student cs ON cs.id = eas.student_id
+        LEFT JOIN sys_office class ON cs.class_id = class.id
+        AND class.type = 3
+        LEFT JOIN sys_office major ON major.id = class.parentid
+        AND major.type = 2
         WHERE
         eas.is_del = 0
         AND eas.teacher_id = #{teacherId}
@@ -198,13 +201,63 @@
             AND epc.NAME = #{companyName}
         </if>
         <if test="state !=null and state !='' and state !=0">
-            AND epr.sate = #{state}
+            AND epr.state = #{state}
         </if>
         <if test="state ==0">
-            and epr.state is null
-            or epr.state=0
+            and (epr.state is null or epr.state=0)
         </if>
-        order by  eas.grade,epr.create_date desc
+        order by eas.grade,cs.id,epr.create_date desc
+    </select>
+
+    <select id="replyReportFindPage" resultMap="BaseResultMap">
+        SELECT
+        ert.grade,
+        cs.id studentId,
+        cs.NAME studentName,
+        class.NAME className,
+        epc.NAME companyName,
+        ct.NAME adviserName,
+        epr.*,
+        eas.id adviserStudentIds,
+        eprd.path
+        FROM
+        ep_reply_teacher ert
+        LEFT JOIN ep_reply_group_student ergs ON ert.major_id = ergs.major_id
+        AND ert.grade = ergs.grade
+        AND ert.group_name = ergs.group_name
+        LEFT JOIN ep_adviser_student eas ON eas.student_id = ergs.student_id
+        AND eas.grade = ergs.grade
+        AND eas.is_del = 0
+        LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
+        LEFT JOIN ep_student_company esc ON esc.grade = eas.grade
+        AND esc.student_id = eas.student_id
+        AND esc.is_del = 0
+        LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
+        LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
+        AND epr.is_del = 0
+        AND epr.is_history = 0
+        LEFT JOIN ep_practice_report_doc eprd ON eprd.id = epr.file_id
+        LEFT JOIN cc_student cs ON cs.id = ergs.student_id
+        LEFT JOIN sys_office class ON cs.class_id = class.id
+        AND class.type = 3
+        LEFT JOIN sys_office major ON major.id = class.parentid
+        AND major.type = 2
+        WHERE
+        ert.teacher_id = #{teacherId}
+        and ert.is_del=0
+        <if test="grade !=null and grade !=''">
+            AND ert.grade= #{grade}
+        </if>
+        <if test="companyName !=null and companyName !=''">
+            AND epc.NAME = #{companyName}
+        </if>
+        <if test="state !=null and state !='' and state !=0">
+            AND epr.state = #{state}
+        </if>
+        <if test="state ==0">
+            and (epr.state is null or epr.state=0)
+        </if>
+        order by eas.grade,cs.id desc
     </select>
 
 </mapper>

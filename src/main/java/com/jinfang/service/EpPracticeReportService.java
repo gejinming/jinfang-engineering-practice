@@ -19,4 +19,6 @@ public interface EpPracticeReportService extends CurdService<EpPracticeReport> {
      * @return: 学生个人的信息
      **/
     Result findStudentReport(Long studentId, Integer page, Integer limit,Integer isHistory);
+
+    Result replyReportFindPage(EpPracticeReport epPracticeReport);
 }

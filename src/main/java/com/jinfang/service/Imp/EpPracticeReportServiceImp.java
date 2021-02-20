@@ -60,4 +60,10 @@ public class EpPracticeReportServiceImp implements EpPracticeReportService {
         MybatisPageHelper.pageHelper(page,limit);
         return Result.ok(MybatisPageHelper.getPageResult(studentReport));
     }
+
+    @Override
+    public Result replyReportFindPage(EpPracticeReport epPracticeReport) {
+        MybatisPageHelper.pageHelper(epPracticeReport.getPage(),epPracticeReport.getLimit());
+        return Result.ok(MybatisPageHelper.getPageResult(epPracticeReportMapper.replyReportFindPage(epPracticeReport)));
+    }
 }

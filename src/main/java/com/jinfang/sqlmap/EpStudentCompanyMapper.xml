@@ -92,6 +92,16 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateEnd" parameterType="list">
+        update ep_student_company
+            set is_end =1
+        where grade=#{grade}
+        and student_id in
+        <foreach collection="students" item="studentId" index="index" open="(" close=")" separator=",">
+            #{studentId}
+        </foreach>
+    </update>
+
 
     <select id="load" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />

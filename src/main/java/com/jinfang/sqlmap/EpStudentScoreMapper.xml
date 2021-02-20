@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpStudentScoreMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpStudentScore" >
+        <result column="id" property="id" />
+        <result column="student_id" property="studentId" />
+        <result column="grade" property="grade" />
+        <result column="major_id" property="majorId" />
+        <result column="score" property="score" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+
+
+    <insert id="save" parameterType="list">
+        INSERT INTO ep_student_score(student_id,grade,major_id,score,create_date,modify_date,is_del)
+        VALUES
+        <foreach collection="list" item="v1" separator="," >
+            (#{v1.studentId},#{v1.grade},#{v1.majorId},#{v1.score},#{v1.createDate},#{v1.modifyDate},0)
+        </foreach>
+
+    </insert>
+
+
+
+    <update id="update" parameterType="com.jinfang.entity.EpStudentScore">
+        UPDATE ep_student_score
+        <set>
+           modify_date = #{modifyDate},
+            is_del = 1
+        </set>
+        WHERE grade=#{grade} and major_id=#{majorId}
+    </update>
+
+
+    <select id="findStudentGradecompose" resultType="com.jinfang.entity.EpStudentScore">
+        SELECT
+            ccg.id courseGradecomposeId,
+            cg.name gradecomposeName,
+            cssi.student_id studentId,
+            sum( cssi.grade ) score
+        FROM
+            cc_course_periode ccp
+                LEFT JOIN cc_educlass ce ON ce.id = ccp.class_id
+                LEFT JOIN cc_teacher_course ctc ON ctc.id = ce.teacher_course_id
+                LEFT JOIN cc_course_gradecompose ccg ON ccg.teacher_course_id = ctc.id
+                AND ccg.is_del = 0
+                LEFT JOIN cc_course_gradecompose_indication ccgi ON ccg.id = ccgi.course_gradecompose_id
+                AND ccgi.is_del = 0
+                LEFT JOIN cc_score_stu_indigrade cssi ON cssi.gradecompose_indication_id = ccgi.id
+                AND cssi.is_del = 0
+                LEFT JOIN cc_gradecompose cg ON cg.id = ccg.gradecompose_id
+        WHERE
+            ccp.course_type = 2
+          AND ccp.is_del = 0
+          AND ccp.major_id = #{majorId}
+          and ccp.period_date=#{grade}
+        GROUP BY
+            cssi.student_id,
+            ccg.id
+        ORDER BY
+            cssi.student_id,
+            ccg.id
+    </select>
+
+    <select id="findPage" resultType="com.jinfang.entity.EpStudentScore">
+        SELECT
+            ess.grade,
+            cs.id studentId,
+            cs.NAME studentName,
+            cs.student_no studentNo,
+            ess.score,
+            ess.create_date createDate,
+            so.NAME className,
+            epc.name companyName
+        FROM
+            ep_student_score ess
+                LEFT JOIN cc_student cs ON cs.id = ess.student_id
+                LEFT JOIN sys_office so ON so.type = 3
+                AND so.id = cs.class_id
+                left join ep_student_company esc on esc.student_id=ess.student_id
+                and esc.grade=ess.grade and esc.is_del=0
+                left join ep_practice_company epc on epc.id= esc.company_id
+        WHERE
+            ess.is_del = 0
+          AND ess.grade = #{grade}
+          AND ess.major_id = #{majorId}
+        order by cs.id
+    </select>
+    <select id="">
+
+    </select>
+
+</mapper>

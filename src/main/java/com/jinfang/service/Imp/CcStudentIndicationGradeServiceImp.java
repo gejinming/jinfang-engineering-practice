@@ -9,6 +9,7 @@ import com.jinfang.httpdto.Result;
 import com.jinfang.httpdto.ResultEnum;
 import com.jinfang.mapper.CcStudentIndicationGradeMapper;
 import com.jinfang.mapper.EpAdviserStudentMapper;
+import com.jinfang.mapper.EpReplyGroupStudentMapper;
 import com.jinfang.mapper.EpReplyTeacherMapper;
 import com.jinfang.page.MybatisPageHelper;
 import com.jinfang.page.PageResult;
@@ -34,7 +35,7 @@ public class CcStudentIndicationGradeServiceImp implements CcStudentIndicationGr
     @Autowired(required = false)
     private IdGenerator idGenerator;
     @Autowired(required = false)
-    private EpAdviserStudentMapper epAdviserStudentMapper;
+    private EpReplyGroupStudentMapper epReplyGroupStudentMapper;
     @Autowired(required = false)
     private EpReplyTeacherMapper epReplyTeacherMapper;
     @Override
@@ -96,29 +97,19 @@ public class CcStudentIndicationGradeServiceImp implements CcStudentIndicationGr
         Integer grade = epAdviserStudent.getGrade();
         Long majorId = epAdviserStudent.getMajorId();
         String studentName = epAdviserStudent.getStudentName();
-       /*
-        1.先查询当前登录的人是否是答辩组长
-        2.查询跟这个答辩组长同一组同一届的所有老师id
-        */
         //查询这个登陆角色是否是答辩组长 取出组名
-        ArrayList<Long> teacherIds = new ArrayList<>();
         List<EpReplyTeacher> teacher = epReplyTeacherMapper.findByTeacher(grade, teacherId, ReplyTeacherType.HEADMAN.getCode());
+        if (teacher==null || teacher.size()==0){
+            return Result.error("您不是答辩组长，不具有此权限！");
+        }
+        String groupName ="";
         for(EpReplyTeacher temp : teacher){
-            //届别
-            Integer teacherGrade = temp.getGrade();
-            String groupName = temp.getGroupName();
-            EpReplyTeacher epReplyTeacher = new EpReplyTeacher();
-            epReplyTeacher.setGrade(teacherGrade);
-            epReplyTeacher.setMajorId(majorId);
-            epReplyTeacher.setGroupName(groupName);
-            //查询同一届别，同一组的答辩教师
-            List<EpReplyTeacher> teachers = epReplyTeacherMapper.findPage(epReplyTeacher);
-            for (EpReplyTeacher et : teachers){
-                teacherIds.add(et.getTeacherId());
-            }
+            groupName = temp.getGroupName();
+            majorId=temp.getMajorId();
+
         }
         //答辩组所有学生列表
-        List<EpAdviserStudent> epAdviserStudentList = epAdviserStudentMapper.findStudentInfo(majorId, studentName, grade, teacherIds,null);
+        List<EpAdviserStudent> epAdviserStudentList = epReplyGroupStudentMapper.findGroupStudentInfo(majorId, grade, groupName,studentName,null);
         //再验证是否已经打分，
         /*
         * 1.先看当前登陆人的角色有哪些成绩组成打分的权限

@@ -1,10 +1,12 @@
 package com.jinfang.service.Imp;
 
+import com.jinfang.entity.CcStudent;
 import com.jinfang.entity.EpAdviserStudent;
 import com.jinfang.entity.EpReplyTeacher;
 import com.jinfang.entity.EpReplyinfo;
 import com.jinfang.httpdto.Result;
 import com.jinfang.mapper.EpAdviserStudentMapper;
+import com.jinfang.mapper.EpReplyGroupStudentMapper;
 import com.jinfang.mapper.EpReplyTeacherMapper;
 import com.jinfang.mapper.EpReplyinfoMapper;
 import com.jinfang.page.MybatisPageHelper;
@@ -14,6 +16,7 @@ import com.jinfang.service.EpReplyinfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +32,7 @@ public class EpReplyinfoServiceImp implements EpReplyinfoService {
     @Autowired(required = false)
     private EpReplyTeacherMapper epReplyTeacherMapper;
     @Autowired(required = false)
-    private EpAdviserStudentMapper epAdviserStudentMapper;
+    private EpReplyGroupStudentMapper epReplyGroupStudentMapper;
     @Override
     public int save(EpReplyinfo record) {
         return epReplyinfoMapper.save(record);
@@ -73,22 +76,23 @@ public class EpReplyinfoServiceImp implements EpReplyinfoService {
         epReplyTeacher.setGrade(grade);
         //届别答辩教师
         List<EpReplyTeacher> TeacherList = epReplyTeacherMapper.findPage(epReplyTeacher);
-        //届别学生
-        List<EpAdviserStudent> gradeStudentList = epAdviserStudentMapper.findGradeStudentList(majorId, grade);
+        ArrayList<String> groupList = new ArrayList<>();
         for (EpReplyinfo temp : replyInfo){
             String groupName = temp.getGroupName();
             String teacherString="";
             String studentString="";
             for (EpReplyTeacher teacher :TeacherList){
-                Long teacherId = teacher.getTeacherId();
                 if (groupName.equals(teacher.getGroupName())){
                     teacherString=teacherString+teacher.getTeacherName()+"、";
                     //组合当前组的学生
-                    for (EpAdviserStudent student : gradeStudentList){
-                        if (teacherId.equals(student.getTeacherId())){
-                            studentString=studentString+student.getStudentName()+"、";
+                    if (!groupList.contains(groupName)){
+                        List<CcStudent> allocatStudentList = epReplyGroupStudentMapper.findAllocatStudentList(majorId, grade, groupName);
+                        for (CcStudent student : allocatStudentList){
+                            studentString=studentString+student.getName()+"、";
                         }
+                        groupList.add(groupName);
                     }
+
                 }
 
             }

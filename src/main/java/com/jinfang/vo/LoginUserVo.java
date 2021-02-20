@@ -2,6 +2,7 @@ package com.jinfang.vo;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +30,9 @@ public class LoginUserVo {
     private Integer grade;
     //校外指导老师ID
     private Long adviserId;
+    //时间控制菜单
+    private Boolean isUse;
+
 
 
 }

@@ -28,7 +28,7 @@
         select ert.*,ct.name teacher_name,so.name major_name
          from ep_reply_teacher ert
         left join cc_teacher ct on ert.teacher_id=ct.id
-        left join sys_office so on so.id=ert.major_id and so.type=2
+        left join sys_office so on so.id=ct.major_id and so.type=2
         where ert.is_del=0 and ert.major_id=#{majorId}
         <if test ="null != grade and grade != ''"> and ert.grade = #{grade}</if>
         <if test ="null != groupName and groupName != '' "> and ert.group_name = #{groupName}</if>

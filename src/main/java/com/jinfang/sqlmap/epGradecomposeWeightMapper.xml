@@ -16,65 +16,22 @@
     </resultMap>
 
 
-    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpGradecomposeWeight">
-        INSERT INTO ep_gradecompose_weight
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test ='null != grade'>
-                grade,
-            </if>
-            <if test ='null != majorId'>
-                major_id,
-            </if>
-            <if test ='null != courseGradecomposeId'>
-                course_gradecompose_id,
-            </if>
-            <if test ='null != weight'>
-                weight,
-            </if>
-            <if test ='null != createDate'>
-                create_date,
-            </if>
-            <if test ='null != modifyDate'>
-                modify_date,
-            </if>
-            <if test ='null != isDel'>
-                is_del
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test ='null != grade'>
-                #{grade},
-            </if>
-            <if test ='null != majorId'>
-                #{majorId},
-            </if>
-            <if test ='null != courseGradecomposeId'>
-                #{courseGradecomposeId},
-            </if>
-            <if test ='null != weight'>
-                #{weight},
-            </if>
-            <if test ='null != createDate'>
-                #{createDate},
-            </if>
-            <if test ='null != modifyDate'>
-                #{modifyDate},
-            </if>
-            <if test ='null != isDel'>
-                #{isDel}
-            </if>
-        </trim>
+    <insert id="save" parameterType="list">
+        INSERT INTO ep_gradecompose_weight(grade,major_id,course_gradecompose_id,weight,create_date,modify_date,is_del)
+        VALUES
+        <foreach collection="list" item="v1" separator=",">
+            (#{v1.grade},#{v1.majorId},#{v1.courseGradecomposeId},#{v1.weight},#{v1.createDate},#{v1.modifyDate},0)
+        </foreach>
     </insert>
 
-    <delete id="delete" >
-        DELETE FROM ep_gradecompose_weight
-        WHERE id = #{id}
-    </delete>
 
-    <update id="update" parameterType="com.jinfang.entity.EpGradecomposeWeight">
+    <update id="delete" parameterType="list">
         UPDATE ep_gradecompose_weight
-            set is_del=0
-        WHERE grade=#{grade} and major_id#{majorId}
+            set is_del=1
+        WHERE course_gradecompose_id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.courseGradecomposeId}
+        </foreach>
     </update>
 
 
