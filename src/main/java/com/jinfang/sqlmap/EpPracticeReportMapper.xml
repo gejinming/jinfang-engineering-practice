@@ -153,12 +153,11 @@
         LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
         LEFT JOIN ep_practice_report epr ON epr.adviser_student_id = eas.id
         AND epr.is_del = 0
-        AND epr.is_history = #{isHistory}
         left join ep_practice_report_doc eprd on eprd.id=epr.file_id
         WHERE
         eas.is_del = 0
         AND eas.student_id = #{studentId}
-        <if test="isHistory==1">
+        <if test="isHistory==0">
             AND epr.is_history = #{isHistory}
         </if>
         order by epr.create_date desc

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+    <!--日志文件存储位置-->
+    <springProperty scope="context" name="appname" source="logback.appname"/>
+    <springProperty scope="context" name="logdir" source="logback.logdir"/>
+    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss} |-%-5level [%thread] in %logger{60} - %msg%n" />
+
+    <contextName>${appname}</contextName>
+
+    <!-- 加载颜色解析器 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!-- 控制台输出日志 -->
+    <appender name="console-stdout" class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([%15.15t]){faint} %clr(%-40.40logger{60}){cyan} | %msg%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <!-- 文件输出日志 -->
+    <appender name="file-stdout" class="ch.qos.logback.core.rolling.RollingFileAppender" >
+
+        <!-- 采用追加日志的方式 -->
+        <append>false</append>
+
+        <!-- 每天产生一个日志文件,保存30天的日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logdir}/${appname}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出,%d:日期;%thread:线程名;%-5level：级别,%logger{36}——日志输出者的名字，%msg——日志消息，%n——平台的换行符
+            从左显示5个字符宽度,可以自定义模板类-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} |-%-5level [%thread] in  %logger{60} - %msg%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <logger name="com.deepoove.poi.render" level="WARN"> </logger>
+
+    <!-- 定义日志的级别 引用appender -->
+    <root level="INFO">
+        <appender-ref ref="console-stdout" />
+        <appender-ref ref="file-stdout" />
+    </root>
+
+</configuration>

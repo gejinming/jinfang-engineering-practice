@@ -83,6 +83,10 @@ public class EpTaskBook extends PageEntity implements Serializable {
 
     private String studentName;
 
+    private String adviserName;
+
+    private Long studentId;
+
 
 
 

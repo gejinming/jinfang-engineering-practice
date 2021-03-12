@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 9090
   context-path: /
   max-http-header-size: 4048576
   tomcat:
@@ -10,7 +10,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://115.29.166.64:3306/school?useUnicode=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      url: jdbc:mysql://115.29.166.64:3306/certification-jg-new-3.30?useUnicode=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
       username: root
       password: yjzky
       filters: stat,log4j,config
@@ -38,10 +38,15 @@ spring:
       max-request-size: 20971520  # 请求大小限制为20M
 #文件上传路径
 storage:
-  disk: D:\upload\
+  disk: D:\upload\practice-application\
 #生成word文档位置生成压缩包之后就删除了
 template:
-  target: D:\template\
+  target: D:\template\practice-application\
+
+#日志文件存储位置
+logback:
+  logdir: D:\logs\practice-application-log
+  appname: practice-application
 
   #打印sql
 logging:

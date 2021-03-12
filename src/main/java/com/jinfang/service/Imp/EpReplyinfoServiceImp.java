@@ -69,6 +69,9 @@ public class EpReplyinfoServiceImp implements EpReplyinfoService {
         //已经设置的最大届别的答辩信息
         MybatisPageHelper.pageHelper(page,limit);
         List<EpReplyinfo> replyInfo = epReplyinfoMapper.findReplyInfo(majorId);
+        if(replyInfo.isEmpty()){
+            return Result.error("还未设置答辩信息");
+        }
         PageResult pageResult = MybatisPageHelper.getPageResult(replyInfo);
         Integer grade = replyInfo.get(0).getGrade();
         EpReplyTeacher epReplyTeacher = new EpReplyTeacher();

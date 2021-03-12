@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinfang.mapper.EpPracticeCheckMapper">
+
+    <resultMap id="BaseResultMap" type="com.jinfang.entity.EpPracticeCheck" >
+        <result column="id" property="id" />
+        <result column="adviser_student_id" property="adviserStudentId" />
+        <result column="week_num" property="weekNum" />
+        <result column="start_date" property="startDate" />
+        <result column="end_date" property="endDate" />
+        <result column="require_content" property="requireContent" />
+        <result column="practice_schedule" property="practiceSchedule" />
+        <result column="matter_vaction" property="matterVaction" />
+        <result column="sick_vaction" property="sickVaction" />
+        <result column="truant" property="truant" />
+        <result column="create_date" property="createDate" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="is_del" property="isDel" />
+    </resultMap>
+
+
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.jinfang.entity.EpPracticeCheck">
+        INSERT INTO ep_practice_check
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ="null != adviserStudentId ">
+                adviser_student_id,
+            </if>
+            <if test ="null != weekNum  ">
+                week_num,
+            </if>
+            <if test ="null != startDate">
+                start_date,
+            </if>
+            <if test ="null != endDate">
+                end_date,
+            </if>
+            <if test ="null != requireContent">
+                require_content,
+            </if>
+            <if test ="null != practiceSchedule">
+                practice_schedule,
+            </if>
+            <if test ="null != matterVaction">
+                matter_vaction,
+            </if>
+            <if test ="null != sickVaction">
+                sick_vaction,
+            </if>
+            <if test ="null != truant">
+                truant,
+            </if>
+            <if test ="null != createDate">
+                create_date,
+            </if>
+            <if test ="null != modifyDate">
+                modify_date,
+            </if>
+            <if test ="null != isDel">
+                is_del
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ="null != adviserStudentId">
+                #{adviserStudentId},
+            </if>
+            <if test ="null != weekNum">
+                #{weekNum},
+            </if>
+            <if test ="null != startDate">
+                #{startDate},
+            </if>
+            <if test ="null != endDate">
+                #{endDate},
+            </if>
+            <if test ="null != requireContent">
+                #{requireContent},
+            </if>
+            <if test ="null != practiceSchedule">
+                #{practiceSchedule},
+            </if>
+            <if test ="null != matterVaction">
+                #{matterVaction},
+            </if>
+            <if test ="null != sickVaction">
+                #{sickVaction},
+            </if>
+            <if test ="null != truant">
+                #{truant},
+            </if>
+            <if test ="null != createDate">
+                #{createDate},
+            </if>
+            <if test ="null != modifyDate">
+                #{modifyDate},
+            </if>
+            <if test ="null != isDel">
+                #{isDel}
+            </if>
+        </trim>
+    </insert>
+
+
+
+    <update id="update" parameterType="com.jinfang.entity.EpPracticeCheck">
+        UPDATE ep_practice_check
+        <set>
+            <if test ="null != weekNum and weekNum != ''">week_num = #{weekNum},</if>
+            <if test ="null != startDate " >start_date = #{startDate},</if>
+            <if test ="null != endDate">end_date = #{endDate},</if>
+            <if test ="null != requireContent and requireContent != ''">require_content = #{requireContent},</if>
+            <if test ="null != practiceSchedule and practiceSchedule != ''">practice_schedule = #{practiceSchedule},</if>
+            <if test ="null != matterVaction and matterVaction != ''">matter_vaction = #{matterVaction},</if>
+            <if test ="null != sickVaction and sickVaction != ''">sick_vaction = #{sickVaction},</if>
+            <if test ="null != truant and truant != ''">truant = #{truant},</if>
+            <if test ="null != modifyDate">modify_date = #{modifyDate},</if>
+            <if test ="null != isDel and isDel != ''">is_del = #{isDel}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT *
+        FROM ep_practice_check
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        SELECT *
+        FROM ep_practice_check
+        where is_del=0 and adviser_student_id=#{adviserStudentId}
+        order by week_num
+    </select>
+
+
+
+</mapper>

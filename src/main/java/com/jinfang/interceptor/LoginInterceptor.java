@@ -32,7 +32,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         String requestURI = arg0.getRequestURI();
         String method = arg0.getMethod();
 
-
         if (method.equals("OPTIONS") || arg0.getRequestURI().contains("/login")
                 || arg0.getRequestURI().contains("/register") || arg0.getRequestURI().contains("/error") || arg0.getRequestURI().contains("/static")) {
             return true;

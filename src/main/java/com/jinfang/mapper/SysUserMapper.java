@@ -21,4 +21,8 @@ public interface SysUserMapper {
     int update(SysUser sysUser);
 
     int updatelist(List<String> list);
+
+    Long findSchoolId(String schoolName);
+
+
 }

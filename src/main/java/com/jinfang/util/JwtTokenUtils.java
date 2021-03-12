@@ -74,28 +74,6 @@ public class JwtTokenUtils implements Serializable {
     }
 
     /**
-     * 根据原有的TOKEN 交换 本系统内新的TOKEN
-     *
-     * @param originTokenClaims 原有TOKEN
-     * @param authorities       权限清单
-     */
-  /*  static String exchangeToken(Claims originTokenClaims, Collection<? extends GrantedAuthority> authorities) {
-        HashMap<String, Object> claims = new HashMap<>();
-        claims.put(ROLE_CLAIMS, originTokenClaims.get(ROLE_CLAIMS));
-        claims.put(AUTHORITIES, authorities);
-        return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET)
-                //设置角色名
-                .setClaims(claims)
-                //设置发证人
-                .setIssuer(originTokenClaims.getIssuer())
-                .setSubject(originTokenClaims.getSubject())
-                .setIssuedAt(originTokenClaims.getIssuedAt())
-                .setExpiration(originTokenClaims.getExpiration())
-                .compact();
-    }
-*/
-    /**
      * 从令牌中获取用户名
      *
      * @param token 令牌
@@ -171,13 +149,14 @@ public class JwtTokenUtils implements Serializable {
 
             Claims claims = getClaimsFromToken(token);
             if (claims==null){
-                log.error("token已经过期或错误");
+                log.error("========>token已经过期或错误=========");
+                return true;
             }
             Date expiration = claims.getExpiration();
             return expiration.before(new Date());
         } catch (Exception e) {
-           // e.printStackTrace();
             log.error("--------token 错误-----------", token, e);
+            //e.printStackTrace();
             return true;
         }
     }

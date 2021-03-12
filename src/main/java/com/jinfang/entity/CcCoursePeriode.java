@@ -2,6 +2,8 @@ package com.jinfang.entity;
 
 import java.io.Serializable;
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import java.util.Date;
 import java.util.List;
 

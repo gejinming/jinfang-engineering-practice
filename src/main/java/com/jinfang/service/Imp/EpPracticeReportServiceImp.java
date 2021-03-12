@@ -37,7 +37,7 @@ public class EpPracticeReportServiceImp implements EpPracticeReportService {
 
     @Override
     public EpPracticeReport findById(Long id) {
-        return null;
+        return epPracticeReportMapper.findById(id);
     }
 
     @Override

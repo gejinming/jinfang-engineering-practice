@@ -193,7 +193,8 @@
             major.NAME majorName,
             college.NAME colleageName,
             epc.NAME companyName,
-        eoas.adviser_id outAdviserId
+            eoas.adviser_id outAdviserId,
+            etb.id taksBookId
         FROM
             ep_adviser_student eas
             LEFT JOIN cc_student cs ON cs.id = eas.student_id
@@ -209,6 +210,10 @@
             LEFT JOIN ep_practice_company epc ON epc.id = esc.company_id
             left join ep_out_adviser_student eoas on eoas.student_company_id=esc.id
             and eoas.is_del=0
+            LEFT JOIN ep_task_book etb ON etb.adviser_student_id = eas.id
+            AND etb.state = 2
+            AND etb.is_del = 0
+            AND etb.is_history = 0
         WHERE
             eas.is_del = 0
             <if test="teacherList.size>null and teacherList !=null ">

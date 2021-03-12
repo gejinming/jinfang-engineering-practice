@@ -36,6 +36,7 @@
         UPDATE ep_task_book_plan
         <set>
             <if test ='null != isHistory'>is_history = #{isHistory}</if>
+            <if test ="null != isDel and isDel !=''">is_del = #{isDel}</if>
         </set>
         WHERE book_id = #{bookId}
     </update>

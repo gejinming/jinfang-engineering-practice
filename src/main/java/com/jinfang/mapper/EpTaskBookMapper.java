@@ -14,7 +14,7 @@ import java.util.List;
 public interface EpTaskBookMapper extends CurdMapper<EpTaskBook> {
 
     /*
-     * @Description:历史记录
+     * @Description:历史记录，显示这个学生的所有信息不分是否isHistory
      * @Author: Gjm
      * @Date: 2021/1/26 11:07
      **/

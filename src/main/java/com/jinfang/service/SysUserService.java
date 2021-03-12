@@ -14,4 +14,6 @@ public interface SysUserService extends CurdService<SysUser>{
     boolean findUserById(Long id);
 
     SysUser findUserByName(String name);
+
+    Long findSchoolId(String schoolName);
 }

@@ -5,6 +5,7 @@
 
     <resultMap id="BaseResultMap" type="com.jinfang.entity.EpTaskBook" >
         <result column="id" property="id" />
+        <result column="adviser_student_id" property="adviserStudentId" />
         <result column="practice_name" property="practiceName" />
         <result column="content" property="content" />
         <result column="definice_require" property="definiceRequire" />
@@ -15,6 +16,7 @@
         <result column="receive_time" property="receiveTime" />
         <result column="is_del" property="isDel" />
         <result column="is_history" property="isHistory" />
+        <result column="name" property="adviserName" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -98,12 +100,19 @@
     <update id="update" parameterType="com.jinfang.entity.EpTaskBook">
         UPDATE ep_task_book
         <set>
-            <if test ='null != state'>state = #{state},</if>
+
+            <if test ='null != practiceName'>practice_name = #{practiceName},</if>
+            <if test ="null != content">content = #{content},</if>
+            <if test ='null != definiceRequire'>definice_require = #{definiceRequire},</if>
+            <if test ='null != createDate'>create_date = #{createDate},</if>
             <if test ='null != modifyDate'>modify_date = #{modifyDate},</if>
+            <if test ="null != state and state !=''">state = #{state},</if>
             <if test ='null != sendDate'>send_date = #{sendDate},</if>
             <if test ='null != receiveTime'>receive_time = #{receiveTime},</if>
-            <if test ='null != isHistory'>is_history = #{isHistory}</if>
+            <if test ="null != isDel and isDel !=''">is_del = #{isDel},</if>
+            <if test ="null != isHistory and isHistory !=''">is_history = #{isHistory}</if>
         </set>
+
         WHERE id = #{id}
     </update>
 
@@ -155,14 +164,12 @@
             <if test="grade!=null and grade !=''">
                 AND eas.grade = #{grade}
             </if>
-            <if test="state!=null and state !='' and state !=3 ">
+            <if test="state!=null and state !=3 ">
                 AND etb.state = #{state}
             </if>
             <if test="state ==3 ">
                 AND etb.state is null
             </if>
-
-
         ORDER BY
             eas.grade,cs.id DESC
     </select>
@@ -178,9 +185,9 @@
             LEFT JOIN ep_adviser_student eas ON etb.adviser_student_id = eas.id
             LEFT JOIN cc_student cs ON cs.id = eas.student_id
         WHERE
-            etb.is_history = 1
-            AND etb.is_del = 0
+             etb.is_del = 0
             AND etb.adviser_student_id=#{adviserStudentId}
+        order by etb.create_date desc
     </select>
 
     <select id="findStudentTaskBook" resultType="com.jinfang.entity.StudentTaskBook">
@@ -214,9 +221,11 @@
     <select id="findTaskBook" resultMap="BaseResultMap">
         select * from ep_task_book where adviser_student_id=#{adviserStudentId} and is_del=0 and is_history=0
     </select>
+
     <select id="findStudentTaskBooks" resultMap="BaseResultMap">
-        select etb.* from ep_task_book etb
+        select etb.*,ct.name from ep_task_book etb
         inner join ep_adviser_student eas ON etb.adviser_student_id = eas.id and eas.is_del=0
+        LEFT JOIN cc_teacher ct ON ct.id = eas.teacher_id
         where etb.is_del=0 and eas.grade=#{grade} and eas.student_id=#{studentId} and  etb.is_history=0
     </select>
 </mapper>

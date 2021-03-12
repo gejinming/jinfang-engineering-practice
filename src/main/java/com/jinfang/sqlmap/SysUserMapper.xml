@@ -61,4 +61,8 @@
             #{loginName}
         </foreach>
     </update>
+
+    <select id="findSchoolId" resultType="java.lang.Long">
+        select id from sys_office where type=0 and name = #{schoolName}
+    </select>
 </mapper>

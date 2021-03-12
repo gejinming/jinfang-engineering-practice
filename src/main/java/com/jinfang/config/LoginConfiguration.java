@@ -25,11 +25,17 @@ public class LoginConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        //拦截所有除去以下路径
         registry.addInterceptor(loginInterceptor())
+                //拦截所有路径
                 .addPathPatterns("/**")
+                //拦截所有除去以下路径
                 .excludePathPatterns("/login", "/register", "/static", "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
+
+    /**
+     * 暴露访问路径
+     * @param registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")

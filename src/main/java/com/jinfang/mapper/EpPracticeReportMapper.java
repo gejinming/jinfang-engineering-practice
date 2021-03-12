@@ -11,12 +11,13 @@ import java.util.List;
  * @Date：2021/2/4 2:44 下午
  */
 public interface EpPracticeReportMapper extends CurdMapper<EpPracticeReport> {
-    /*
-     * @Description:查询学生的信息
-     * @Author: Gjm
-     * @Date: 2021/2/4 3:28 下午
-     * @return: 学生个人的信息
-     **/
+   /**
+    * @param studentId: 学生ID
+    * @param isHistory: 是否历史记录，新需求是学生的每一条信息都是历史记录所以显示时都显示出
+    * @Author: Gjm
+    * @Date: 2021/3/12 2:34 下午
+    * @return: 实习报告列表
+    **/
     List<EpPracticeReport> findStudentReport(Long studentId,Integer isHistory);
     /*
      * @Description:答辩组教师查询学生列表

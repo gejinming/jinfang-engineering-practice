@@ -56,8 +56,11 @@ public class SystemService {
      */
     public Result checkUserPassword(String loginName, String password, String role) {
         LoginUserVo loginUserVo = new LoginUserVo();
-        //先设定死SchoolId和角色,之后根据专业认证的token来取数据
-        String schoolId = "704041";
+        Long shcoolId = sysUserService.findSchoolId("浙江科技学院");
+        if (shcoolId == null){
+            return Result.error("学校ID未找到，请联系管理员");
+        }
+        //String schoolId = "704041";
         if (loginName == null) {
             return Result.error(201, "账号不可为空");
         }
@@ -74,7 +77,7 @@ public class SystemService {
         ArrayList<String> menuRoleList = new ArrayList<>();
         //教师登录
         if (role.equals(LoginRole.TEACHER.getRoleName())) {
-            loginName = schoolId + "-" + loginName;
+            loginName = shcoolId.toString() + "-" + loginName;
             SysUser sysUser = sysUserService.findUserByName(loginName);
             if (sysUser == null) {
                 return Result.error(201, "账号不存在");
@@ -151,8 +154,12 @@ public class SystemService {
         }
         loginUserVo.setUserId(Long.parseLong(userId));
         //loginUserVo.setLoginName(loginName);
+        //判断是否在当前专业时间开放内
+        LoginUserVo loginUserVo1 = getLoginUserVo(token, false);
+        boolean isUse = getMajorTimeControl(loginUserVo1.getMajorId(), grade);
         loginUserVo.setName(LoginUserName);
         loginUserVo.setRoles(menuRoleList);
+        loginUserVo.setIsUse(isUse);
         result.put("token", token);
         result.put("loginUserVo", loginUserVo);
         return Result.ok(result);

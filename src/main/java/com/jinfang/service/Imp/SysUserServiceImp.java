@@ -64,4 +64,9 @@ public class SysUserServiceImp implements SysUserService {
         SysUser sysUser = sysUserMapper.findByName(userName);
         return sysUser;
     }
+
+    @Override
+    public Long findSchoolId(String schoolName) {
+        return sysUserMapper.findSchoolId(schoolName);
+    }
 }

@@ -30,7 +30,6 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
 
 
-
   # file upload max size 20M
   servlet:
         multipart:
@@ -48,11 +47,14 @@ logging:
   level:
     com.jinfang.mapper: debug
     io.swagger.models.parameters.AbstractSerializableParameter: error
-
+#日志文件存储位置
+logback:
+  logdir: /Volumes/work/logs
+  appname: practice-application
 
 #分页插件设置
 pagehelper:
   helper-dialect: mysql
-  #mapper目录
+ #mapper目录
 mybatis:
   mapper-locations: classpath:com/jinfang/sqlmap/*.xml
